@@ -1,0 +1,14 @@
+.slider img{
+    max-height: 600px;
+    aspect-ratio: 4/3;
+    
+}
+.slider .carousel-inner{
+    border-radius: 30px;
+}
+
+@media(max-width: 576px){
+    .slider img{
+        height: 250px;
+    }
+}

@@ -1,0 +1,43 @@
+.footer{
+    background-color: #f0f0f0;
+}
+.footer .logo img{
+    height: 50px;
+    width: auto;
+}
+.subscribe .input-group{
+    height: 50px;
+}
+.input-group ::-webkit-input-placeholder { 
+    padding-left: 30px;
+}
+.footer .rest{
+    background-color: white;
+}
+.footer .payimg img{
+    height: 40px;
+    width: auto;
+}
+.footer a{
+    text-decoration: none;
+    color: black;
+    width: fit-content;
+    line-height: 40px;
+}
+.footer a:hover{
+    color: rgb(126, 124, 124);
+    scale: 1.05;
+}
+.footer .social{
+    border: 2px solid black;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 50px;
+    padding-top: 5px;
+}
+.footer .social i{
+    font-size: x-large;
+}

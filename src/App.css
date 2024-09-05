@@ -1,0 +1,17 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+*::-webkit-scrollbar {
+  display: none; /* Hide scrollbar in WebKit browsers */
+  background-color: aqua;
+}
+
+*{
+  -ms-overflow-style: none; /* Hide scrollbar in Internet Explorer and Edge */
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+}
+@import url("css/header.css");
+@import url("css/slider.css");
+@import url("css/categories.css");
+@import url("css/footer.css");
