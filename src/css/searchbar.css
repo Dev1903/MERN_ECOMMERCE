@@ -1,4 +1,45 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css');
+
 .searchbar .logo img{
     height: 50px;
     width: auto;
+}
+.searchbar .input-group input[type=text]{
+    border:0.5px solid gray;
+}
+.searchbar .search{
+    width: 50px;
+    padding-right: 24px;
+}
+.searchbar #categoriesDropdown{
+    border-top:0.5px solid gray;
+    border-bottom:0.5px solid gray;
+    padding: 10px 10px;
+    margin: 0 0.5px;
+}
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+.search-container input[type="text"] {
+    padding-left: 30px; /* Adjust based on the icon size */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.searchbar .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-45%);
+    color: #888;
+}
+.searchbar .right i{
+    font-size: larger;
+}
+.searchbar .right .cart .total{
+    font-size: x-small;
+    position: absolute;
+    transform: translateX(25px) translateY(-9px);
 }
