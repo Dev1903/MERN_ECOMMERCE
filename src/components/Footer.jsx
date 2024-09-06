@@ -15,9 +15,9 @@ const Newsletter = () => {
                             </div>
                         </div>
                         <div className="col-md-6 d-flex align-items-center subscribe">
-                            <div class="input-group mb-3">
-                                <input type="text" class="form-control" placeholder="Enter your Email" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                                <button class="btn btn-dark" type="button" id="button-addon2">Subscribe</button>
+                            <div className="input-group mb-3">
+                                <input type="text" className="form-control" placeholder="Enter your Email" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                                <button className="btn btn-dark" type="button" id="button-addon2">Subscribe</button>
                             </div>
                         </div>
                     </div>
@@ -93,16 +93,16 @@ const Footer = () => {
                             </div>
                             <div className="row d-flex justify-content-evenly">
                                 <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i class="fa-brands fa-twitter"></i></a>
+                                <a href="#temp"><i className="fa-brands fa-twitter"></i></a>
                                 </div>
                                 <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#temp"><i className="fa-brands fa-instagram"></i></a>
                                 </div>
                                 <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i class="fa-brands fa-facebook"></i></a>
+                                <a href="#temp"><i className="fa-brands fa-facebook"></i></a>
                                 </div>
                                 <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i class="fa-brands fa-youtube"></i></a>
+                                <a href="#temp"><i className="fa-brands fa-youtube"></i></a>
                                 </div>
                             </div>
                         </div>

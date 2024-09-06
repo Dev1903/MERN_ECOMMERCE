@@ -9,9 +9,9 @@ const Searchbar = () => {
                     <img src="images/ecommerce_logo.png" alt="" />
                 </div>
                 <div className="col-md-5 mt-4 mb-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for Products" aria-label="Recipient's username" aria-describedby="button-addon2" />
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <div className="input-group">
+                        <input type="text" className="form-control" placeholder="Search for Products" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                        <i className="fa-solid fa-magnifying-glass search-icon"></i>
                         <div className="dropdown">
                             <a
                                 className="nav-link dropdown-toggle"
@@ -31,20 +31,20 @@ const Searchbar = () => {
                                 ))}
                             </ul>
                         </div>
-                        <button class="btn btn-dark search" type="button" id="button-addon2"><i class="fa-solid fa-magnifying-glass text-white text-center search"></i></button>
+                        <button className="btn btn-dark search" type="button" id="button-addon2"><i className="fa-solid fa-magnifying-glass text-white text-center search"></i></button>
                     </div>
                 </div>
                 <div className="col-md-4 d-flex justify-content-end align-items-center right mt-4 mb-3">
                     <div className="col-4 account text-end">
-                        <i class="fa-regular fa-user"></i>&nbsp;
+                        <i className="fa-regular fa-user"></i>&nbsp;
                         <span>Account</span>
                     </div>
                     <div className="col-4 wishlist text-center">
-                    <i class="fa-regular fa-heart"></i>
+                    <i className="fa-regular fa-heart"></i>
                     </div>
                     <div className="col-4 cart">
                         <span className="total">Total</span>
-                        <a href="#temp"><i class="fa-solid fa-cart-shopping text-black"></i></a>
+                        <a href="#temp"><i className="fa-solid fa-cart-shopping text-black"></i></a>
                         <span className="totalprice">₹0.00</span>
                     </div>
                 </div>
