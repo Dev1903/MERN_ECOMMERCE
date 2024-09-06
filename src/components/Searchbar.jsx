@@ -5,10 +5,10 @@ const Searchbar = () => {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-md-4 logo mt-4 mb-3">
+                <div className="col-md-3 logo mt-4 mb-3 d-flex justify-content-center justify-content-lg-start">
                     <img src="images/ecommerce_logo.png" alt="" />
                 </div>
-                <div className="col-md-4 mt-4 mb-3">
+                <div className="col-md-5 mt-4 mb-3">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search for Products" aria-label="Recipient's username" aria-describedby="button-addon2" />
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
