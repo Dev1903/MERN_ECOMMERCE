@@ -36,11 +36,13 @@ const Searchbar = () => {
                 </div>
                 <div className="col-md-4 d-flex justify-content-end align-items-center right mt-4 mb-3">
                     <div className="col-4 account text-end">
-                        <i className="fa-regular fa-user"></i>&nbsp;
-                        <span>Account</span>
+                        <a href="#temp">
+                           <i className="fa-regular fa-user"></i>&nbsp;
+                           <span>Account</span>
+                        </a>
                     </div>
                     <div className="col-4 wishlist text-center">
-                    <i className="fa-regular fa-heart"></i>
+                    <a href="#temp"><i className="fa-regular fa-heart"></i></a>
                     </div>
                     <div className="col-4 cart">
                         <span className="total">Total</span>
