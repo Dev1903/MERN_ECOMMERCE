@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { category } from './Categories';
 import CategoryDropdown from './CategoryDropdown';
 
@@ -12,29 +12,29 @@ const Searchbar = () => {
     const uniqueCategories = Array.from(new Set(category.map(item => item.title)));
 
     const handleSearch = () => {
-      const validCategory = uniqueCategories.includes(selectedCategory);
-  
-      if (searchTerm) {
-          if (validCategory) {
-              // Search with both term and valid category
-              setErrorMessage(""); // Clear error if category is valid
-              navigate(`/products?search=${searchTerm}&category=${selectedCategory}`);
-          } else {
-              // Search with term only if category is not valid
-              setErrorMessage(""); // Clear error if search term is valid
-              navigate(`/products?search=${searchTerm}`);
-          }
-      } else if (validCategory) {
-          // Search with only valid category if no search term
-          setErrorMessage(""); // Clear error if category is valid
-          navigate(`/products?category=${selectedCategory}`);
-      } else {
-          // Neither search term nor valid category
-          setErrorMessage("No such category exists");
-          navigate('/error'); // Navigate to error page
-      }
-  };
-  
+        const validCategory = uniqueCategories.includes(selectedCategory);
+
+        if (searchTerm) {
+            if (validCategory) {
+                // Search with both term and valid category
+                setErrorMessage(""); // Clear error if category is valid
+                navigate(`/products?search=${searchTerm}&category=${selectedCategory}`);
+            } else {
+                // Search with term only if category is not valid
+                setErrorMessage(""); // Clear error if search term is valid
+                navigate(`/products?search=${searchTerm}`);
+            }
+        } else if (validCategory) {
+            // Search with only valid category if no search term
+            setErrorMessage(""); // Clear error if category is valid
+            navigate(`/products?category=${selectedCategory}`);
+        } else {
+            // Neither search term nor valid category
+            setErrorMessage("No such category exists");
+            navigate('/error'); // Navigate to error page
+        }
+    };
+
 
     return (
         <div className="container">
@@ -77,9 +77,11 @@ const Searchbar = () => {
                         <a href="#temp" className="text-black text-decoration-none"><i className="fa-regular fa-heart"></i></a>
                     </div>
                     <div className="col-4 cart">
-                        <span className="total">Total</span>
-                        <a href="#temp"><i className="fa-solid fa-cart-shopping text-black"></i></a>
-                        <span className="totalprice">₹0.00</span>
+                        <Link to="/cart" className="text-black text-decoration-none">
+                            <span className="total">Total</span>
+                            <i className="fa-solid fa-cart-shopping text-black"></i>
+                            <span className="totalprice">₹0.00</span>
+                        </Link>
                     </div>
                 </div>
             </div>

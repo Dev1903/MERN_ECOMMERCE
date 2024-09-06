@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import products from '../js/products';
 import Header from './Header';
 import Searchbar from './Searchbar';
@@ -7,9 +7,27 @@ import { Footer, Newsletter } from './Footer';
 
 const Products = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const searchTerm = queryParams.get('search') || '';
     const category = queryParams.get('category') || '';
+
+    // Function to check if any word in the search term matches the product's details
+    const searchWords = searchTerm.split(' ').map(word => word.toLowerCase());
+
+    const matchesSearchTerm = (product) => {
+        const productName = product.name.toLowerCase();
+        const productBrand = product.brand.toLowerCase();
+        const productCategory = product.category.toLowerCase();
+        const productPrice = product.price.toString().toLowerCase(); // Convert price to string
+
+        return searchWords.some(word => 
+            productName.includes(word) ||
+            productBrand.includes(word) ||
+            productCategory.includes(word) ||
+            productPrice.includes(word)
+        );
+    };
 
     // Check if the category is valid
     const validCategories = Array.from(new Set(products.map(product => product.category.toLowerCase())));
@@ -18,9 +36,16 @@ const Products = () => {
     // Filter products
     const filteredProducts = products.filter((product) => {
         const matchesCategory = !category || product.category.toLowerCase().includes(category.toLowerCase());
-        const matchesSearch = !searchTerm || product.name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = !searchTerm || matchesSearchTerm(product);
         return matchesCategory && matchesSearch;
     });
+
+    useEffect(() => {
+        // Redirect to error page if category is invalid and no products are found
+        if (!isCategoryValid || filteredProducts.length === 0) {
+            navigate('/error', { replace: true });
+        }
+    }, [isCategoryValid, filteredProducts.length, navigate]);
 
     return (
         <div className="container-fluid">
@@ -47,7 +72,6 @@ const Products = () => {
                                             </div>
                                         </div>
                                     </div>
-
                                 ))
                             ) : (
                                 <p>No products found for the given criteria.</p>

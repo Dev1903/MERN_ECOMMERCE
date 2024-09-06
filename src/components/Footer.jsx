@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Newsletter = () => {
     return (
@@ -24,98 +25,95 @@ const Newsletter = () => {
                 </div>
             </div>
         </div>
-
-    )
-}
+    );
+};
 
 const Footer = () => {
     return (
-        
-            <div className="col rest mt-1">
-                <div className="container">
-                    <div className="row justify-content-between">
-                        <div className="col-lg-3 pt-5">
-                            <div className="row logo mb-4">
-                                <img src="images/ecommerce_logo.png" alt="logo" />
-                            </div>
-                            <div className="row desc">
-                                <p className="text-muted text-md-nowrap">We support all Credit Cards and Payment Methods</p>
-                            </div>
-                            <div className="row payimg d-flex ms-1">
-                                <div className="col g-0 m-0 p-0">
-                                    <img src="images/payment-logo/gpay.png" alt="Google Pay" />
-                                </div>
-                                <div className="col g-0 m-0 p-0">
-                                    <img src="images/payment-logo/mastercard.png" alt="Master Card" />
-                                </div>
-                                <div className="col g-0 m-0 p-0">
-                                    <img src="images/payment-logo/paypal.png" alt="PayPal" />
-                                </div>
-                                <div className="col g-0 m-0 p-0">
-                                    <img src="images/payment-logo/visa.png" alt="Visa" />
-                                </div>
-                            </div>
+        <div className="col rest mt-1">
+            <div className="container">
+                <div className="row justify-content-between">
+                    <div className="col-lg-3 pt-5">
+                        <div className="row logo mb-4">
+                            <img src="images/ecommerce_logo.png" alt="logo" />
                         </div>
-                        <div className="col-lg-2 pt-5 d-md-flex flex-column align-items-lg-end">
-                            <div className="row">
-                                <a href="#temp">Home</a>
-                            </div>
-                            <div className="row">
-                                <a href="#temp">About</a>
-                            </div>
-                            <div className="row">
-                                <a href="#temp">Popular Products</a>
-                            </div>
-                            <div className="row">
-                                <a href="#temp">Contact</a>
-                            </div>
+                        <div className="row desc">
+                            <p className="text-muted text-md-nowrap">We support all Credit Cards and Payment Methods</p>
                         </div>
-                        <div className="col-lg-2 pt-5">
-                            <div className="row">
-                                <a href="#temp">My Account</a>
+                        <div className="row payimg d-flex ms-1">
+                            <div className="col g-0 m-0 p-0">
+                                <img src="images/payment-logo/gpay.png" alt="Google Pay" />
                             </div>
-                            <div className="row">
-                                <a href="#temp">Order Tracking</a>
+                            <div className="col g-0 m-0 p-0">
+                                <img src="images/payment-logo/mastercard.png" alt="Master Card" />
                             </div>
-                            <div className="row">
-                                <a href="#temp">Checkout</a>
+                            <div className="col g-0 m-0 p-0">
+                                <img src="images/payment-logo/paypal.png" alt="PayPal" />
                             </div>
-                            <div className="row">
-                                <a href="#temp">Wishlist</a>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 pt-5 d-flex flex-column align-items-lg-end">
-                            <div className="row">
-                                <a href="tel:+919330243841">+91-933-024-3841</a>
-                            </div>
-                            <div className="row">
-                                <p>Baranagar, Kolkata,<br />West Bengal</p>
-                            </div>
-                            <div className="row d-flex justify-content-evenly">
-                                <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i className="fa-brands fa-twitter"></i></a>
-                                </div>
-                                <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i className="fa-brands fa-instagram"></i></a>
-                                </div>
-                                <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i className="fa-brands fa-facebook"></i></a>
-                                </div>
-                                <div className="col-3 social me-lg-2">
-                                <a href="#temp"><i className="fa-brands fa-youtube"></i></a>
-                                </div>
+                            <div className="col g-0 m-0 p-0">
+                                <img src="images/payment-logo/visa.png" alt="Visa" />
                             </div>
                         </div>
                     </div>
-                    <hr style={{border: '1px solid black'}}/>
-                    <div className="row text-center text-muted mb-4">
-                        <div className="col">CopyRight &copy; 2024 All Rights Reserved</div>
-                        <div className="col"> Terms & Conditions</div>
+                    <div className="col-lg-2 pt-5 d-md-flex flex-column align-items-lg-end">
+                        <div className="row">
+                            <Link to="/">Home</Link>
+                        </div>
+                        <div className="row">
+                            <Link to="/about">About</Link>
+                        </div>
+                        <div className="row">
+                            <Link to="/popular-products">Popular Products</Link>
+                        </div>
+                        <div className="row">
+                            <Link to="/contact">Contact</Link>
+                        </div>
+                    </div>
+                    <div className="col-lg-2 pt-5">
+                        <div className="row">
+                            <Link to="/my-account">My Account</Link>
+                        </div>
+                        <div className="row">
+                            <Link to="/order-tracking">Order Tracking</Link>
+                        </div>
+                        <div className="row">
+                            <Link to="/checkout">Checkout</Link>
+                        </div>
+                        <div className="row">
+                            <Link to="/wishlist">Wishlist</Link>
+                        </div>
+                    </div>
+                    <div className="col-lg-3 pt-5 d-flex flex-column align-items-lg-end">
+                        <div className="row">
+                            <a href="tel:+919330243841">+91-933-024-3841</a>
+                        </div>
+                        <div className="row">
+                            <p>Baranagar, Kolkata,<br />West Bengal</p>
+                        </div>
+                        <div className="row d-flex justify-content-evenly">
+                            <div className="col-3 social me-lg-2">
+                                <a href="https://www.x.com" target="_blank"><i className="fa-brands fa-twitter"></i></a>
+                            </div>
+                            <div className="col-3 social me-lg-2">
+                                <a href="https://www.instagram.com/bristidev.burman2004/" target="_blank" title="Visit the Creator's Instagram"><i className="fa-brands fa-instagram"></i></a>
+                            </div>
+                            <div className="col-3 social me-lg-2">
+                                <a href="https://www.facebook.com" target="_blank"><i className="fa-brands fa-facebook"></i></a>
+                            </div>
+                            <div className="col-3 social me-lg-2">
+                                <a href="https://www.youtube.com" target="_blank"><i className="fa-brands fa-youtube"></i></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <hr style={{ border: '1px solid black' }} />
+                <div className="row text-center text-muted mb-4">
+                    <div className="col">CopyRight &copy; 2024 All Rights Reserved</div>
+                    <div className="col">Terms & Conditions</div>
+                </div>
             </div>
-        
+        </div>
     );
-}
+};
 
 export { Newsletter, Footer };

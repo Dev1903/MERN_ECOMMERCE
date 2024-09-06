@@ -43,22 +43,22 @@ const Header = () => {
             <div className="collapse navbar-collapse">
               <ul className="navbar-nav ms-auto">
                 <li className="nav-item">
-                  <a className="nav-link" href="#temp">Home</a>
+                  <button className="nav-link btn" onClick={() => navigate('/')}>Home</button>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#temp">Today's Deals</a>
+                  <button className="nav-link btn" onClick={() => navigate('/today-deals')}>Today's Deals</button>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#temp">Customer Services</a>
+                  <button className="nav-link btn" onClick={() => navigate('/customer-services')}>Customer Services</button>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#temp">Trending Products</a>
+                  <button className="nav-link btn" onClick={() => navigate('/trending-products')}>Trending Products</button>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#temp">Blog</a>
+                  <button className="nav-link btn" onClick={() => navigate('/blog')}>Blog</button>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="#temp">Special Offers</a>
+                  <button className="nav-link btn" onClick={() => navigate('/special-offers')}>Special Offers</button>
                 </li>
               </ul>
             </div>
@@ -71,22 +71,22 @@ const Header = () => {
         <button className="btn-close" onClick={toggleSidebar}></button>
         <ul className="navbar-nav flex-column">
           <li className="nav-item">
-            <a className="nav-link" href="#temp">Home</a>
+            <button className="nav-link btn" onClick={() => navigate('/')}>Home</button>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#temp">Today's Deals</a>
+            <button className="nav-link btn" onClick={() => navigate('/today-deals')}>Today's Deals</button>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#temp">Customer Services</a>
+            <button className="nav-link btn" onClick={() => navigate('/customer-services')}>Customer Services</button>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#temp">Trending Products</a>
+            <button className="nav-link btn" onClick={() => navigate('/trending-products')}>Trending Products</button>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#temp">Blog</a>
+            <button className="nav-link btn" onClick={() => navigate('/blog')}>Blog</button>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#temp">Special Offers</a>
+            <button className="nav-link btn" onClick={() => navigate('/special-offers')}>Special Offers</button>
           </li>
         </ul>
       </div>

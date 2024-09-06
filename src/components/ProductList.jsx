@@ -54,8 +54,11 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
 
   // Filter the products based on the passed category
   const filteredProducts = filterByPopular
-    ? products.filter(product => product.popular)
-    : products.filter(product => product.category === category);
+  ? products.filter(product => product.popular)
+  : products.filter(product => 
+      product.category === category || 
+      product.name.toLowerCase().includes(category.toLowerCase())
+    );
 
   return (
     <div className="col">
