@@ -1,6 +1,9 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import products from '../js/products';
+import Header from './Header';
+import Searchbar from './Searchbar';
+import { Footer, Newsletter } from './Footer';
 
 const Products = () => {
     const location = useLocation();
@@ -20,25 +23,42 @@ const Products = () => {
     });
 
     return (
-        <div className="container mt-4">
-            <div className="row">
-                {filteredProducts.length > 0 && isCategoryValid ? (
-                    filteredProducts.map((product) => (
-                        <div className="col-md-4 mb-4" key={product.id}>
-                            <div className="card">
-                                <img src={product.image} className="card-img-top" alt={product.name} />
-                                <div className="card-body">
-                                    <h5 className="card-title">{product.name}</h5>
-                                    <p className="card-text">Brand: {product.brand}</p>
-                                    <p className="card-text">Price: ₹{product.price.toFixed(2)}</p>
-                                    <p className="card-text">Rating: {product.rating}</p>
-                                </div>
-                            </div>
+        <div className="container-fluid">
+            <div className="row searchbar mb-2">
+                <Searchbar />
+            </div>
+            <div className="row header mb-2">
+                <Header />
+            </div>
+            <div className="row product-display mb-2">
+                <div className="col">
+                    <div className="container mt-4">
+                        <div className="row">
+                            {filteredProducts.length > 0 && isCategoryValid ? (
+                                filteredProducts.map((product) => (
+                                    <div className="col-md-4 mb-4" key={product.id}>
+                                        <div className="card">
+                                            <img src={product.image} className="card-img-top" alt={product.name} />
+                                            <div className="card-body">
+                                                <h5 className="card-title">{product.name}</h5>
+                                                <p className="card-text">Brand: {product.brand}</p>
+                                                <p className="card-text">Price: ₹{product.price.toFixed(2)}</p>
+                                                <p className="card-text">Rating: {product.rating}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                ))
+                            ) : (
+                                <p>No products found for the given criteria.</p>
+                            )}
                         </div>
-                    ))
-                ) : (
-                    <p>No products found for the given criteria.</p>
-                )}
+                    </div>
+                </div>
+            </div>
+            <div className="footer mb-2">
+                <Newsletter />
+                <Footer />
             </div>
         </div>
     );
