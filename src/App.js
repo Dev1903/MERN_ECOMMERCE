@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import Searchbar from "./components/Searchbar";
 import Header from "./components/Header";
 import Slider from "./components/Slider";
 import {Categories} from "./components/Categories";
@@ -8,6 +9,9 @@ import {Newsletter,Footer} from "./components/Footer";
 function App() {
   return (
     <div className="App container-fluid">
+    <div className="row searchbar mb-2">
+        <Searchbar />
+      </div>
       <div className="row header mb-5">
         <Header />
       </div>
