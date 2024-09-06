@@ -23,7 +23,7 @@
 }
 
 .search-container input[type="text"] {
-    padding-left: 30px; /* Adjust based on the icon size */
+    padding-left: 30px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -42,4 +42,7 @@
     font-size: x-small;
     position: absolute;
     transform: translateX(25px) translateY(-9px);
+}
+.searchbar .right .account span{
+    font-size: small;
 }
