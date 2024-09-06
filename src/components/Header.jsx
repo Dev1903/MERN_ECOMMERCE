@@ -28,7 +28,7 @@ const Header = () => {
   const uniqueCategories = Array.from(new Set(category.map(item => item.title)));
 
   return (
-    <div className="col">
+
     <div className="container">
       <header>
         <div className="container-fluid">
@@ -110,8 +110,8 @@ const Header = () => {
           </li>
         </ul>
       </div>
-</div>
     </div>
+
   );
 };
 
