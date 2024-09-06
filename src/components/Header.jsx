@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { category } from './Categories';
+import { useNavigate } from 'react-router-dom';
+import CategoryDropdown from './CategoryDropdown'; // Adjust the path as necessary
 
 const Header = () => {
   const [showSidebar, setShowSidebar] = useState(false);
+  const navigate = useNavigate();
 
   // Toggle sidebar for mobile view
   const toggleSidebar = () => {
@@ -24,11 +26,7 @@ const Header = () => {
     };
   }, [showSidebar]);
 
-  // Filter unique categories
-  const uniqueCategories = Array.from(new Set(category.map(item => item.title)));
-
   return (
-
     <div className="container">
       <header>
         <div className="container-fluid">
@@ -38,26 +36,8 @@ const Header = () => {
               <span className="navbar-toggler-icon"></span>
             </button>
 
-            {/* Categories Dropdown with FontAwesome icon */}
-            <div className="dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#temp"
-                id="categoriesDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="fa-regular fa-rectangle-list"></i> CATEGORIES
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="categoriesDropdown">
-                {uniqueCategories.map((title, index) => (
-                  <li key={index}>
-                    <a className="dropdown-item" href="#temp">{title}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* Categories Dropdown */}
+            <CategoryDropdown />
 
             {/* Navbar links */}
             <div className="collapse navbar-collapse">
@@ -111,7 +91,6 @@ const Header = () => {
         </ul>
       </div>
     </div>
-
   );
 };
 
