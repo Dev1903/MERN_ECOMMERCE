@@ -1,82 +1,58 @@
-import React, { useRef, useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
-import productsData from '../js/products'; // Use products data from your products.js file
+// ProductList.jsx
+import React, { useRef, useState, useEffect } from 'react';
+import ProductCard from './ProductCard';
+import productsData from '../js/products';
 
-// ProductCard Component
-const ProductCard = ({ product, quantity, handleAdd, handleRemove }) => (
-  <Link to={`/product/${product.id}`} className="text-decoration-none text-black">
-    <div className="card" style={{ minWidth: '245px' }}>
-      <img src={product.image} className="card-img-top" alt={product.name} />
-      <div className="card-body">
-        <h5 className="card-title">{product.name}</h5>
-        <p className="card-text">{product.brand}</p>
-        <div className="d-flex justify-content-between flex-column">
-          <div>
-            <span className="text-warning pe-5 me-4n">★ {product.rating}</span>
-            <span className="text-success"> {product.sold} Sold</span>
-          </div>
-          <div className="d-flex justify-content-end">
-            <span className="text-muted"><s>${product.originalPrice}</s></span>
-            <span className="fw-bold ps-2"> ${product.price}</span>
-          </div>
-        </div>
-        <div className="mt-2 d-flex justify-content-between align-items-center">
-          <button className="btn btn-outline-secondary"><i className="fa-solid fa-heart"></i></button>
-          {quantity === 0 ? (
-            <button className="btn btn-dark" onClick={handleAdd}>
-              <i className="fa-solid fa-plus"></i>
-            </button>
-          ) : (
-            <div className="d-flex align-items-center">
-              <button className="btn btn-dark" onClick={handleRemove}>
-                <i className="fa-solid fa-minus"></i>
-              </button>
-              <span className="mx-2">{quantity}</span>
-              <button className="btn btn-dark" onClick={handleAdd}>
-                <i className="fa-solid fa-plus"></i>
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  </Link>
-);
-
-// ProductList Component
 const ProductList = ({ category, heading, filterByPopular = false }) => {
   const scrollRef = useRef(null);
-  const [products, setProducts] = useState(productsData); // Initialize product state
+  const [products, setProducts] = useState(productsData);
+  const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
+  const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
 
-  // Handler to add quantity
-  const handleAdd = (productId) => {
-    setProducts(products.map(product =>
-      product.id === productId
-        ? { ...product, quantity: (product.quantity || 0) + 1 }
-        : product
-    ));
+  const handleAddToCart = (product) => {
+    setCart(prevCart => {
+      const existingProduct = prevCart.find(item => item.id === product.id);
+      if (existingProduct) {
+        return prevCart.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      } else {
+        return [...prevCart, { ...product, quantity: 1 }];
+      }
+    });
   };
 
-  // Handler to remove quantity
-  const handleRemove = (productId) => {
-    setProducts(products.map(product =>
-      product.id === productId && product.quantity > 0
-        ? { ...product, quantity: product.quantity - 1 }
-        : product
-    ));
+  const handleWishlist = (product) => {
+    setWishlist(prevWishlist => {
+      const isInWishlist = prevWishlist.some(item => item.id === product.id);
+      if (isInWishlist) {
+        return prevWishlist.filter(item => item.id !== product.id);
+      } else {
+        return [...prevWishlist, product];
+      }
+    });
   };
+
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }, [cart]);
+
+  useEffect(() => {
+    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+  }, [wishlist]);
 
   const scrollLeft = () => {
-    const cardWidth = scrollRef.current.querySelector('.card').offsetWidth + 16; // Add 16 for margin-right
+    const cardWidth = scrollRef.current.querySelector('.card').offsetWidth + 16;
     scrollRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
   };
 
   const scrollRight = () => {
-    const cardWidth = scrollRef.current.querySelector('.card').offsetWidth + 16; // Add 16 for margin-right
+    const cardWidth = scrollRef.current.querySelector('.card').offsetWidth + 16;
     scrollRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
   };
 
-  // Filter the products based on the passed category
   const filteredProducts = filterByPopular
     ? products.filter(product => product.popular)
     : products.filter(product =>
@@ -104,9 +80,10 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
               <div className="me-3" key={product.id}>
                 <ProductCard
                   product={product}
-                  quantity={product.quantity || 0}
-                  handleAdd={() => handleAdd(product.id)}
-                  handleRemove={() => handleRemove(product.id)}
+                  quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}
+                  handleAddToCart={() => handleAddToCart(product)}
+                  handleWishlist={() => handleWishlist(product)}
+                  isInWishlist={wishlist.some(item => item.id === product.id)}
                 />
               </div>
             ))}

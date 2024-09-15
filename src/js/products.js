@@ -14,8 +14,8 @@ const products = [
   },
   {
     id: 2,
-    name: 'Mobile',
-    brand: 'IQOO',
+    name: 'Oppo Reno 69 Pro 5G Mobile',
+    brand: 'Oppo',
     price: 24.56,
     originalPrice: 24.56,
     rating: 4.7,

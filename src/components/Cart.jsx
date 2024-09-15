@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import products from '../js/products'; // Ensure this file includes the product data
 
 const Cart = () => {
-    // Assuming we have a cart state stored in localStorage or context
     const [cart, setCart] = useState(() => {
         // Fetch cart from localStorage or any other state management solution
         return JSON.parse(localStorage.getItem('cart')) || [];
     });
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
 
     const handleQuantityChange = (id, change) => {
         setCart(prevCart => {
@@ -49,7 +52,7 @@ const Cart = () => {
                                 </div>
                             </div>
                             <div>
-                                <h5 className="mb-1">₹{item.price * item.quantity}</h5>
+                                <h5 className="mb-1">₹{(item.price * item.quantity).toFixed(2)}</h5>
                             </div>
                         </div>
                     ))}

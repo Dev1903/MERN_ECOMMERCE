@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom'; // Import Link
+// Products.jsx
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import products from '../js/products';
 import Header from './Header';
 import Searchbar from './Searchbar';
 import { Footer, Newsletter } from './Footer';
+import ProductCard from './ProductCard';
 
 const Products = () => {
     const location = useLocation();
@@ -11,6 +13,9 @@ const Products = () => {
     const queryParams = new URLSearchParams(location.search);
     const searchTerm = queryParams.get('search') || '';
     const category = queryParams.get('category') || '';
+
+    const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
+    const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
 
     const searchWords = searchTerm.split(' ').map(word => word.toLowerCase());
 
@@ -43,6 +48,40 @@ const Products = () => {
         }
     }, [isCategoryValid, filteredProducts.length, navigate]);
 
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
+
+    useEffect(() => {
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    }, [wishlist]);
+
+    const handleAddToCart = (product) => {
+        setCart(prevCart => {
+            const existingProduct = prevCart.find(item => item.id === product.id);
+            if (existingProduct) {
+                return prevCart.map(item =>
+                    item.id === product.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+            } else {
+                return [...prevCart, { ...product, quantity: 1 }];
+            }
+        });
+    };
+
+    const handleWishlist = (product) => {
+        setWishlist(prevWishlist => {
+            const isInWishlist = prevWishlist.some(item => item.id === product.id);
+            if (isInWishlist) {
+                return prevWishlist.filter(item => item.id !== product.id);
+            } else {
+                return [...prevWishlist, product];
+            }
+        });
+    };
+
     return (
         <div className="container-fluid">
             <div className="row searchbar mb-2">
@@ -58,17 +97,13 @@ const Products = () => {
                             {filteredProducts.length > 0 && isCategoryValid ? (
                                 filteredProducts.map((product) => (
                                     <div className="col-md-4 mb-4" key={product.id}>
-                                        <Link to={`/product/${product.id}`} className="card-link">
-                                            <div className="card">
-                                                <img src={product.image} className="card-img-top" alt={product.name} />
-                                                <div className="card-body">
-                                                    <h5 className="card-title">{product.name}</h5>
-                                                    <p className="card-text">Brand: {product.brand}</p>
-                                                    <p className="card-text">Price: ₹{product.price.toFixed(2)}</p>
-                                                    <p className="card-text">Rating: {product.rating}</p>
-                                                </div>
-                                            </div>
-                                        </Link>
+                                        <ProductCard
+                                            product={product}
+                                            quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}
+                                            handleAddToCart={() => handleAddToCart(product)}
+                                            handleWishlist={() => handleWishlist(product)}
+                                            isInWishlist={wishlist.some(item => item.id === product.id)}
+                                        />
                                     </div>
                                 ))
                             ) : (

@@ -1,14 +1,16 @@
+// src/components/Searchbar.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext'; // Import useCart
 import category from '../js/category';
 import CategoryDropdown from './CategoryDropdown';
-
 
 const Searchbar = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
+    const { totalQuantity } = useCart(); // Get totalQuantity from context
 
     const uniqueCategories = Array.from(new Set(category.map(item => item.title)));
 
@@ -36,12 +38,11 @@ const Searchbar = () => {
         }
     };
 
-
     return (
         <div className="container">
             <div className="row">
                 <div className="col-md-3 logo mt-4 mb-3 d-flex justify-content-center justify-content-lg-start">
-                    <Link to="/"><img src="images/ecommerce_logo.png" alt=""/></Link>
+                    <Link to="/"><img src="images/ecommerce_logo.png" alt="" /></Link>
                 </div>
                 <div className="col-md-5 mt-4 mb-3">
                     <div className="input-group">
@@ -75,13 +76,13 @@ const Searchbar = () => {
                         </Link>
                     </div>
                     <div className="col-4 wishlist text-center">
-                        <a href="#temp" className="text-black text-decoration-none"><i className="fa-regular fa-heart"></i></a>
+                        <Link to="/wishlist" className="text-black text-decoration-none"><i className="fa-regular fa-heart"></i></Link>
                     </div>
                     <div className="col-4 cart">
                         <Link to="/cart" className="text-black text-decoration-none">
                             <span className="total">Total</span>
                             <i className="fa-solid fa-cart-shopping text-black"></i>
-                            <span className="totalprice">₹0.00</span>
+                            <span className="totalquantity">{totalQuantity}</span>
                         </Link>
                     </div>
                 </div>
