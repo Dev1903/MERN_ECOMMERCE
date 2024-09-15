@@ -35,7 +35,7 @@ const Footer = () => {
                 <div className="row justify-content-between">
                     <div className="col-lg-3 pt-5">
                         <div className="row logo mb-4">
-                            <img src="images/ecommerce_logo.png" alt="logo" />
+                            <Link to={'/'}><img src="images/ecommerce_logo.png" alt="logo" /></Link>
                         </div>
                         <div className="row desc">
                             <p className="text-muted text-md-nowrap">We support all Credit Cards and Payment Methods</p>
