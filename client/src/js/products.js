@@ -144,18 +144,7 @@ const products = [
     image: 'images/products/wardrobe.jpeg',
     popular: false,
   },
-  {
-    id: 13,
-    name: 'Air Jordan Shoes',
-    brand: 'Nike',
-    price: 24.56,
-    originalPrice: 24.56,
-    rating: 4.7,
-    category: 'fashion',
-    sold: 7489,
-    image: 'images/products/shoes1.jpeg',
-    popular: true,
-  },
+ 
   {
     id: 14,
     name: 'Nike Running Shoes',

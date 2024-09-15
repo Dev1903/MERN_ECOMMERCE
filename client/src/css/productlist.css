@@ -1,0 +1,17 @@
+/* ProductList.css */
+.product-list-container {
+    margin: auto;
+    padding: 0 15px; /* Ensure some padding for better appearance */
+  }
+  
+  .product-list-scroller {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .product-list-scroller > div {
+    flex: 0 0 auto; /* Prevent flex items from shrinking */
+    scroll-snap-align: start;
+  }
+  

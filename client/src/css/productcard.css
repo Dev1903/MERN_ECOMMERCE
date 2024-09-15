@@ -1,0 +1,47 @@
+.product-card {
+    width: 100%;
+    max-width: 320px; /* Adjusted max-width to match other components */
+    height: auto; /* Allow height to adjust automatically based on content */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .product-card img {
+    height: 230px; /* Adjusted height */
+    width: 100%;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  @media (max-width: 767px) {
+    .product-card {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .product-card img {
+      height: 200px; /* Adjusted for smaller screens */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .product-card {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+    }
+  
+    .product-card img {
+      height: 230px; /* Consistent with the height used in Products component */
+    }
+  }
+  
