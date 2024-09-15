@@ -22,13 +22,13 @@ const LandingPage = () => {
       <div className="row categories mb-5">
         <Categories />
       </div>
-      <div className="row popular">
+      <div className="row popular mb-5" id="popular">
         <ProductList filterByPopular={true} heading={"Popular Products 2024"} />
       </div>
-      <div className="row furniture">
+      <div className="row furniture mb-5">
         <ProductList category={"furniture"} heading={"Our Furniture Collection"} />
       </div>
-      <div className="row shoes">
+      <div className="row shoes mb-5">
         <ProductList category={"shoes"} heading={"New Shoes Collection"} />
       </div>
       <div className="row footer">

@@ -1,4 +1,3 @@
-// Products.jsx
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import products from '../js/products';
@@ -69,7 +68,6 @@ const Products = () => {
                 return [...prevCart, { ...product, quantity: 1 }];
             }
         });
-        window.location.reload();
     };
 
     const handleWishlist = (product) => {
@@ -92,21 +90,23 @@ const Products = () => {
                 <Header />
             </div>
             <div className="row product-display mb-2">
-                <div className="col">
+                <div className="col-12">
                     <div className="container mt-4">
-                        <div className="row">
+                        <div className="row justify-content-center">
                             {filteredProducts.length > 0 && isCategoryValid ? (
-                                filteredProducts.map((product) => (
-                                    <div className="col-md-3 mb-4" key={product.id}>
-                                        <ProductCard
-                                            product={product}
-                                            quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}
-                                            handleAddToCart={() => handleAddToCart(product)}
-                                            handleWishlist={() => handleWishlist(product)}
-                                            isInWishlist={wishlist.some(item => item.id === product.id)}
-                                        />
-                                    </div>
-                                ))
+                                <div className="d-flex flex-wrap justify-content-center">
+                                    {filteredProducts.map((product) => (
+                                        <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4" key={product.id}>
+                                            <ProductCard
+                                                product={product}
+                                                quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}
+                                                handleAddToCart={() => handleAddToCart(product)}
+                                                handleWishlist={() => handleWishlist(product)}
+                                                isInWishlist={wishlist.some(item => item.id === product.id)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             ) : (
                                 <p>No products found for the given criteria.</p>
                             )}

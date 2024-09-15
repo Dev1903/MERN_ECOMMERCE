@@ -1,7 +1,7 @@
-// ProductList.jsx
 import React, { useRef, useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import productsData from '../js/products';
+import '../css/productlist.css'; // Import the CSS file
 
 const ProductList = ({ category, heading, filterByPopular = false }) => {
   const scrollRef = useRef(null);
@@ -45,12 +45,12 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
   }, [wishlist]);
 
   const scrollLeft = () => {
-    const cardWidth = scrollRef.current.querySelector('.card').offsetWidth + 16;
+    const cardWidth = scrollRef.current.querySelector('.product-card').offsetWidth + 16;
     scrollRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
   };
 
   const scrollRight = () => {
-    const cardWidth = scrollRef.current.querySelector('.card').offsetWidth + 16;
+    const cardWidth = scrollRef.current.querySelector('.product-card').offsetWidth + 16;
     scrollRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
   };
 
@@ -62,34 +62,30 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
       );
 
   return (
-    <div className="col">
-      <div className="container my-5">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h4>{heading}</h4>
-          <div>
-            <button className="btn btn-light mx-2" onClick={scrollLeft}>
-              <i className="fa-solid fa-chevron-left"></i>
-            </button>
-            <button className="btn btn-light" onClick={scrollRight}>
-              <i className="fa-solid fa-chevron-right"></i>
-            </button>
-          </div>
+    <div className="col product-list-container">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h4>{heading}</h4>
+        <div>
+          <button className="btn btn-light mx-2" onClick={scrollLeft}>
+            <i className="fa-solid fa-chevron-left"></i>
+          </button>
+          <button className="btn btn-light" onClick={scrollRight}>
+            <i className="fa-solid fa-chevron-right"></i>
+          </button>
         </div>
-        <div className="d-flex overflow-hidden position-relative">
-          <div className="d-flex overflow-auto" ref={scrollRef} style={{ scrollSnapType: 'x mandatory' }}>
-            {filteredProducts.map(product => (
-              <div className="me-3" key={product.id}>
-                <ProductCard
-                  product={product}
-                  quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}
-                  handleAddToCart={() => handleAddToCart(product)}
-                  handleWishlist={() => handleWishlist(product)}
-                  isInWishlist={wishlist.some(item => item.id === product.id)}
-                />
-              </div>
-            ))}
+      </div>
+      <div className="product-list-scroller" ref={scrollRef}>
+        {filteredProducts.map(product => (
+          <div className="me-3" key={product.id}>
+            <ProductCard
+              product={product}
+              quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}
+              handleAddToCart={() => handleAddToCart(product)}
+              handleWishlist={() => handleWishlist(product)}
+              isInWishlist={wishlist.some(item => item.id === product.id)}
+            />
           </div>
-        </div>
+        ))}
       </div>
     </div>
   );
