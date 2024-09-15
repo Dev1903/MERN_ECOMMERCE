@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import products from '../js/products'; // Ensure this file includes the product data
 
 const Cart = () => {
     const [cart, setCart] = useState(() => {
@@ -24,6 +23,7 @@ const Cart = () => {
             localStorage.setItem('cart', JSON.stringify(updatedCart));
             return updatedCart;
         });
+        window.location.reload();
     };
 
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);

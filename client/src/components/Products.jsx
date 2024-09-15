@@ -69,6 +69,7 @@ const Products = () => {
                 return [...prevCart, { ...product, quantity: 1 }];
             }
         });
+        window.location.reload();
     };
 
     const handleWishlist = (product) => {

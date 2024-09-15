@@ -53,7 +53,7 @@ const SignUp = () => {
 
     const handlePassword = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
-        const passwordCheck = e.target.value.replace(/[^a-zA-Z0-9!@#$%^&*()_+{}\[\]:;"'<>,.?/-]/g, '');
+        const passwordCheck = e.target.value.replace(/[^a-zA-Z0-9!@#$%^&*()_+{}[\]:;"'<>,.?/-]/g, '');
         setInputPassword(passwordCheck);
         console.log(user);
     };
@@ -277,7 +277,7 @@ const Login = () => {
 
     const handlePassword = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
-        const passwordCheck = e.target.value.replace(/[^a-zA-Z0-9!@#$%^&*()_+{}\[\]:;"'<>,.?/-]/g, '');
+        const passwordCheck = e.target.value.replace(/[^a-zA-Z0-9!@#$%^&*()_+{}[\]:;"'<>,.?/-]/g, '');
         setInputPassword(passwordCheck);
     };
 

@@ -5,7 +5,7 @@ import productsData from '../js/products';
 
 const ProductList = ({ category, heading, filterByPopular = false }) => {
   const scrollRef = useRef(null);
-  const [products, setProducts] = useState(productsData);
+  const [products] = useState(productsData);
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
   const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
 
@@ -22,6 +22,7 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
+    window.location.reload();
   };
 
   const handleWishlist = (product) => {
