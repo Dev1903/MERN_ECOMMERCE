@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom'; // Import Link
 import products from '../js/products';
 import Header from './Header';
 import Searchbar from './Searchbar';
@@ -12,14 +12,13 @@ const Products = () => {
     const searchTerm = queryParams.get('search') || '';
     const category = queryParams.get('category') || '';
 
-    // Function to check if any word in the search term matches the product's details
     const searchWords = searchTerm.split(' ').map(word => word.toLowerCase());
 
     const matchesSearchTerm = (product) => {
         const productName = product.name.toLowerCase();
         const productBrand = product.brand.toLowerCase();
         const productCategory = product.category.toLowerCase();
-        const productPrice = product.price.toString().toLowerCase(); // Convert price to string
+        const productPrice = product.price.toString().toLowerCase();
 
         return searchWords.some(word => 
             productName.includes(word) ||
@@ -29,11 +28,9 @@ const Products = () => {
         );
     };
 
-    // Check if the category is valid
     const validCategories = Array.from(new Set(products.map(product => product.category.toLowerCase())));
     const isCategoryValid = !category || validCategories.includes(category.toLowerCase());
 
-    // Filter products
     const filteredProducts = products.filter((product) => {
         const matchesCategory = !category || product.category.toLowerCase().includes(category.toLowerCase());
         const matchesSearch = !searchTerm || matchesSearchTerm(product);
@@ -41,7 +38,6 @@ const Products = () => {
     });
 
     useEffect(() => {
-        // Redirect to error page if category is invalid and no products are found
         if (!isCategoryValid || filteredProducts.length === 0) {
             navigate('/error', { replace: true });
         }
@@ -62,15 +58,17 @@ const Products = () => {
                             {filteredProducts.length > 0 && isCategoryValid ? (
                                 filteredProducts.map((product) => (
                                     <div className="col-md-4 mb-4" key={product.id}>
-                                        <div className="card">
-                                            <img src={product.image} className="card-img-top" alt={product.name} />
-                                            <div className="card-body">
-                                                <h5 className="card-title">{product.name}</h5>
-                                                <p className="card-text">Brand: {product.brand}</p>
-                                                <p className="card-text">Price: ₹{product.price.toFixed(2)}</p>
-                                                <p className="card-text">Rating: {product.rating}</p>
+                                        <Link to={`/product/${product.id}`} className="card-link">
+                                            <div className="card">
+                                                <img src={product.image} className="card-img-top" alt={product.name} />
+                                                <div className="card-body">
+                                                    <h5 className="card-title">{product.name}</h5>
+                                                    <p className="card-text">Brand: {product.brand}</p>
+                                                    <p className="card-text">Price: ₹{product.price.toFixed(2)}</p>
+                                                    <p className="card-text">Rating: {product.rating}</p>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </Link>
                                     </div>
                                 ))
                             ) : (

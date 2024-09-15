@@ -8,8 +8,8 @@ import Blog from "./components/Blog";
 import Cart from "./components/Cart";
 import About from "./components/About";
 import AdminPage from "./components/AdminPage";
-import {SignUp,Login} from "./components/UserLogin";
-
+import { SignUp, Login } from "./components/UserLogin";
+import Fulldetails from "./components/Fulldetails";
 
 const App = () => {
   return (
@@ -18,6 +18,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/product/:id" element={<Fulldetails />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/about" element={<About />} />
           <Route path="/cart" element={<Cart />} />
