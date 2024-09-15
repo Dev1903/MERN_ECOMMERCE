@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { category } from './Categories';
+import category from '../js/category';
 import CategoryDropdown from './CategoryDropdown';
 
 const Searchbar = () => {
@@ -68,10 +68,10 @@ const Searchbar = () => {
                 </div>
                 <div className="col-md-4 d-flex justify-content-end align-items-center right mt-4 mb-3">
                     <div className="col-4 account text-end">
-                        <a href="#temp" className="text-black text-decoration-none">
+                        <Link to="/userSignUp" className="text-black text-decoration-none">
                             <i className="fa-regular fa-user"></i>&nbsp;
                             <span>Account</span>
-                        </a>
+                        </Link>
                     </div>
                     <div className="col-4 wishlist text-center">
                         <a href="#temp" className="text-black text-decoration-none"><i className="fa-regular fa-heart"></i></a>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { category } from './Categories';
+import category from '../js/category';
 
 const CategoryDropdown = () => {
   const uniqueCategories = Array.from(new Set(category.map(item => item.title)));

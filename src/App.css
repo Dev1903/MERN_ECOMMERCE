@@ -16,3 +16,7 @@
 @import url("css/categories.css");
 @import url("css/footer.css");
 @import url("css/searchbar.css");
+@import url("admin-panel/css/category.css");
+@import url("admin-panel/css/orderList.css");
+@import url("admin-panel/css/productList.css");
+@import url("admin-panel/css/sidebar.css");

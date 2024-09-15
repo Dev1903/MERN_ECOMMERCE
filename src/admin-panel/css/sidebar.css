@@ -1,0 +1,48 @@
+/* sidebar.css */
+.sidebar-admin {
+    /* width: 300px; */
+    background-color: #4b49ac;
+    color: white;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.sidebar-admin h2 {
+    margin-bottom: 20px;
+}
+
+.sidebar-admin ul {
+    list-style: none;
+    padding: 0;
+    padding-left: 20px!important;
+}
+
+.sidebar-admin ul li {
+    padding: 10px 0;
+    margin-bottom: 15px;
+}
+
+.sidebar-admin ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.sidebar-admin ul li a:hover {
+    text-decoration: underline;
+}
+
+.sidebar-admin ul .dropdown {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    padding-left: 0; /* Remove padding if not needed */
+}
+
+.sidebar-admin ul .dropdown.open {
+    margin-top: 20px;
+    max-height: 100px; /* Adjust as needed */
+    padding-left: 20px; /* Adjust padding as needed */  
+}

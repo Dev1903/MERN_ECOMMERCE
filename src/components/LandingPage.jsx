@@ -3,7 +3,7 @@ import React from 'react';
 import Searchbar from './Searchbar';
 import Header from './Header';
 import Slider from './Slider';
-import { Categories } from './Categories';
+import Categories from './Categories';
 import ProductList from './ProductList';
 import { Newsletter, Footer } from './Footer';
 
