@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import category from '../js/category';
 import CategoryDropdown from './CategoryDropdown';
 
+
 const Searchbar = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
@@ -68,7 +69,7 @@ const Searchbar = () => {
                 </div>
                 <div className="col-md-4 d-flex justify-content-end align-items-center right mt-4 mb-3">
                     <div className="col-4 account text-end">
-                        <Link to="/userSignUp" className="text-black text-decoration-none">
+                        <Link to="/signUp" className="text-black text-decoration-none">
                             <i className="fa-regular fa-user"></i>&nbsp;
                             <span>Account</span>
                         </Link>
