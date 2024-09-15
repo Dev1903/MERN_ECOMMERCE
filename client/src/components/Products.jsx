@@ -96,7 +96,7 @@ const Products = () => {
                         <div className="row">
                             {filteredProducts.length > 0 && isCategoryValid ? (
                                 filteredProducts.map((product) => (
-                                    <div className="col-md-4 mb-4" key={product.id}>
+                                    <div className="col-md-3 mb-4" key={product.id}>
                                         <ProductCard
                                             product={product}
                                             quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}

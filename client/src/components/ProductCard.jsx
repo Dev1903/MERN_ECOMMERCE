@@ -3,9 +3,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product, quantity, handleAddToCart, handleWishlist, isInWishlist }) => (
-  <div className="card d-flex flex-column" style={{ width: '245px', height: '450px' }}>
+  <div className="card d-flex flex-column" style={{ width: '280px', height: '480px' }}>
     <Link to={`/product/${product.id}`} className="text-decoration-none text-black">
-      <img src={product.image} className="card-img-top" alt={product.name} style={{ objectFit: 'cover', height: '250px' }} />
+      <img src={product.image} className="card-img-top" alt={product.name} style={{ objectFit: 'cover', height: '280px' }} />
       <div className="card-body d-flex flex-column">
         <h5 className="card-title text-truncate">{product.name}</h5>
         <p className="card-text text-truncate">{product.brand}</p>
