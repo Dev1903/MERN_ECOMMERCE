@@ -17,25 +17,15 @@ const CategoryForm = () =>{
 
     const [user, setUser] = useState({
         name:'',
-        mobile:'',
         image:''
     })
 
     const [input, setInput] = useState('')
-    const [inputmobile, setInputMobile] = useState('')
     const [inputImage, setImage] = useState('')
 
     const handleInputChange = (e) => {
         setUser({...user, [e.target.name] : e.target.value})
         setInput(e.target.value)
-        console.log(user)
-    }
-
-    const handleMobile = (e) =>{
-        setUser({...user, [e.target.name] : e.target.value})
-        setInputMobile(e.target.value)
-        const onlyNums = e.target.value.replace(/[^0-9]/g, '')
-        setInputMobile(onlyNums)
         console.log(user)
     }
 
@@ -45,11 +35,9 @@ const CategoryForm = () =>{
     }
   
     const isError = input === ''
-    const isErrorMobile = inputmobile === ''
     const isErrorImage = inputImage === ''
 
     const nameValid = useRef(null);
-    const validMobile = useRef(null)
     const imageValid = useRef(null)
 
     const submitData = async (e) =>{
@@ -57,20 +45,15 @@ const CategoryForm = () =>{
         if(!user.name){
             alert('Please Enter Your Name !')
             nameValid.current.focus()
-        }else if(!user.mobile){
-            alert("Enter Your Mobile !")
-            validMobile.current.focus()
-        }else if(user.mobile.length !== 10){
-            alert("Please Enter Your Valid Mobile No!")
-            validMobile.current.focus()
-        }else if(!user.image){
+        }
+        else if(!user.image){
             alert("Please Upload Image!")
             imageValid.current.focus()
-        }else{
+        }
+        else{
             const formData = new FormData()
             formData.append('image', user.image, user.image.name)
             formData.append('name', user.name)
-            formData.append('mobile', user.mobile)
 
             const res = await addUser(formData)
             if(res.status === 201){
@@ -100,7 +83,7 @@ const CategoryForm = () =>{
                                 <h6>Category Upload Form</h6><hr></hr>
                                 <form>
                                     <FormControl isInvalid={isError}>
-                                        <FormLabel fontSize={'14px'}>Name <sup><span style={{color:'red'}}>*</span></sup></FormLabel>
+                                        <FormLabel fontSize={'14px'}>Category Name <sup><span style={{color:'red'}}>*</span></sup></FormLabel>
                                         <Input 
                                             type='text'
                                             name="name" 
@@ -119,28 +102,8 @@ const CategoryForm = () =>{
                                         )}
                                     </FormControl>
 
-                                    <FormControl isInvalid={isErrorMobile}>
-                                        <FormLabel fontSize={'14px'} mt={4}>Mobile No. <sup><span style={{color:'red'}}>*</span></sup></FormLabel>
-                                        <Input 
-                                            type='text' 
-                                            name="mobile"
-                                            value={inputmobile} 
-                                            placeholder="Enter Your Name"
-                                            ref={validMobile}
-                                            pb={1}
-                                            onChange={handleMobile} 
-                                        />
-                                        {!isErrorMobile ? (
-                                            <FormHelperText>
-                                                Success
-                                            </FormHelperText>
-                                        ) : (
-                                            <FormErrorMessage>Field is required.</FormErrorMessage>
-                                        )}
-                                    </FormControl>
-
                                     <FormControl isInvalid={isErrorImage}>
-                                        <FormLabel fontSize={'14px'} mt={4}>Image <sup><span style={{color:'red'}}>*</span></sup></FormLabel>
+                                        <FormLabel fontSize={'14px'} mt={4}>Upload Image <sup><span style={{color:'red'}}>*</span></sup></FormLabel>
                                         <Input 
                                             type='file' 
                                             name="image"

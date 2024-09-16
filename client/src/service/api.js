@@ -1,22 +1,42 @@
 import axios from "axios";
 
-const URL = 'http://localhost:8000';
+const URL = 'http://localhost:8000'; // Replace with your actual backend API URL
 
-export const addUser = async (data) =>{
-    try{
-        return await axios.post(`${URL}/add`, data)
-    }catch(error){
-        console.log('Error While Connecting API', error)
+// Add user (Product) function
+export const addUser = async (data) => {
+    try {
+        return await axios.post(`${URL}/add`, data);
+    } catch (error) {
+        console.error('Error While Connecting API:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
     }
-}
-// const API_URL = 'http://your-api-endpoint.com'; // Replace with your actual API endpoint
+};
 
+// Login user function
 export const loginUser = async (user) => {
     try {
         const response = await axios.post(`${URL}/login`, user);
         return response;
     } catch (error) {
         console.error('Error during login:', error);
-        return error.response;
+        return error.response ? error.response : { message: 'Unknown error occurred' };
     }
 };
+
+// Check if category exists
+export const checkCategoryExists = async (categoryName) => {
+    try {
+        const response = await axios.get(`${URL}/checkCategory`, { params: { categoryName } });
+        if (response.data.exists) {
+            console.log('Category exists, you can proceed.');
+            return true;
+        } else {
+            console.log('Category does not exist, please add the category first.');
+            return false;
+        }
+    } catch (error) {
+        console.error('Error checking category:', error.response ? error.response.data : error.message);
+        return false; // Return false in case of an error
+    }
+};
+

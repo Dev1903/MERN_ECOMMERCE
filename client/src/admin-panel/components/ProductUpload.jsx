@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { ChakraProvider, FormControl, FormLabel, FormHelperText, Input, FormErrorMessage, Button, Select, Textarea } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
-import { addUser } from "../../service/api.js";
+import { addUser, checkCategoryExists } from "../../service/api.js"; // Add a function to check category existence
 
 const ProductForm = () => {
     const [product, setProduct] = useState({
@@ -32,9 +32,11 @@ const ProductForm = () => {
 
     const isError = input === '';
     const isErrorImage = inputImage === '';
+    const isErrorCategory = product.category === '';
 
     const nameValid = useRef(null);
     const imageValid = useRef(null);
+    const categoryValid = useRef(null);
 
     const submitData = async (e) => {
         e.preventDefault();
@@ -44,32 +46,45 @@ const ProductForm = () => {
         } else if (!product.image) {
             alert('Please Upload Image!');
             imageValid.current.focus();
+        } else if (!product.category) {
+            alert('Please Enter a Category!');
+            categoryValid.current.focus();
         } else {
-            const formData = new FormData();
-            formData.append('image', product.image, product.image.name);
-            formData.append('name', product.name);
-            formData.append('description', product.description);
-            formData.append('price', product.price);
-            formData.append('currency', product.currency);
-            formData.append('stockQuantity', product.stockQuantity);
-            formData.append('category', product.category);
-            formData.append('brand', product.brand);
-            formData.append('tags', product.tags);
-            formData.append('sku', product.sku);
-
-            const res = await addUser(formData);
-            if (res.status === 201) {
+            // Check if category exists in the database
+            const categoryExists = await checkCategoryExists(product.category);
+            if (!categoryExists) {
                 Swal.fire({
-                    title: "Success",
-                    text: res.data,
-                    icon: "success"
+                    icon: 'warning',
+                    title: 'Category Not Found',
+                    text: 'Please add the category before entering the product.',
                 });
             } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
-                });
+                const formData = new FormData();
+                formData.append('image', product.image, product.image.name);
+                formData.append('name', product.name);
+                formData.append('description', product.description);
+                formData.append('price', product.price);
+                formData.append('currency', product.currency);
+                formData.append('stockQuantity', product.stockQuantity);
+                formData.append('category', product.category);
+                formData.append('brand', product.brand);
+                formData.append('tags', product.tags);
+                formData.append('sku', product.sku);
+
+                const res = await addUser(formData);
+                if (res.status === 201) {
+                    Swal.fire({
+                        title: "Success",
+                        text: res.data,
+                        icon: "success"
+                    });
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                }
             }
         }
     };
@@ -112,13 +127,14 @@ const ProductForm = () => {
                                 </FormControl>
 
                                 <FormControl mt={4}>
-                                    <FormLabel fontSize={'14px'}>Price</FormLabel>
+                                    <FormLabel fontSize={'14px'}>Price <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
                                     <Input
                                         type='number'
                                         name="price"
                                         value={product.price}
                                         placeholder="Enter Price"
                                         onChange={handleInputChange}
+                                        isRequired
                                     />
                                 </FormControl>
 
@@ -130,6 +146,7 @@ const ProductForm = () => {
                                         onChange={handleInputChange}
                                     >
                                         <option value="">Select Currency</option>
+                                        <option value="INR">INR</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                         <option value="GBP">GBP</option>
@@ -147,15 +164,21 @@ const ProductForm = () => {
                                     />
                                 </FormControl>
 
-                                <FormControl mt={4}>
-                                    <FormLabel fontSize={'14px'}>Category</FormLabel>
+                                <FormControl isInvalid={isErrorCategory} mt={4}>
+                                    <FormLabel fontSize={'14px'}>Category <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
                                     <Input
                                         type='text'
                                         name="category"
                                         value={product.category}
                                         placeholder="Enter Category"
+                                        ref={categoryValid}
                                         onChange={handleInputChange}
                                     />
+                                    {!isErrorCategory ? (
+                                        <FormHelperText>Success</FormHelperText>
+                                    ) : (
+                                        <FormErrorMessage>Field is required.</FormErrorMessage>
+                                    )}
                                 </FormControl>
 
                                 <FormControl mt={4}>
