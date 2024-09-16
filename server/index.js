@@ -1,3 +1,4 @@
+//index.js
 import express from 'express'
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -13,6 +14,6 @@ app.use(bodyParser.urlencoded({ extended : true }))
 Connection()
 
 app.use('/', Routes)
-app.use('/uploads', express.static('uploads'))
+app.use('/images/category-logo', express.static('images/category-logo'))
 
 app.listen(PORT, () => console.log(`Server Running On Port Number ${PORT}`))

@@ -1,11 +1,32 @@
+// api.js
 import axios from "axios";
 
-const URL = 'http://localhost:8000'; // Replace with your actual backend API URL
+const URL = 'http://localhost:8000';
 
-// Add user (Product) function
+// Add User
 export const addUser = async (data) => {
     try {
-        return await axios.post(`${URL}/add`, data);
+        return await axios.post(`${URL}/addUser`, data);
+    } catch (error) {
+        console.error('Error While Connecting API:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
+    }
+};
+
+// Add Category
+export const addCategory = async (data) => {
+    try {
+        return await axios.post(`${URL}/addCategory`, data);
+    } catch (error) {
+        console.error('Error While Connecting API:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
+    }
+};
+
+// Add Product
+export const addProduct = async (data) => {
+    try {
+        return await axios.post(`${URL}/addProduct`, data);
     } catch (error) {
         console.error('Error While Connecting API:', error);
         return error.response ? error.response : { message: 'Unknown error occurred' };
@@ -39,4 +60,3 @@ export const checkCategoryExists = async (categoryName) => {
         return false; // Return false in case of an error
     }
 };
-

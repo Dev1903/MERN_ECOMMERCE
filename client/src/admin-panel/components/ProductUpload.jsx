@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
-import { ChakraProvider, FormControl, FormLabel, FormHelperText, Input, FormErrorMessage, Button, Select, Textarea } from '@chakra-ui/react';
+import { ChakraProvider, FormControl, FormLabel, FormHelperText, Input, FormErrorMessage, Button, Select } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import { addUser, checkCategoryExists } from "../../service/api.js"; // Add a function to check category existence
 
 const ProductForm = () => {
@@ -28,6 +30,10 @@ const ProductForm = () => {
     const handleImage = (e) => {
         setInputImage(e.target.files[0]);
         setProduct({ ...product, image: e.target.files[0] });
+    };
+
+    const handleDescriptionChange = (value) => {
+        setProduct({ ...product, description: value });
     };
 
     const isError = input === '';
@@ -62,14 +68,14 @@ const ProductForm = () => {
                 const formData = new FormData();
                 formData.append('image', product.image, product.image.name);
                 formData.append('name', product.name);
-                formData.append('description', product.description);
+                formData.append('description', product.description || null);
                 formData.append('price', product.price);
-                formData.append('currency', product.currency);
-                formData.append('stockQuantity', product.stockQuantity);
+                formData.append('currency', product.currency || null);
+                formData.append('stockQuantity', product.stockQuantity || null);
                 formData.append('category', product.category);
-                formData.append('brand', product.brand);
-                formData.append('tags', product.tags);
-                formData.append('sku', product.sku);
+                formData.append('brand', product.brand || null);
+                formData.append('tags', product.tags || null);
+                formData.append('sku', product.sku || null);
 
                 const res = await addUser(formData);
                 if (res.status === 201) {
@@ -118,11 +124,10 @@ const ProductForm = () => {
 
                                 <FormControl mt={4}>
                                     <FormLabel fontSize={'14px'}>Description</FormLabel>
-                                    <Textarea
-                                        name="description"
+                                    <ReactQuill
                                         value={product.description}
+                                        onChange={handleDescriptionChange}
                                         placeholder="Enter Product Description"
-                                        onChange={handleInputChange}
                                     />
                                 </FormControl>
 
@@ -219,7 +224,7 @@ const ProductForm = () => {
                                     <Input
                                         type='file'
                                         name="image"
-                                        accept=".png, .jpg"
+                                        accept=".png, .jpg, .jpeg"
                                         ref={imageValid}
                                         pt={1}
                                         onChange={handleImage}
