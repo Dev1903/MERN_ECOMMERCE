@@ -15,5 +15,6 @@ Connection()
 
 app.use('/', Routes)
 app.use('/images/category-logo', express.static('images/category-logo'))
+app.use('/images/product-images', express.static('images/product-images'))
 
 app.listen(PORT, () => console.log(`Server Running On Port Number ${PORT}`))

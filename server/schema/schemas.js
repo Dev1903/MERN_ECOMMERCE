@@ -11,10 +11,17 @@ const Category = mongoose.model('Category', categorySchema);
 // Define the Product schema
 const productSchema = mongoose.Schema({
     name: String,
-    price: Number,
+    price: String,
+    discountPrice: String,
     description: String,
     image: String,
-    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' }, // Reference to Category
+    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
+    brand: String,
+    stockQuantity: String,
+    rating: Number,
+    sku: String,
+
+
 });
 
 const Product = mongoose.model('Product', productSchema);
@@ -32,8 +39,8 @@ const User = mongoose.model('User', userSchema);
 
 // Define the Order schema
 const orderSchema = mongoose.Schema({
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }, // Reference to User
-    products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }], // Array of Product references
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     totalAmount: Number,
     status: { type: String, default: 'Pending' },
     orderDate: { type: Date, default: Date.now },

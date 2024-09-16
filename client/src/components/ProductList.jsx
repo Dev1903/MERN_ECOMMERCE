@@ -63,6 +63,7 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
 
   return (
     <div className="col product-list-container">
+    <div className="container">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4>{heading}</h4>
         <div>
@@ -87,6 +88,7 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 };

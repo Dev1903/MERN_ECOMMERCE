@@ -4,7 +4,8 @@ import { User, Category, Product } from '../schema/schemas.js';
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
+// Storage configuration for category images
+const categoryStorage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'images/category-logo');
     },
@@ -12,7 +13,18 @@ const storage = multer.diskStorage({
         cb(null, file.originalname);
     }
 });
-const upload = multer({ storage: storage });
+const categoryUpload = multer({ storage: categoryStorage });
+
+// Storage configuration for product images
+const productStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'images/product-images');
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    }
+});
+const productUpload = multer({ storage: productStorage });
 
 // Add User
 router.post('/addUser', async (req, res) => {
@@ -32,7 +44,7 @@ router.post('/addUser', async (req, res) => {
 });
 
 // Add Category
-router.post('/addCategory', upload.single('image'), async (req, res) => {
+router.post('/addCategory', categoryUpload.single('image'), async (req, res) => {
     try {
         const category = new Category({
             name: req.body.name,
@@ -46,15 +58,26 @@ router.post('/addCategory', upload.single('image'), async (req, res) => {
 });
 
 // Add Product
-router.post('/addProduct', upload.single('image'), async (req, res) => {
+router.post('/addProduct', productUpload.single('image'), async (req, res) => {
     try {
+        const category = await Category.findOne({ name: req.body.category });
+        if (!category) {
+            return res.status(400).json('Category does not exist');
+        }
+
         const product = new Product({
             name: req.body.name,
             price: req.body.price,
+            discountPrice: req.body.discountPrice, // Add discountPrice
+            stockQuantity: req.body.stockQuantity, // Add stockQuantity
+            category: category._id,
+            brand: req.body.brand, // Add brand
+            rating: req.body.rating, // Add rating
+            sku: req.body.sku, // Add SKU
             description: req.body.description,
-            image: req.file.originalname,
-            category: req.body.category // Assuming category ID is sent in request
+            image: req.file.originalname// Ensure image is uploaded
         });
+
         await product.save();
         res.status(201).json('Product Successfully Inserted');
     } catch (error) {

@@ -1,4 +1,3 @@
-// api.js
 import axios from "axios";
 
 const URL = 'http://localhost:8000';
@@ -57,6 +56,6 @@ export const checkCategoryExists = async (categoryName) => {
         }
     } catch (error) {
         console.error('Error checking category:', error.response ? error.response.data : error.message);
-        return false; // Return false in case of an error
+        return false;
     }
 };

@@ -1,30 +1,28 @@
 import React, { useState, useRef } from "react";
-import { ChakraProvider, FormControl, FormLabel, FormHelperText, Input, FormErrorMessage, Button, Select } from '@chakra-ui/react';
+import { ChakraProvider, FormControl, FormLabel, FormHelperText, Input, FormErrorMessage, Button } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
-import { addUser, checkCategoryExists } from "../../service/api.js"; // Add a function to check category existence
+import { addProduct, checkCategoryExists } from "../../service/api.js";
 
 const ProductForm = () => {
     const [product, setProduct] = useState({
         name: '',
         description: '',
         price: '',
-        currency: '',
+        discountPrice: '',
         stockQuantity: '',
         category: '',
         brand: '',
         image: '',
-        tags: '',
-        sku: ''
+        sku: '',
+        rating: ''
     });
 
-    const [input, setInput] = useState('');
     const [inputImage, setInputImage] = useState('');
 
     const handleInputChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
-        setInput(e.target.value);
     };
 
     const handleImage = (e) => {
@@ -36,25 +34,24 @@ const ProductForm = () => {
         setProduct({ ...product, description: value });
     };
 
-    const isError = input === '';
-    const isErrorImage = inputImage === '';
     const isErrorCategory = product.category === '';
+    const isErrorImage = product.image === '';
+    const isErrorPrice = product.price === '';
 
-    const nameValid = useRef(null);
-    const imageValid = useRef(null);
     const categoryValid = useRef(null);
+    const imageValid = useRef(null);
+    const priceValid = useRef(null);
 
     const submitData = async (e) => {
         e.preventDefault();
         if (!product.name) {
             alert('Please Enter Product Name!');
-            nameValid.current.focus();
         } else if (!product.image) {
             alert('Please Upload Image!');
-            imageValid.current.focus();
         } else if (!product.category) {
             alert('Please Enter a Category!');
-            categoryValid.current.focus();
+        } else if (!product.price) {
+            alert('Please Enter Price of the Product!');
         } else {
             // Check if category exists in the database
             const categoryExists = await checkCategoryExists(product.category);
@@ -70,20 +67,24 @@ const ProductForm = () => {
                 formData.append('name', product.name);
                 formData.append('description', product.description || null);
                 formData.append('price', product.price);
-                formData.append('currency', product.currency || null);
+                formData.append('discountPrice', product.discountPrice || null);
                 formData.append('stockQuantity', product.stockQuantity || null);
                 formData.append('category', product.category);
                 formData.append('brand', product.brand || null);
-                formData.append('tags', product.tags || null);
+                formData.append('rating', product.rating || null);
                 formData.append('sku', product.sku || null);
 
-                const res = await addUser(formData);
+                const res = await addProduct(formData);
                 if (res.status === 201) {
                     Swal.fire({
                         title: "Success",
                         text: res.data,
                         icon: "success"
                     });
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+
                 } else {
                     Swal.fire({
                         icon: "error",
@@ -104,21 +105,20 @@ const ProductForm = () => {
                         <div className="card p-3">
                             <h6>Product Upload Form</h6><hr />
                             <form>
-                                <FormControl isInvalid={isError}>
+                                <FormControl isInvalid={product.name === ''}>
                                     <FormLabel fontSize={'14px'}>Product Name <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
                                     <Input
                                         type='text'
                                         name="name"
                                         value={product.name}
                                         placeholder="Enter Product Name"
-                                        ref={nameValid}
                                         pb={1}
                                         onChange={handleInputChange}
                                     />
-                                    {!isError ? (
-                                        <FormHelperText>Success</FormHelperText>
-                                    ) : (
+                                    {product.name === '' ? (
                                         <FormErrorMessage>Field is required.</FormErrorMessage>
+                                    ) : (
+                                        <FormHelperText>Success</FormHelperText>
                                     )}
                                 </FormControl>
 
@@ -131,31 +131,66 @@ const ProductForm = () => {
                                     />
                                 </FormControl>
 
-                                <FormControl mt={4}>
+                                <FormControl mt={4} isInvalid={isErrorPrice}>
                                     <FormLabel fontSize={'14px'}>Price <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
                                     <Input
                                         type='number'
                                         name="price"
                                         value={product.price}
                                         placeholder="Enter Price"
+                                        ref={priceValid}
                                         onChange={handleInputChange}
-                                        isRequired
                                     />
+                                    {isErrorPrice ? (
+                                        <FormErrorMessage>Price is required.</FormErrorMessage>
+                                    ) : (
+                                        <FormHelperText>Success</FormHelperText>
+                                    )}
                                 </FormControl>
 
                                 <FormControl mt={4}>
-                                    <FormLabel fontSize={'14px'}>Currency</FormLabel>
-                                    <Select
-                                        name="currency"
-                                        value={product.currency}
+                                    <FormLabel fontSize={'14px'}>Category <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                    <Input
+                                        type='text'
+                                        name="category"
+                                        value={product.category}
+                                        placeholder="Enter Category Name"
+                                        ref={categoryValid}
+                                        pb={1}
                                         onChange={handleInputChange}
-                                    >
-                                        <option value="">Select Currency</option>
-                                        <option value="INR">INR</option>
-                                        <option value="USD">USD</option>
-                                        <option value="EUR">EUR</option>
-                                        <option value="GBP">GBP</option>
-                                    </Select>
+                                    />
+                                    {isErrorCategory ? (
+                                        <FormErrorMessage>Field is required.</FormErrorMessage>
+                                    ) : (
+                                        <FormHelperText>Success</FormHelperText>
+                                    )}
+                                </FormControl>
+
+                                <FormControl mt={4} isInvalid={isErrorImage}>
+                                    <FormLabel fontSize={'14px'}>Product Image <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                    <Input
+                                        type='file'
+                                        name="image"
+                                        accept="image/*"
+                                        ref={imageValid}
+                                        onChange={handleImage}
+                                    />
+                                    {isErrorImage ? (
+                                        <FormErrorMessage>Image is required.</FormErrorMessage>
+                                    ) : (
+                                        <FormHelperText>Success</FormHelperText>
+                                    )}
+                                </FormControl>
+
+                                <FormControl mt={4}>
+                                    <FormLabel fontSize={'14px'}>Discount Price</FormLabel>
+                                    <Input
+                                        type='number'
+                                        name="discountPrice"
+                                        value={product.discountPrice}
+                                        placeholder="Enter Discount Price"
+                                        onChange={handleInputChange}
+                                    />
                                 </FormControl>
 
                                 <FormControl mt={4}>
@@ -167,23 +202,6 @@ const ProductForm = () => {
                                         placeholder="Enter Stock Quantity"
                                         onChange={handleInputChange}
                                     />
-                                </FormControl>
-
-                                <FormControl isInvalid={isErrorCategory} mt={4}>
-                                    <FormLabel fontSize={'14px'}>Category <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                    <Input
-                                        type='text'
-                                        name="category"
-                                        value={product.category}
-                                        placeholder="Enter Category"
-                                        ref={categoryValid}
-                                        onChange={handleInputChange}
-                                    />
-                                    {!isErrorCategory ? (
-                                        <FormHelperText>Success</FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Field is required.</FormErrorMessage>
-                                    )}
                                 </FormControl>
 
                                 <FormControl mt={4}>
@@ -198,12 +216,12 @@ const ProductForm = () => {
                                 </FormControl>
 
                                 <FormControl mt={4}>
-                                    <FormLabel fontSize={'14px'}>Tags</FormLabel>
+                                    <FormLabel fontSize={'14px'}>Rating</FormLabel>
                                     <Input
-                                        type='text'
-                                        name="tags"
-                                        value={product.tags}
-                                        placeholder="Enter Tags (comma-separated)"
+                                        type='number'
+                                        name="rating"
+                                        value={product.rating}
+                                        placeholder="Enter Rating"
                                         onChange={handleInputChange}
                                     />
                                 </FormControl>
@@ -219,30 +237,7 @@ const ProductForm = () => {
                                     />
                                 </FormControl>
 
-                                <FormControl isInvalid={isErrorImage} mt={4}>
-                                    <FormLabel fontSize={'14px'}>Image <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                    <Input
-                                        type='file'
-                                        name="image"
-                                        accept=".png, .jpg, .jpeg"
-                                        ref={imageValid}
-                                        pt={1}
-                                        onChange={handleImage}
-                                    />
-                                    {!isErrorImage ? (
-                                        <FormHelperText>Uploaded</FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Field is required.</FormErrorMessage>
-                                    )}
-                                </FormControl>
-
-                                <div className="row">
-                                    <div className="col-12">
-                                        <div className="d-block float-right">
-                                            <Button onClick={submitData} colorScheme='blue'>Submit</Button>
-                                        </div>
-                                    </div>
-                                </div>
+                                <Button type="submit" colorScheme='blue' mt={4} onClick={submitData}>Upload</Button>
                             </form>
                         </div>
                     </div>
@@ -250,6 +245,6 @@ const ProductForm = () => {
             </div>
         </ChakraProvider>
     );
-}
+};
 
 export default ProductForm;
