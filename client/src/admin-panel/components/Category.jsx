@@ -50,7 +50,8 @@ const Category = () => {
             setCurrentCategory(null); // Clear current category
             setCategoryName(''); // Clear input fields
             setCategoryImage(null); // Clear image field
-            // Optionally, refresh the categories list to reflect the updated category
+            const updatedCategories = await getCategories();
+            setCategories(updatedCategories);//refresh the categories list to reflect the updated category
         } catch (error) {
             console.error('Error updating category', error);
             alert('Error updating category');

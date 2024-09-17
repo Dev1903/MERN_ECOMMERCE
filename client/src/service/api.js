@@ -65,7 +65,7 @@ export const checkCategoryExists = async (categoryName) => {
 export const getCategories = async () => {
     try {
         const response = await axios.get(`${URL}/categories`);
-        return response.data;
+        return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
         console.error('Error While Fetching Categories:', error);
         return error.response ? error.response : { message: 'Unknown error occurred' };
