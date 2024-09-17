@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 import { getCategories, deleteCategory, updateCategory } from '../../service/api';
 
 const Category = () => {
-    const [firstClick, setFirstClick] = useState(true); // Flag for first click
-    const editFormRef = useRef(null); // Create a ref for the edit form div
     const [categories, setCategories] = useState([]);
     const [viewAll, setViewAll] = useState(false);
     const [editMode, setEditMode] = useState(false);
@@ -24,10 +23,24 @@ const Category = () => {
     };
 
     const handleDelete = async (id) => {
-        const confirmDelete = window.confirm('Are you sure you want to delete this category?');
-        if (confirmDelete) {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        });
+        
+        if (result.isConfirmed) {
             await deleteCategory(id);
             setCategories(categories.filter(category => category._id !== id));
+            Swal.fire(
+                'Deleted!',
+                'The category has been deleted.',
+                'success'
+            );
         }
     };
 
@@ -36,12 +49,9 @@ const Category = () => {
         setCurrentCategory(category);
         setCategoryName(category.name);
         setCategoryImage(null);
-
-        // Scroll the edit form into view only on the first click
-        if (firstClick && editFormRef.current) {
-            editFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setFirstClick(false); // Set flag to false after the first click
-        }
+        // Open modal
+        const editModal = new window.bootstrap.Modal(document.getElementById('editModal'));
+        editModal.show();
     };
 
     const handleUpdateCategory = async (e) => {
@@ -54,16 +64,27 @@ const Category = () => {
 
         try {
             await updateCategory(currentCategory._id, formData);
-            alert('Category updated successfully');
+            const updatedCategories = await getCategories();
+            setCategories(updatedCategories);
+            Swal.fire(
+                'Updated!',
+                'Category updated successfully.',
+                'success'
+            );
             setEditMode(false);
             setCurrentCategory(null);
             setCategoryName('');
             setCategoryImage(null);
-            const updatedCategories = await getCategories();
-            setCategories(updatedCategories);
+            // Close modal
+            const editModal = window.bootstrap.Modal.getInstance(document.getElementById('editModal'));
+            editModal.hide();
         } catch (error) {
             console.error('Error updating category', error);
-            alert('Error updating category');
+            Swal.fire(
+                'Error!',
+                'There was an error updating the category.',
+                'error'
+            );
         }
     };
 
@@ -76,7 +97,7 @@ const Category = () => {
                         {viewAll ? 'View Less' : 'View All'}
                     </button>
                 </div>
-                <table style={{ width: '100%' }}>
+                <table className="table">
                     <thead>
                         <tr>
                             <th>Sno.</th>
@@ -106,37 +127,45 @@ const Category = () => {
                 </table>
             </div>
 
-            {/* Edit form section */}
-            {editMode && (
-                <div className="edit-form mt-5" ref={editFormRef}> {/* Attach ref here */}
-                    <h2>Edit Category</h2>
-                    <form onSubmit={handleUpdateCategory}>
-                        <div className="form-group pt-3">
-                            <label>Category Name</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                value={categoryName}
-                                onChange={(e) => setCategoryName(e.target.value)}
-                                required
-                            />
+            {/* Edit Modal */}
+            <div className="modal fade" id="editModal" tabIndex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="editModalLabel">Edit Category</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="form-group pt-3">
-                            <label>Category Image</label>
-                            <input
-                                type="file"
-                                className="form-control"
-                                onChange={(e) => setCategoryImage(e.target.files[0])}
-                            />
+                        <div className="modal-body">
+                            <form onSubmit={handleUpdateCategory}>
+                                <div className="mb-3">
+                                    <label htmlFor="categoryName" className="form-label">Category Name</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="categoryName"
+                                        value={categoryName}
+                                        onChange={(e) => setCategoryName(e.target.value)}
+                                        required
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="categoryImage" className="form-label">Category Image</label>
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        id="categoryImage"
+                                        onChange={(e) => setCategoryImage(e.target.files[0])}
+                                    />
+                                </div>
+                                <div className="d-flex justify-content-end">
+                                    <button type="submit" className="btn btn-primary me-2">Update Category</button>
+                                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                </div>
+                            </form>
                         </div>
-
-                        <div className="buttons pt-3">
-                            <button type="submit" className="btn btn-primary me-3">Update Category</button>
-                            <button type="button" className="btn btn-danger" onClick={() => setEditMode(false)}>Cancel</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };
