@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { getCategories, deleteCategory, updateCategory } from '../../service/api'; // Ensure updateCategory is imported
+import React, { useState, useEffect, useRef } from 'react';
+import { getCategories, deleteCategory, updateCategory } from '../../service/api';
 
 const Category = () => {
+    const [firstClick, setFirstClick] = useState(true); // Flag for first click
+    const editFormRef = useRef(null); // Create a ref for the edit form div
     const [categories, setCategories] = useState([]);
     const [viewAll, setViewAll] = useState(false);
-    const [editMode, setEditMode] = useState(false); // For edit mode
-    const [currentCategory, setCurrentCategory] = useState(null); // Current category for editing
-    const [categoryName, setCategoryName] = useState(''); // For category name input
-    const [categoryImage, setCategoryImage] = useState(null); // For image input
+    const [editMode, setEditMode] = useState(false);
+    const [currentCategory, setCurrentCategory] = useState(null);
+    const [categoryName, setCategoryName] = useState('');
+    const [categoryImage, setCategoryImage] = useState(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -31,27 +33,34 @@ const Category = () => {
 
     const handleEditClick = (category) => {
         setEditMode(true);
-        setCurrentCategory(category); // Set current category for editing
-        setCategoryName(category.name); // Pre-fill name
+        setCurrentCategory(category);
+        setCategoryName(category.name);
+        setCategoryImage(null);
+
+        // Scroll the edit form into view only on the first click
+        if (firstClick && editFormRef.current) {
+            editFormRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setFirstClick(false); // Set flag to false after the first click
+        }
     };
 
     const handleUpdateCategory = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('name', categoryName); // Append the new/updated category name
+        formData.append('name', categoryName);
         if (categoryImage) {
-            formData.append('image', categoryImage); // Append the new image if uploaded
+            formData.append('image', categoryImage);
         }
 
         try {
-            await updateCategory(currentCategory._id, formData); // Send update request
+            await updateCategory(currentCategory._id, formData);
             alert('Category updated successfully');
-            setEditMode(false); // Close edit mode
-            setCurrentCategory(null); // Clear current category
-            setCategoryName(''); // Clear input fields
-            setCategoryImage(null); // Clear image field
+            setEditMode(false);
+            setCurrentCategory(null);
+            setCategoryName('');
+            setCategoryImage(null);
             const updatedCategories = await getCategories();
-            setCategories(updatedCategories);//refresh the categories list to reflect the updated category
+            setCategories(updatedCategories);
         } catch (error) {
             console.error('Error updating category', error);
             alert('Error updating category');
@@ -95,36 +104,39 @@ const Category = () => {
                         }
                     </tbody>
                 </table>
-
-                {/* Edit form section */}
-                {editMode && (
-                    <div className="edit-form">
-                        <h2>Edit Category</h2>
-                        <form onSubmit={handleUpdateCategory}>
-                            <div className="form-group">
-                                <label>Category Name</label>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    value={categoryName}
-                                    onChange={(e) => setCategoryName(e.target.value)}
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Category Image</label>
-                                <input
-                                    type="file"
-                                    className="form-control"
-                                    onChange={(e) => setCategoryImage(e.target.files[0])}
-                                />
-                            </div>
-                            <button type="submit" className="btn btn-primary">Update Category</button>
-                            <button type="button" className="btn btn-secondary" onClick={() => setEditMode(false)}>Cancel</button>
-                        </form>
-                    </div>
-                )}
             </div>
+
+            {/* Edit form section */}
+            {editMode && (
+                <div className="edit-form mt-5" ref={editFormRef}> {/* Attach ref here */}
+                    <h2>Edit Category</h2>
+                    <form onSubmit={handleUpdateCategory}>
+                        <div className="form-group pt-3">
+                            <label>Category Name</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={categoryName}
+                                onChange={(e) => setCategoryName(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-group pt-3">
+                            <label>Category Image</label>
+                            <input
+                                type="file"
+                                className="form-control"
+                                onChange={(e) => setCategoryImage(e.target.files[0])}
+                            />
+                        </div>
+
+                        <div className="buttons pt-3">
+                            <button type="submit" className="btn btn-primary me-3">Update Category</button>
+                            <button type="button" className="btn btn-danger" onClick={() => setEditMode(false)}>Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            )}
         </div>
     );
 };
