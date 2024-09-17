@@ -2,22 +2,7 @@
 .main {
     height: calc(100vh - 10px);
     width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
     padding: 40px 30px 30px 30px;
-}
-
-/* Scrollbar Styles */
-.main::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(to bottom, rgb(0, 0, 85), rgb(0, 0, 50));
-}
-
-.main::-webkit-scrollbar {
-    width: 5px;
-}
-
-.main::-webkit-scrollbar-track {
-    background-color: #9e9e9eb2;
 }
 
 /* Report Container */
@@ -26,6 +11,7 @@
     border-radius: 30px;
     box-shadow: 3px 3px 10px rgb(188, 188, 188);
     padding: 0px 20px 20px 20px;
+    width: fit-content;
 }
 
 /* Report Header */
@@ -41,7 +27,7 @@
 
 /* Table Styles */
 .table {
-    width: 100%;
+    min-width: 90vw;
     border-collapse: collapse;
     margin-bottom: 20px;
     
@@ -56,44 +42,7 @@
     background-color: #f4f4f4;
 }
 
-/* Button Styles */
-.btn {
-    padding: 5px 10px;
-    border-radius: 5px;
-}
 
-.btn-outline-primary {
-    background-color: transparent;
-    border: 1px solid #4b49ac;
-    color: #4b49ac;
-}
-
-.btn-success {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-danger {
-    background-color: #dc3545;
-    color: white;
-}
-
-/* Flexbox Utilities */
-.d-flex {
-    display: flex;
-}
-
-.justify-content-center {
-    justify-content: center;
-}
-
-.align-items-center {
-    align-items: center;
-}
-
-.text-center {
-    text-align: center;
-}
 
 /* Responsive Styles */
 @media (max-width: 768px) {

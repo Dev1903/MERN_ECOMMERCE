@@ -4,7 +4,7 @@ import '../css/sidebar.css'; // Ensure you have a CSS file to include styling
 
 const Sidebar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [sidebarOpen, setSidebarOpen] = useState(true); // State to manage sidebar visibility
+    const [sidebarOpen, setSidebarOpen] = useState(false); // State to manage sidebar visibility
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
@@ -12,6 +12,9 @@ const Sidebar = () => {
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
+    };
+    const sidebarClosed = () => {
+        setSidebarOpen(false);
     };
 
     return (
@@ -21,9 +24,9 @@ const Sidebar = () => {
             </button>
             <h2>Admin Panel</h2>
             <ul>
-                <li><Link to="/admin/categories">Categories</Link></li>
-                <li><Link to="/admin/products">Products</Link></li>
-                <li><Link to="/admin/orders">Orders</Link></li>
+                <li><Link to="/admin/categories" onClick={sidebarClosed}>Categories</Link></li>
+                <li><Link to="/admin/products" onClick={sidebarClosed}>Products</Link></li>
+                <li><Link to="/admin/orders" onClick={sidebarClosed}>Orders</Link></li>
 
                 {/* Dropdown */}
                 <li onClick={toggleDropdown} style={{ cursor: 'pointer', fontSize: '18px' }}>
@@ -32,12 +35,12 @@ const Sidebar = () => {
                         <i className={`fas ${dropdownOpen ? 'fa-chevron-up' : 'fa-chevron-down'}`}></i> {/* FontAwesome icon */}
                     </span>
                     <ul className={`dropdown ${dropdownOpen ? 'open' : ''}`}>
-                        <li><Link to="/admin/categoryUpload">Category</Link></li>
-                        <li><Link to="/admin/productUpload">Product</Link></li>
+                        <li><Link to="/admin/categoryUpload" onClick={sidebarClosed}>Category</Link></li>
+                        <li><Link to="/admin/productUpload" onClick={sidebarClosed}>Product</Link></li>
                     </ul>
                 </li>
 
-                <li><Link to="/admin/email">Email</Link></li>
+                <li><Link to="/admin/email" onClick={sidebarClosed}>Email</Link></li>
             </ul>
         </div>
     );

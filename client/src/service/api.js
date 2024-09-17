@@ -97,3 +97,14 @@ export const updateCategory = async (id, categoryData) => {
     }
 };
 
+//Fetch Products
+export const getProducts = async () => {
+    try {
+        const response = await axios.get(`${URL}/products`);
+        return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+        console.error('Error While Fetching Products:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
+    }
+};
+

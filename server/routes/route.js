@@ -153,4 +153,15 @@ router.put('/updateCategory/:id', categoryUpload.single('image'), async (req, re
         res.status(500).json('Error While Updating Category');
     }
 });
+
+// Get products
+router.get('/products', async (req, res) => {
+    try {
+        const products = await Product.find().populate('category');
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json('Error While Fetching Products');
+    }
+});
+
 export default router;

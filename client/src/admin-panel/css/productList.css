@@ -9,6 +9,14 @@
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.description-cell {
+    max-width: 200px; /* Adjust the max-width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word; /* Optional: handles long words */
+}
+
 .product-list h1 {
     text-align: start;
     margin-bottom: 20px;
@@ -16,10 +24,16 @@
 }
 
 /* Table Styles */
+.table-container {
+    /* width: 100%; */
+    overflow: visible;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
+}
+
 .table {
-    width: 100%;
+    /* width: 100%; */
     border-collapse: collapse;
-    margin-bottom: 20px;
+    /* min-width: 1000px;  */
 }
 
 .table th, .table td {
@@ -40,11 +54,6 @@
     .product-list h1 {
         font-size: 24px;
         text-align: center;
-    }
-
-    .table {
-        overflow-x: auto; /* Add horizontal scrolling for tables on small screens */
-        display: block; /* Make table block for horizontal scrolling */
     }
 
     .table th, .table td {
