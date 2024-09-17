@@ -8,7 +8,58 @@
 .order-list h1 {
     margin-bottom: 20px;
     font-size: 28px;
+}/* Order List */
+.order-list {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
 }
+
+.order-list h1 {
+    margin-bottom: 20px;
+    font-size: 28px;
+}
+
+/* Table Styles */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f4f4f4;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .order-list {
+        padding: 15px; /* Adjust padding for smaller screens */
+        border-radius: 8px; /* Reduce border-radius for smaller screens */
+    }
+
+    .order-list h1 {
+        font-size: 24px; /* Adjust font size for smaller screens */
+        margin-bottom: 15px; /* Adjust margin for smaller screens */
+    }
+
+    .table {
+        overflow-x: auto; /* Enable horizontal scrolling for the table on small screens */
+        display: block; /* Make table block for horizontal scrolling */
+    }
+
+    table th, table td {
+        padding: 8px; /* Adjust padding for smaller screens */
+        font-size: 14px; /* Adjust font size for smaller screens */
+    }
+}
+
 
 .table {
     width: 100%;

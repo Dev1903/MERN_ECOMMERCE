@@ -1,4 +1,3 @@
-/* sidebar.css */
 .sidebar-admin {
     width: 250px;
     background-color: #4b49ac;
@@ -7,7 +6,16 @@
     position: fixed;
     top: 0;
     left: 0;
-    padding: 20px 0 0 10px ; 
+    padding: 20px 0 0 10px;
+    transition: transform 0.3s ease; /* Smooth transition for sliding effect */
+}
+
+.sidebar-admin.closed {
+    transform: translateX(-100%); /* Hide sidebar off-screen */
+}
+
+.sidebar-admin.open {
+    transform: translateX(0); /* Show sidebar */
 }
 
 .sidebar-admin h2 {
@@ -17,7 +25,7 @@
 .sidebar-admin ul {
     list-style: none;
     padding: 0;
-    padding-left: 20px!important;
+    padding-left: 20px !important;
 }
 
 .sidebar-admin ul li {
@@ -45,5 +53,25 @@
 .sidebar-admin ul .dropdown.open {
     margin-top: 20px;
     max-height: 100px; /* Adjust as needed */
-    padding-left: 20px; /* Adjust padding as needed */  
+    padding-left: 20px; /* Adjust padding as needed */
+}
+
+/* Toggler button styles */
+.sidebar-toggle {
+    position: absolute;
+    top: 5px;
+    right: -45px; /* Adjust as needed */
+    background-color: #4b49ac;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1000; /* Ensure it is above other content */
+    height: 40px;
+    aspect-ratio: 1/1;
+}
+
+.sidebar-toggle i {
+    font-size: 20px;
 }
