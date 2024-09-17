@@ -1,6 +1,9 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import products from '../js/products';
+import Searchbar from './Searchbar';
+import Header from './Header';
+import { Footer, Newsletter } from './Footer';
 
 const Fulldetails = () => {
     const { id } = useParams();
@@ -14,28 +17,41 @@ const Fulldetails = () => {
     console.log(product.image);
 
     return (
-        <div className="container">
-            <div className="row mt-5">
-                <div className="col-md-6">
-                    <img
-                        src={product.image}
-                        alt={product.name}
-                        className="img-fluid"
-                        onError={(e) => {
-                            e.target.src = '/path/to/placeholder/image.jpg'; // Fallback image
-                        }}
-                    />
+        <div className='container-fluid'>
+            <div className="row mb-2 searchbar">
+                <Searchbar />
+            </div>
+            <div className="row mb-5 header">
+                <Header />
+                
+            </div>
+            <div className="container">
+                <div className="row mt-5">
+                <hr />
+                    <div className="col-md-6 mt-5 mb-5">
+                        <img
+                            src={`/${product.image}`}
+                            alt={product.name}
+                            className="img-fluid"
+                            style={{ height: '500px' }}
+                        />
+                    </div>
+                    <div className="col-md-6 d-flex flex-column justify-content-center mt-5 mb-5">
+                        <h3>{product.name}</h3>
+                        <p><strong>Brand:</strong> {product.brand}</p>
+                        <p><strong>Category:</strong> {product.category}</p>
+                        <p><strong>Rating:</strong> {product.rating}</p>
+                        <p><strong>Sold:</strong> {product.sold} units</p>
+                        <p><strong>Price:</strong> ₹{product.price.toFixed(2)}</p>
+                        <p><strong>Original Price:</strong> ₹{product.originalPrice.toFixed(2)}</p>
+                        <p><strong>Popular:</strong> {product.popular ? 'Yes' : 'No'}</p>
+                    </div>
+                    <hr />
                 </div>
-                <div className="col-md-6">
-                    <h3>{product.name}</h3>
-                    <p><strong>Brand:</strong> {product.brand}</p>
-                    <p><strong>Category:</strong> {product.category}</p>
-                    <p><strong>Rating:</strong> {product.rating}</p>
-                    <p><strong>Sold:</strong> {product.sold} units</p>
-                    <p><strong>Price:</strong> ₹{product.price.toFixed(2)}</p>
-                    <p><strong>Original Price:</strong> ₹{product.originalPrice.toFixed(2)}</p>
-                    <p><strong>Popular:</strong> {product.popular ? 'Yes' : 'No'}</p>
-                </div>
+            </div>
+            <div className="row mb-2 footer">
+                <Newsletter />
+                <Footer />
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { FormControl, FormLabel, FormHelperText, Input, FormErrorMessage } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
-import { addUser } from "../service/api.js";
+import { addUser, loginUser } from "../service/api.js";
 import { Link } from "react-router-dom";
 
 const SignUp = () => {
@@ -113,7 +113,7 @@ const SignUp = () => {
         } else if (user.password.length < 6) {
             alert("Password must be at least 6 characters long!");
             passwordValid.current.focus();
-        } 
+        }
         // New validation for confirm password
         else if (!user.confirmPassword) {
             alert("Please Confirm Your Password!");
@@ -243,7 +243,7 @@ const SignUp = () => {
                                 </FormControl>
 
                                 {/* Password Field */}
-                                <FormControl isInvalid={isErrorPassword}>
+                                <FormControl isInvalid={isErrorPassword || (inputPassword.length > 0 && inputPassword.length < 6)}>
                                     <FormLabel fontSize={'14px'} mt={4}>Password <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
                                     <Input
                                         type='password'
@@ -254,12 +254,15 @@ const SignUp = () => {
                                         pb={1}
                                         onChange={handlePassword}
                                     />
-                                    {!isErrorPassword ? (
-                                        <FormHelperText>Looks good!</FormHelperText>
-                                    ) : (
+                                    {isErrorPassword ? (
                                         <FormErrorMessage>Password is required.</FormErrorMessage>
+                                    ) : inputPassword.length < 6 && inputPassword.length > 0 ? (
+                                        <FormErrorMessage>Password must be at least 6 characters long.</FormErrorMessage>
+                                    ) : (
+                                        <FormHelperText>Looks Good!</FormHelperText>
                                     )}
                                 </FormControl>
+
 
                                 {/* Confirm Password Field */}
                                 <FormControl isInvalid={isErrorConfirmPassword}>

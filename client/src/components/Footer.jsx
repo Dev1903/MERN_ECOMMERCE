@@ -35,23 +35,23 @@ const Footer = () => {
                 <div className="row justify-content-between">
                     <div className="col-lg-3 pt-5">
                         <div className="row logo mb-4">
-                            <Link to={'/'}><img src="images/ecommerce_logo.png" alt="logo" /></Link>
+                            <Link to={'/'}><img src="/images/ecommerce_logo.png" alt="logo" /></Link>
                         </div>
                         <div className="row desc">
                             <p className="text-muted text-md-nowrap">We support all Credit Cards and Payment Methods</p>
                         </div>
                         <div className="row payimg d-flex ms-1">
                             <div className="col g-0 m-0 p-0">
-                                <img src="images/payment-logo/gpay.png" alt="Google Pay" />
+                                <img src="/images/payment-logo/gpay.png" alt="Google Pay" />
                             </div>
                             <div className="col g-0 m-0 p-0">
-                                <img src="images/payment-logo/mastercard.png" alt="Master Card" />
+                                <img src="/images/payment-logo/mastercard.png" alt="Master Card" />
                             </div>
                             <div className="col g-0 m-0 p-0">
-                                <img src="images/payment-logo/paypal.png" alt="PayPal" />
+                                <img src="/images/payment-logo/paypal.png" alt="PayPal" />
                             </div>
                             <div className="col g-0 m-0 p-0">
-                                <img src="images/payment-logo/visa.png" alt="Visa" />
+                                <img src="/images/payment-logo/visa.png" alt="Visa" />
                             </div>
                         </div>
                     </div>
@@ -92,16 +92,16 @@ const Footer = () => {
                         </div>
                         <div className="row d-flex justify-content-evenly">
                             <div className="col-3 social me-lg-2">
-                                <a href="https://www.x.com" target="_blank"><i className="fa-brands fa-twitter"></i></a>
+                                <a href="https://www.x.com" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-twitter"></i></a>
                             </div>
                             <div className="col-3 social me-lg-2">
-                                <a href="https://www.instagram.com/bristidev.burman2004/" target="_blank" title="Visit the Creator's Instagram"><i className="fa-brands fa-instagram"></i></a>
+                                <a href="https://www.instagram.com/bristidev.burman2004/" target="_blank" rel="noopener noreferrer" title="Visit the Creator's Instagram"><i className="fa-brands fa-instagram"></i></a>
                             </div>
                             <div className="col-3 social me-lg-2">
-                                <a href="https://www.facebook.com" target="_blank"><i className="fa-brands fa-facebook"></i></a>
+                                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-facebook"></i></a>
                             </div>
                             <div className="col-3 social me-lg-2">
-                                <a href="https://www.youtube.com" target="_blank"><i className="fa-brands fa-youtube"></i></a>
+                                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"><i className="fa-brands fa-youtube"></i></a>
                             </div>
                         </div>
                     </div>

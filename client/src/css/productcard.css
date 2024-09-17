@@ -20,6 +20,27 @@
     flex-direction: column;
     justify-content: space-between;
   }
+  .add-to-cart-btn {
+    width: 120px; /* Set a minimum width to prevent button shrinking */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
+    padding: 10px 0px; /* Maintain padding for a consistent size */
+    font-size: 18px;
+    text-wrap: nowrap;
+  }
+  
+  .add-to-cart-btn:focus {
+    outline: none;
+  }
+  
+  .add-to-cart-btn.btn-dark {
+    background-color: #343a40;
+    color: white;
+  }
+  
+  .add-to-cart-btn.btn-success {
+    background-color: #28a745;
+    color: white;
+  }
   
   @media (max-width: 767px) {
     .product-card {

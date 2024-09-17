@@ -15,6 +15,7 @@ const Products = () => {
 
     const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
     const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
+    const [addedProductId, setAddedProductId] = useState(null);
 
     const searchWords = searchTerm.split(' ').map(word => word.toLowerCase());
 
@@ -24,7 +25,7 @@ const Products = () => {
         const productCategory = product.category.toLowerCase();
         const productPrice = product.price.toString().toLowerCase();
 
-        return searchWords.some(word => 
+        return searchWords.some(word =>
             productName.includes(word) ||
             productBrand.includes(word) ||
             productCategory.includes(word) ||
@@ -68,6 +69,13 @@ const Products = () => {
                 return [...prevCart, { ...product, quantity: 1 }];
             }
         });
+
+        // Set the addedProductId to show "Added" and reset after 1 second
+        setAddedProductId(product.id);
+        setTimeout(() => setAddedProductId(null), 1600); // Reset after 1 second
+
+        setAddedProductId(product.id);
+        setTimeout(() => window.location.reload(), 2000);
     };
 
     const handleWishlist = (product) => {
@@ -103,6 +111,7 @@ const Products = () => {
                                                 handleAddToCart={() => handleAddToCart(product)}
                                                 handleWishlist={() => handleWishlist(product)}
                                                 isInWishlist={wishlist.some(item => item.id === product.id)}
+                                                isAddedToCart={addedProductId === product.id}
                                             />
                                         </div>
                                     ))}

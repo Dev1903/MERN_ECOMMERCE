@@ -1,3 +1,4 @@
+// ProductList.jsx
 import React, { useRef, useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
 import productsData from '../js/products';
@@ -8,6 +9,7 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
   const [products] = useState(productsData);
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
   const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
+  const [addedProductId, setAddedProductId] = useState(null); // New state to track the added product
 
   const handleAddToCart = (product) => {
     setCart(prevCart => {
@@ -22,7 +24,13 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
         return [...prevCart, { ...product, quantity: 1 }];
       }
     });
-    window.location.reload();
+    
+    // Set the addedProductId to show "Added" and reset after 1 second
+    setAddedProductId(product.id);
+    setTimeout(() => setAddedProductId(null), 1600); // Reset after 1 second
+
+    setAddedProductId(product.id);
+    setTimeout(() => window.location.reload(), 2000);
   };
 
   const handleWishlist = (product) => {
@@ -84,6 +92,7 @@ const ProductList = ({ category, heading, filterByPopular = false }) => {
               handleAddToCart={() => handleAddToCart(product)}
               handleWishlist={() => handleWishlist(product)}
               isInWishlist={wishlist.some(item => item.id === product.id)}
+              isAddedToCart={addedProductId === product.id}
             />
           </div>
         ))}

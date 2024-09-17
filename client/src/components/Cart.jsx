@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import Header from './Header';
+import Searchbar from './Searchbar';
+import { Newsletter, Footer } from './Footer';
 
 const Cart = () => {
     const [cart, setCart] = useState(() => {
@@ -29,18 +33,35 @@ const Cart = () => {
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
-        <div className="container my-5">
+        <div className='container-fluid'>
+            <div className="row mb-2 searchbar">
+                <Searchbar />
+            </div>
+            <div className="row mb-5 header">
+                <Header />
+                
+            </div>
+            <div className="container my-5">
             <h4 className="mb-4">Shopping Cart</h4>
             {cart.length === 0 ? (
                 <p>Your cart is empty.</p>
             ) : (
                 <div>
                     {cart.map(item => (
+<div>
                         <div className="d-flex justify-content-between align-items-center mb-3" key={item.id}>
-                            <img src={item.image} alt={item.name} className="cart-item-img" style={{ width: '100px' }} />
-                            <div className="flex-grow-1 ms-3">
-                                <h5 className="mb-1">{item.name}</h5>
-                                <p className="mb-1">{item.brand}</p>
+                            {/* Wrap only the image and product details in the Link */}
+                            <Link to={`/product/${item.id}`} className="d-flex text-decoration-none text-black" style={{ flexGrow: 1 }}>
+                                <img src={item.image} alt={item.name} className="cart-item-img" style={{ width: '100px' }} />
+                                <div className="flex-grow-1 ms-3">
+                                    <h5 className="mb-1">{item.name}</h5>
+                                    <p className="mb-1">{item.brand}</p>
+                                </div>
+                            </Link>
+
+                            {/* Exclude the buttons from the Link */}
+                            <div className="buttons">
+                                <h5 className="mb-1">₹{(item.price * item.quantity).toFixed(2)}</h5>
                                 <div className="d-flex align-items-center">
                                     <button className="btn btn-dark btn-sm" onClick={() => handleQuantityChange(item.id, -1)}>
                                         <i className="fa-solid fa-minus"></i>
@@ -51,18 +72,26 @@ const Cart = () => {
                                     </button>
                                 </div>
                             </div>
-                            <div>
-                                <h5 className="mb-1">₹{(item.price * item.quantity).toFixed(2)}</h5>
-                            </div>
+                           
                         </div>
+                        
+                        <hr style={{borderTop: "dashed 1px black"}} />
+                        </div>
+
                     ))}
-                    <hr />
+                    
                     <div className="d-flex justify-content-between">
                         <h5>Total Price:</h5>
                         <h5>₹{totalPrice.toFixed(2)}</h5>
                     </div>
                 </div>
+
             )}
+        </div>
+            <div className="row mb-2 footer">
+                <Newsletter />
+                <Footer />
+            </div>
         </div>
     );
 };

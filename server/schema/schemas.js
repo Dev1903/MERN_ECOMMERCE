@@ -32,7 +32,7 @@ const userSchema = mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
     address: String,
-    phone: String,
+    mobile: String,
 });
 
 const User = mongoose.model('User', userSchema);

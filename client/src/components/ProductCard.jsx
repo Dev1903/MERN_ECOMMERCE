@@ -1,8 +1,9 @@
+// ProductCard.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../css/productcard.css'; // Import the CSS file
 
-const ProductCard = ({ product, quantity, handleAddToCart, handleWishlist, isInWishlist }) => (
+const ProductCard = ({ product, quantity, handleAddToCart, handleWishlist, isInWishlist, isAddedToCart }) => (
   <div className="card d-flex flex-column product-card">
     <Link to={`/product/${product.id}`} className="text-decoration-none text-black">
       <img 
@@ -33,10 +34,10 @@ const ProductCard = ({ product, quantity, handleAddToCart, handleWishlist, isInW
         <i className="fa-solid fa-heart"></i>
       </button>
       <button 
-        className="btn btn-dark btn-lg" 
+        className={`btn btn-lg ${isAddedToCart ? 'btn-success' : 'btn-dark'} add-to-cart-btn`} 
         onClick={() => handleAddToCart(product)}
       >
-        Add to Cart
+        {isAddedToCart ? 'Added' : 'Add to Cart'}
       </button>
     </div>
   </div>

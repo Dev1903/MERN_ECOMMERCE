@@ -42,7 +42,7 @@ const Searchbar = () => {
         <div className="container">
             <div className="row">
                 <div className="col-md-3 logo mt-4 mb-3 d-flex justify-content-center justify-content-lg-start">
-                    <Link to="/"><img src="images/ecommerce_logo.png" alt="" /></Link>
+                    <Link to="/"><img src="/images/ecommerce_logo.png" alt="" /></Link>
                 </div>
                 <div className="col-md-5 mt-4 mb-3">
                     <div className="input-group">
