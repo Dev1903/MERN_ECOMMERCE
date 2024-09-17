@@ -100,4 +100,57 @@ router.get('/checkCategory', async (req, res) => {
     }
 });
 
+// Get Categories
+router.get('/categories', async (req, res) => {
+    try {
+        const categories = await Category.find();
+        res.status(200).json(categories);
+    } catch (error) {
+        res.status(500).json('Error While Fetching Categories');
+    }
+});
+
+// Delete Category
+router.delete('/deleteCategory/:id', async (req, res) => {
+    try {
+        const category = await Category.findByIdAndDelete(req.params.id);
+        if (category) {
+            res.status(200).json('Category Successfully Deleted');
+        } else {
+            res.status(404).json('Category Not Found');
+        }
+    } catch (error) {
+        res.status(500).json('Error While Deleting Category');
+    }
+});
+
+//Update Category
+router.put('/updateCategory/:id', categoryUpload.single('image'), async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name } = req.body;
+        let image;
+
+        // Check if an image file is uploaded
+        if (req.file) {
+            image = req.file.originalname; // Use new uploaded image if provided
+        }
+
+        const category = await Category.findById(id);
+        if (!category) {
+            return res.status(404).json('Category Not Found');
+        }
+
+        // Update fields
+        category.name = name || category.name;
+        if (image) {
+            category.image = image;
+        }
+
+        await category.save(); // Save updated category
+        res.status(200).json('Category Successfully Updated');
+    } catch (error) {
+        res.status(500).json('Error While Updating Category');
+    }
+});
 export default router;

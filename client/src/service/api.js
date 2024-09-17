@@ -59,3 +59,41 @@ export const checkCategoryExists = async (categoryName) => {
         return false;
     }
 };
+
+
+// Fetch Categories
+export const getCategories = async () => {
+    try {
+        const response = await axios.get(`${URL}/categories`);
+        return response.data;
+    } catch (error) {
+        console.error('Error While Fetching Categories:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
+    }
+};
+
+// Delete Category
+export const deleteCategory = async (id) => {
+    try {
+        return await axios.delete(`${URL}/deleteCategory/${id}`);
+    } catch (error) {
+        console.error('Error While Deleting Category:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
+    }
+};
+
+//Update Category
+export const updateCategory = async (id, categoryData) => {
+    try {
+        const response = await axios.put(`http://localhost:8000/updateCategory/${id}`, categoryData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating category', error);
+        throw error;
+    }
+};
+
