@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import { addUser, loginUser } from "../service/api.js";
 import { Link } from "react-router-dom";
 
+import Searchbar from "./Searchbar.jsx";
+import { Newsletter, Footer } from "./Footer.jsx";
 const SignUp = () => {
 
     // Existing state for user information
@@ -158,7 +160,12 @@ const SignUp = () => {
 
     return (
         <ChakraProvider>
-            <div className="container main pt-3">
+        <div className="container-fluid">
+                <div className="row searchbar">
+                    <Searchbar />
+                </div>
+
+                <div className="container main pt-3">
                 <div className="row">
                     <div className="col-12 col-md-3"></div>
                     <div className="col-12 col-md-6">
@@ -301,6 +308,16 @@ const SignUp = () => {
                     <div className="col-12 col-md-3"></div>
                 </div>
             </div>
+                
+                <div className="row footer mt-5">
+                    <Newsletter />
+                    <Footer />
+                </div>
+            </div>
+
+
+
+            
         </ChakraProvider>
     )
 }
@@ -375,65 +392,75 @@ const Login = () => {
 
     return (
         <ChakraProvider>
-            <div className="container main pt-3">
-                <div className="row">
-                    <div className="col-12 col-md-3"></div>
-                    <div className="col-12 col-md-6">
-                        <div className="card p-3">
-                            <h6>Login</h6>
-                            <hr />
-                            <form>
-                                <FormControl isInvalid={isErrorEmail}>
-                                    <FormLabel fontSize={'14px'} mt={4}>
-                                        Email ID <sup><span style={{ color: 'red' }}>*</span></sup>
-                                    </FormLabel>
-                                    <Input
-                                        type="email"
-                                        name="email"
-                                        value={inputemail}
-                                        placeholder="Enter Your Email ID"
-                                        ref={emailValid}
-                                        pb={1}
-                                        onChange={handleEmail}
-                                    />
-                                    {!isErrorEmail ? (
-                                        <FormHelperText>Looks good!</FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Field is required.</FormErrorMessage>
-                                    )}
-                                </FormControl>
+            <div className="container-fluid">
+                <div className="row searchbar">
+                    <Searchbar />
+                </div>
 
-                                <FormControl isInvalid={isErrorPassword}>
-                                    <FormLabel fontSize={'14px'} mt={4}>
-                                        Password <sup><span style={{ color: 'red' }}>*</span></sup>
-                                    </FormLabel>
-                                    <Input
-                                        type="password"
-                                        name="password"
-                                        value={inputpassword}
-                                        placeholder="Enter Your Password"
-                                        ref={passwordValid}
-                                        pb={1}
-                                        onChange={handlePassword}
-                                    />
-                                    {!isErrorPassword ? (
-                                        <FormHelperText>Looks good!</FormHelperText>
-                                    ) : (
-                                        <FormErrorMessage>Password is required.</FormErrorMessage>
-                                    )}
-                                </FormControl>
+                <div className="container mt-5 ">
+                    <div className="row d-flex justify-content-center align-item-center">
+                        
+                        <div className="col-12 col-md-6">
+                            <div className="card p-3">
+                                <h6>Login</h6>
+                                <hr />
+                                <form>
+                                    <FormControl isInvalid={isErrorEmail}>
+                                        <FormLabel fontSize={'14px'} mt={4}>
+                                            Email ID <sup><span style={{ color: 'red' }}>*</span></sup>
+                                        </FormLabel>
+                                        <Input
+                                            type="email"
+                                            name="email"
+                                            value={inputemail}
+                                            placeholder="Enter Your Email ID"
+                                            ref={emailValid}
+                                            pb={1}
+                                            onChange={handleEmail}
+                                        />
+                                        {!isErrorEmail ? (
+                                            <FormHelperText>Looks good!</FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>Field is required.</FormErrorMessage>
+                                        )}
+                                    </FormControl>
 
-                                <div className="row mt-4">
-                                    <div className="col-12">
-                                        <Button onClick={submitData} colorScheme="blue">
-                                            Login
-                                        </Button>
+                                    <FormControl isInvalid={isErrorPassword}>
+                                        <FormLabel fontSize={'14px'} mt={4}>
+                                            Password <sup><span style={{ color: 'red' }}>*</span></sup>
+                                        </FormLabel>
+                                        <Input
+                                            type="password"
+                                            name="password"
+                                            value={inputpassword}
+                                            placeholder="Enter Your Password"
+                                            ref={passwordValid}
+                                            pb={1}
+                                            onChange={handlePassword}
+                                        />
+                                        {!isErrorPassword ? (
+                                            <FormHelperText>Looks good!</FormHelperText>
+                                        ) : (
+                                            <FormErrorMessage>Password is required.</FormErrorMessage>
+                                        )}
+                                    </FormControl>
+
+                                    <div className="row mt-4 text-center">
+                                        <div className="col-12">
+                                            <Button onClick={submitData} colorScheme="blue">
+                                                Login
+                                            </Button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
+                                </form>
+                            </div>
+                        </div>                        
                     </div>
-                    <div className="col-12 col-md-3"></div>
+                </div>
+
+                <div className="row footer mt-5">
+                    <Newsletter />
+                    <Footer />
                 </div>
             </div>
         </ChakraProvider>
