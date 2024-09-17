@@ -76,7 +76,7 @@ const Searchbar = () => {
                         </Link>
                     </div>
                     <div className="col-4 wishlist text-center">
-                        <Link to="/wishlist" className="text-black text-decoration-none"><i className="fa-regular fa-heart"></i></Link>
+                        <Link to="/wishlist" className="text-black text-decoration-none"><i className="fa-solid fa-heart"  style={{color: '#f1094e', fontSize:'23px', textShadow: '1px 2px 5px gray'}}></i></Link>
                     </div>
                     <div className="col-4 cart">
                         <Link to="/cart" className="text-black text-decoration-none">
