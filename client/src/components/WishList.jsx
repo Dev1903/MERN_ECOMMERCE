@@ -38,10 +38,10 @@ const Wishlist = () => {
 
         // Set the addedProductId to show "Added" and reset after 1 second
         setAddedProductId(product.id);
-        setTimeout(() => setAddedProductId(null), 1600); // Reset after 1 second
+        setTimeout(() => setAddedProductId(null), 800); // Reset after 1 second
 
         setAddedProductId(product.id);
-        setTimeout(() => window.location.reload(), 2000);
+        setTimeout(() => window.location.reload(), 1000);
     };
 
     return (

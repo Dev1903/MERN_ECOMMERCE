@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import category from '../js/category';
+import { getCategories } from '../service/api';
 
 const CategoryDropdown = () => {
-  const uniqueCategories = Array.from(new Set(category.map(item => item.title)));
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+        const categoryList = await getCategories();
+        setCategories(categoryList);
+    };
+    fetchCategories();
+}, []);
+
+  const uniqueCategories = Array.from(new Set(categories.map(item => item.name)));
 
   const handleCategorySelect = (selectedCategory) => {
     navigate(`/products?category=${selectedCategory}`);

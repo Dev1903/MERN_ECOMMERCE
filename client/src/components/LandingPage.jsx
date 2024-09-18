@@ -26,7 +26,7 @@ const LandingPage = () => {
         <ProductList filterByPopular={true} heading={"Popular Products 2024"} />
       </div>
       <div className="row furniture mb-5">
-        <ProductList category={"furniture"} heading={"Our Furniture Collection"} />
+        <ProductList category={"Furniture"} heading={"Our Furniture Collection"} />
       </div>
       <div className="row shoes mb-5">
         <ProductList category={"shoes"} heading={"New Shoes Collection"} />

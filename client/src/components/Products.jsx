@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import products from '../js/products';
+import { getProducts } from '../service/api'; // Ensure this function fetches data from MongoDB
 import Header from './Header';
 import Searchbar from './Searchbar';
 import { Footer, Newsletter } from './Footer';
@@ -13,6 +13,7 @@ const Products = () => {
     const searchTerm = queryParams.get('search') || '';
     const category = queryParams.get('category') || '';
 
+    const [products, setProducts] = useState([]);
     const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
     const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
     const [addedProductId, setAddedProductId] = useState(null);
@@ -33,20 +34,26 @@ const Products = () => {
         );
     };
 
-    const validCategories = Array.from(new Set(products.map(product => product.category.toLowerCase())));
-    const isCategoryValid = !category || validCategories.includes(category.toLowerCase());
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const productList = await getProducts();
+                setProducts(productList);
+            } catch (error) {
+                console.error('Error fetching products:', error);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+    const validCategories = Array.from(new Set(products.map(product => product.category.name)));
+    const isCategoryValid = !category || validCategories.includes(category);
 
     const filteredProducts = products.filter((product) => {
-        const matchesCategory = !category || product.category.toLowerCase().includes(category.toLowerCase());
+        const matchesCategory = !category || product.category.name.includes(category);
         const matchesSearch = !searchTerm || matchesSearchTerm(product);
         return matchesCategory && matchesSearch;
     });
-
-    useEffect(() => {
-        if (!isCategoryValid || filteredProducts.length === 0) {
-            navigate('/error', { replace: true });
-        }
-    }, [isCategoryValid, filteredProducts.length, navigate]);
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
@@ -58,10 +65,10 @@ const Products = () => {
 
     const handleAddToCart = (product) => {
         setCart(prevCart => {
-            const existingProduct = prevCart.find(item => item.id === product.id);
+            const existingProduct = prevCart.find(item => item._id === product._id);
             if (existingProduct) {
                 return prevCart.map(item =>
-                    item.id === product.id
+                    item._id === product._id
                         ? { ...item, quantity: item.quantity + 1 }
                         : item
                 );
@@ -70,19 +77,16 @@ const Products = () => {
             }
         });
 
-        // Set the addedProductId to show "Added" and reset after 1 second
-        setAddedProductId(product.id);
-        setTimeout(() => setAddedProductId(null), 1600); // Reset after 1 second
-
-        setAddedProductId(product.id);
-        setTimeout(() => window.location.reload(), 2000);
+        setAddedProductId(product._id);
+        setTimeout(() => setAddedProductId(null), 800);
+        setTimeout(() => window.location.reload(), 1000);
     };
 
     const handleWishlist = (product) => {
         setWishlist(prevWishlist => {
-            const isInWishlist = prevWishlist.some(item => item.id === product.id);
+            const isInWishlist = prevWishlist.some(item => item._id === product._id);
             if (isInWishlist) {
-                return prevWishlist.filter(item => item.id !== product.id);
+                return prevWishlist.filter(item => item._id !== product._id);
             } else {
                 return [...prevWishlist, product];
             }
@@ -104,14 +108,13 @@ const Products = () => {
                             {filteredProducts.length > 0 && isCategoryValid ? (
                                 <div className="d-flex flex-wrap justify-content-center">
                                     {filteredProducts.map((product) => (
-                                        <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4" key={product.id}>
+                                        <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4" key={product._id}>
                                             <ProductCard
                                                 product={product}
-                                                quantity={(cart.find(item => item.id === product.id) || {}).quantity || 0}
                                                 handleAddToCart={() => handleAddToCart(product)}
                                                 handleWishlist={() => handleWishlist(product)}
-                                                isInWishlist={wishlist.some(item => item.id === product.id)}
-                                                isAddedToCart={addedProductId === product.id}
+                                                isInWishlist={wishlist.some(item => item._id === product._id)}
+                                                isAddedToCart={addedProductId === product._id}
                                             />
                                         </div>
                                     ))}

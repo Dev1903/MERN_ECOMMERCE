@@ -1,7 +1,7 @@
 // src/components/Searchbar.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext'; // Import useCart
+import { useCart } from '../context/CartContext';
 import category from '../js/category';
 import CategoryDropdown from './CategoryDropdown';
 
@@ -19,20 +19,16 @@ const Searchbar = () => {
 
         if (searchTerm) {
             if (validCategory) {
-                // Search with both term and valid category
                 setErrorMessage(""); // Clear error if category is valid
                 navigate(`/products?search=${searchTerm}&category=${selectedCategory}`);
             } else {
-                // Search with term only if category is not valid
                 setErrorMessage(""); // Clear error if search term is valid
                 navigate(`/products?search=${searchTerm}`);
             }
         } else if (validCategory) {
-            // Search with only valid category if no search term
             setErrorMessage(""); // Clear error if category is valid
             navigate(`/products?category=${selectedCategory}`);
         } else {
-            // Neither search term nor valid category
             setErrorMessage("No such category exists");
             navigate('/error'); // Navigate to error page
         }
@@ -76,7 +72,9 @@ const Searchbar = () => {
                         </Link>
                     </div>
                     <div className="col-4 wishlist text-center">
-                        <Link to="/wishlist" className="text-black text-decoration-none"><i className="fa-solid fa-heart"  style={{color: '#f1094e', fontSize:'23px', textShadow: '1px 2px 5px gray'}}></i></Link>
+                        <Link to="/wishlist" className="text-black text-decoration-none">
+                            <i className="fa-solid fa-heart" style={{ color: '#f1094e', fontSize: '23px', textShadow: '1px 2px 5px gray' }}></i>
+                        </Link>
                     </div>
                     <div className="col-4 cart">
                         <Link to="/cart" className="text-black text-decoration-none">

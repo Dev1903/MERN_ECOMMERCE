@@ -85,7 +85,7 @@ export const deleteCategory = async (id) => {
 //Update Category
 export const updateCategory = async (id, categoryData) => {
     try {
-        const response = await axios.put(`http://localhost:8000/updateCategory/${id}`, categoryData, {
+        const response = await axios.put(`${URL}/updateCategory/${id}`, categoryData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
@@ -98,13 +98,15 @@ export const updateCategory = async (id, categoryData) => {
 };
 
 //Fetch Products
-export const getProducts = async () => {
+export const getProducts = async (category = '', searchTerm = '') => {
     try {
-        const response = await axios.get(`${URL}/products`);
-        return Array.isArray(response.data) ? response.data : [];
+        const response = await axios.get(`${URL}/products`, {
+            params: { category, search: searchTerm }
+        });
+        return response.data;
     } catch (error) {
-        console.error('Error While Fetching Products:', error);
-        return error.response ? error.response : { message: 'Unknown error occurred' };
+        console.error('Error fetching products:', error);
+        return [];
     }
 };
 
