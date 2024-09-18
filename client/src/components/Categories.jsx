@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import { useNavigate } from 'react-router-dom';
-import category from '../js/category';
+import axios from 'axios';
 
 const Categories = () => {
+    const [categories, setCategories] = useState([]);
     const [showAll, setShowAll] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Fetch categories from the backend API
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/categories'); // API call to your backend
+                setCategories(response.data); // Assuming response contains category data
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleClick = (title) => {
         navigate(`/products?category=${title}`);
@@ -33,18 +47,19 @@ const Categories = () => {
                     )}
                 </div>
                 <div className={`categories-container ${showAll ? 'expanded' : ''}`}>
-                    {category.map((item) => (
-                        <div key={item.id} className="category-item" onClick={() => handleClick(item.title)} style={{ cursor: 'pointer' }}>
+                    {categories.map((item) => (
+                        <div key={item._id} className="category-item" onClick={() => handleClick(item.name)} style={{ cursor: 'pointer' }}>
                             <div className="image">
-                                <img src={item.logo} alt={item.title} className="img-fluid" />
+                                {/* Use the category image from the uploads folder */}
+                                <img src={`http://localhost:8000/images/category-logo/${item.image}`} alt={item.name} className="img-fluid" />
                             </div>
-                            <p className="desc">{item.title}</p>
+                            <p className="desc">{item.name}</p>
                         </div>
                     ))}
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default Categories;
