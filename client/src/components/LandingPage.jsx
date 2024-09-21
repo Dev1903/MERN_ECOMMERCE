@@ -5,7 +5,7 @@ import Slider from './Slider';
 import Categories from './Categories';
 import ProductList from './ProductList';
 import { Newsletter, Footer } from './Footer';
-import { getProducts } from '../service/api'; // Import the getProducts function
+import { getProducts } from '../api/api'; // Import the getProducts function
 
 const LandingPage = () => {
   const [products, setProducts] = useState([]);

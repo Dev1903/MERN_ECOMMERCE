@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, Button, Box, Image } from '@chakra-ui/react';
 import { useParams } from 'react-router-dom';
-import { getProducts } from '../service/api.js';
+import { getProducts } from '../api/api.js';
 import Searchbar from './Searchbar';
 import Header from './Header';
 import { Footer, Newsletter } from './Footer';

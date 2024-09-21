@@ -3,7 +3,7 @@ import { ChakraProvider, FormControl, FormLabel, FormHelperText, Input, FormErro
 import Swal from 'sweetalert2';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Import Quill styles
-import { addProduct, checkCategoryExists } from "../../service/api.js";
+import { addProduct, checkCategoryExists } from "../../api/api.js";
 
 const ProductForm = () => {
     const [product, setProduct] = useState({

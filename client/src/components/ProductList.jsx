@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
-import { getProducts } from '../service/api';
+import { getProducts } from '../api/api';
 import { useCart } from '../context/CartContext'; // Import the CartContext
 
 const ProductList = ({ category, heading, filterByPopular }) => {

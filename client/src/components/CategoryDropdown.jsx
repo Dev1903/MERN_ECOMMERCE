@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCategories } from '../service/api';
+import { getCategories } from '../api/api';
 
 const CategoryDropdown = () => {
   const navigate = useNavigate();

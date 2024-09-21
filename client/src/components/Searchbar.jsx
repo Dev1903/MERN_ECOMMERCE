@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CategoryDropdown from './CategoryDropdown';
-import { getCategories } from '../service/api'; // Import the function to fetch categories
+import { getCategories } from '../api/api'; // Import the function to fetch categories
 
 const Searchbar = () => {
     const [searchTerm, setSearchTerm] = useState("");

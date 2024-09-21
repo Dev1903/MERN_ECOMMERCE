@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { getCategories, deleteCategory, updateCategory } from '../../service/api';
+import { getCategories, deleteCategory, updateCategory } from '../../api/api';
 
 const Category = () => {
     const [categories, setCategories] = useState([]);

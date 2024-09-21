@@ -3,7 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { FormControl, FormLabel, FormHelperText, Input, FormErrorMessage } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
 import Swal from 'sweetalert2';
-import { addUser, loginUser } from "../service/api.js";
+import { addUser, loginUser } from "../api/api.js";
 import { Link, useNavigate } from "react-router-dom";
 
 import Searchbar from "./Searchbar.jsx";

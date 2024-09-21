@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getProducts } from '../../service/api.js'; // Importing the API function from your api.js
+import { getProducts } from '../../api/api.js'; // Importing the API function from your api.js
 import '../css/productList.css'; // Ensure to import the CSS file
 
 const ProductList = () => {

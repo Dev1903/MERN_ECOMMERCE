@@ -10,7 +10,7 @@ import {
 import { Button } from '@chakra-ui/react';
 import { useRef } from "react";
 import Swal from 'sweetalert2';
-import { addCategory } from "../../service/api.js";
+import { addCategory } from "../../api/api.js";
 
 
 const CategoryForm = () => {

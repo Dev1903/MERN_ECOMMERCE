@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Button, Image } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
-import { getProducts } from '../service/api'; // Ensure this function fetches data from MongoDB
+import { getProducts } from '../api/api'; // Ensure this function fetches data from MongoDB
 import Header from './Header';
 import Searchbar from './Searchbar';
 import { Footer, Newsletter } from './Footer';
