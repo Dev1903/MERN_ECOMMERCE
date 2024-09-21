@@ -113,7 +113,7 @@ const Category = () => {
                                     <td>{index + 1}</td>
                                     <td>{elem.name}</td>
                                     <td className='d-flex justify-content-center align-items-center'>
-                                        <img src={`http://localhost:8000/images/category-logo/${elem.image}`} alt="logo" style={{ width: '50px', height: 'auto' }} />
+                                        <img src={`${process.env.REACT_APP_API_URL}/images/category-logo/${elem.image}`} alt="logo" style={{ width: '50px', height: 'auto' }} />
                                     </td>
                                     <td className='text-center'>
                                         <button className="btn btn-success" onClick={() => handleEditClick(elem)}>Edit</button>

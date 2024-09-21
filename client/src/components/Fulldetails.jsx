@@ -55,7 +55,7 @@ const Fulldetails = () => {
                 <div className="row product-details">
                     <div className="col-md-6 image-container">
                         <img
-                            src={`http://localhost:8000/images/product-images/${product.image}`}
+                            src={`${process.env.REACT_APP_API_URL}/images/product-images/${product.image}`}
                             alt={product.name}
                             className="img-fluid"
                         />

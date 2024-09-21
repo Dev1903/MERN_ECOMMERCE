@@ -11,7 +11,7 @@ const Categories = () => {
         // Fetch categories from the backend API
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/categories'); // API call to your backend
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/categories`); // API call to your backend
                 setCategories(response.data); // Assuming response contains category data
             } catch (error) {
                 console.error('Error fetching categories:', error);
@@ -55,7 +55,7 @@ const Categories = () => {
                         <div key={item._id} className="category-item" onClick={() => handleClick(item.name)} style={{ cursor: 'pointer' }}>
                             <div className="image">
                                 {/* Use the category image from the uploads folder */}
-                                <img src={`http://localhost:8000/images/category-logo/${item.image}`} alt={item.name} className="img-fluid" />
+                                <img src={`${process.env.REACT_APP_API_URL}/images/category-logo/${item.image}`} alt={item.name} className="img-fluid" />
                             </div>
                             <p className="desc">{item.name}</p>
                         </div>

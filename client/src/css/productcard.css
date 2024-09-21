@@ -1,8 +1,9 @@
 
 
 .product-card {
-  width: 100%;
+  /* width: 100%; */
   max-width: 320px;
+  min-width: 250px!important;
   /* Adjusted max-width to match other components */
   height: auto;
   /* Allow height to adjust automatically based on content */

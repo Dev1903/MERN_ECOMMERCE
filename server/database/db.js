@@ -1,8 +1,9 @@
 //db.js
+import dotenv from 'dotenv';
+dotenv.config();
 import mongoose from "mongoose";
-
 const Connection = async () => {
-    const URL = `mongodb+srv://bristidev2004:bNBP8xUJVdhsRBDn@database.0gqkb.mongodb.net/MERN_ECOMMERCE?retryWrites=true&w=majority`;
+    const URL = process.env.MONGODB_URI;
     
     try {
         await mongoose.connect(URL, {

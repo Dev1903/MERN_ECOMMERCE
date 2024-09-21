@@ -61,7 +61,7 @@ const ProductList = () => {
                                     <td>{product.brand}</td>
                                     <td>{product.category.name}</td> 
                                     <td style={{ minWidth: "100px", display: 'flex', justifyContent: 'center' }}>
-                                        <img src={`http://localhost:8000/images/product-images/${product.image}`} alt={product.name} style={{ height: '60px', width: 'auto' }} />
+                                        <img src={`${process.env.REACT_APP_API_URL}/images/product-images/${product.image}`} alt={product.name} style={{ height: '60px', width: 'auto' }} />
                                     </td>
                                     <td className='text-warning'>{`★${product.rating}`}</td>
                                     <td>{`₹${product.price}`}</td>

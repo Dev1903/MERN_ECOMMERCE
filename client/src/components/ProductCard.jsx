@@ -5,7 +5,7 @@ const ProductCard = ({ product, handleAddToCart, handleWishlist, isInWishlist, i
   <div className="card d-flex flex-column product-card">
     <Link to={`/product/${product._id}`} className="text-decoration-none text-black">
       <img 
-        src={`http://localhost:8000/images/product-images/${product.image}`}
+        src={`${process.env.REACT_APP_API_URL}/images/product-images/${product.image}`}
         className="card-img-top" 
         alt={product.name} 
         style={{ objectFit: 'contain' }} 

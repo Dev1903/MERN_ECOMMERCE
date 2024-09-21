@@ -52,7 +52,7 @@ const Cart = () => {
                             <div key={item._id}>
                                 <div className="d-flex justify-content-between align-items-center mb-3">
                                     <Link to={`/product/${item._id}`} className="d-flex text-decoration-none text-black" style={{ flexGrow: 1 }}>
-                                        <img src={`http://localhost:8000/images/product-images/${item.image}`} alt={item.name} className="cart-item-img" style={{ width: '100px' }} />
+                                        <img src={`${process.env.REACT_APP_API_URL}/images/product-images/${item.image}`} alt={item.name} className="cart-item-img" style={{ width: '100px' }} />
                                         <div className="flex-grow-1 ms-3">
                                             <h5 className="mb-1">{item.name}</h5>
                                             <p className="mb-1">{item.brand}</p>
