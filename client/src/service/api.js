@@ -2,6 +2,7 @@ import axios from "axios";
 
 const URL = 'http://localhost:8000';
 
+
 // Add User
 export const addUser = async (data) => {
     try {
@@ -33,15 +34,23 @@ export const addProduct = async (data) => {
 };
 
 // Login user function
-export const loginUser = async (user) => {
+export const loginUser = async ({ username, password }) => {
     try {
-        const response = await axios.post(`${URL}/login`, user);
+        const response = await axios.post(`${URL}/loginUser`, { username, password });
         return response;
     } catch (error) {
         console.error('Error during login:', error);
-        return error.response ? error.response : { message: 'Unknown error occurred' };
+        if (error.response) {
+            return {
+                status: error.response.status,
+                message: error.response.data.message || 'An error occurred during login.'
+            };
+        }
+        return { message: 'Unknown error occurred' };
     }
 };
+
+
 
 // Check if category exists
 export const checkCategoryExists = async (categoryName) => {
@@ -60,17 +69,18 @@ export const checkCategoryExists = async (categoryName) => {
     }
 };
 
-
 // Fetch Categories
 export const getCategories = async () => {
     try {
         const response = await axios.get(`${URL}/categories`);
+        // Ensure the response is treated as an array
         return Array.isArray(response.data) ? response.data : [];
     } catch (error) {
         console.error('Error While Fetching Categories:', error);
-        return error.response ? error.response : { message: 'Unknown error occurred' };
+        return []; // Return an empty array on error
     }
 };
+
 
 // Delete Category
 export const deleteCategory = async (id) => {
@@ -82,7 +92,7 @@ export const deleteCategory = async (id) => {
     }
 };
 
-//Update Category
+// Update Category
 export const updateCategory = async (id, categoryData) => {
     try {
         const response = await axios.put(`${URL}/updateCategory/${id}`, categoryData, {
@@ -97,7 +107,7 @@ export const updateCategory = async (id, categoryData) => {
     }
 };
 
-//Fetch Products
+// Fetch Products
 export const getProducts = async (category = '', searchTerm = '') => {
     try {
         const response = await axios.get(`${URL}/products`, {
@@ -109,4 +119,3 @@ export const getProducts = async (category = '', searchTerm = '') => {
         return [];
     }
 };
-

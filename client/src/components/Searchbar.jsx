@@ -1,18 +1,28 @@
-// src/components/Searchbar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import category from '../js/category';
 import CategoryDropdown from './CategoryDropdown';
+import { getCategories } from '../service/api'; // Import the function to fetch categories
 
 const Searchbar = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [categories, setCategories] = useState([]); // Initialize categories state
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     const { totalQuantity } = useCart(); // Get totalQuantity from context
 
-    const uniqueCategories = Array.from(new Set(category.map(item => item.title)));
+    // Fetch categories from the database
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const fetchedCategories = await getCategories();
+            setCategories(fetchedCategories); // Set fetched categories to state
+        };
+        fetchCategories();
+    }, []);
+
+    // Get unique categories from fetched data
+    const uniqueCategories = Array.from(new Set(categories.map(item => item.name)));
 
     const handleSearch = () => {
         const validCategory = uniqueCategories.includes(selectedCategory);

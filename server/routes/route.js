@@ -1,8 +1,11 @@
 import express from 'express';
 import multer from 'multer';
 import { User, Category, Product } from '../schema/schemas.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
+const storage = multer.memoryStorage();
 
 // Storage configuration for category images
 const categoryStorage = multer.diskStorage({
@@ -27,21 +30,74 @@ const productStorage = multer.diskStorage({
 const productUpload = multer({ storage: productStorage });
 
 // Add User
-router.post('/addUser', async (req, res) => {
+const userUpload = multer({ storage });
+
+ // Ensure bcrypt is imported
+
+router.post('/addUser', userUpload.none(), async (req, res) => {
     try {
+        // Check if user already exists
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(409).json('User already exists. Please log in.');
+        }
+
+        // Hash the password before saving
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+        // Create a new user instance
         const user = new User({
             name: req.body.name,
             email: req.body.email,
-            password: req.body.password,
+            password: hashedPassword, // Store hashed password
             address: req.body.address,
-            phone: req.body.phone
+            mobile: req.body.mobile,
         });
+
+        // Save the user to the database
         await user.save();
         res.status(201).json('User Successfully Inserted');
     } catch (error) {
+        console.error('Error while adding user:', error);
         res.status(500).json('Error While Adding User');
     }
 });
+
+
+// Login User
+router.post('/loginUser', async (req, res) => {
+    console.log(req.body); // Check what is received
+
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.findOne({
+            $or: [
+                { email: username },
+                { mobile: username }
+            ]
+        });
+        console.log(user)
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+        console.log(bcrypt.hash(user.password, 10))
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).send("Invalid credentials");
+        }
+
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        console.log(token)
+        return res.status(200).json({ token, user: { id: user._id, email: user.email, mobile: user.mobile } });
+    } catch (error) {
+        console.error(error); // Log any errors for debugging
+        return res.status(500).send("Server error");
+    }
+});
+
+
 
 // Add Category
 router.post('/addCategory', categoryUpload.single('image'), async (req, res) => {
@@ -68,14 +124,14 @@ router.post('/addProduct', productUpload.single('image'), async (req, res) => {
         const product = new Product({
             name: req.body.name,
             price: req.body.price,
-            discountPrice: req.body.discountPrice, // Add discountPrice
-            stockQuantity: req.body.stockQuantity, // Add stockQuantity
+            discountPrice: req.body.discountPrice,
+            stockQuantity: req.body.stockQuantity,
             category: category._id,
-            brand: req.body.brand, // Add brand
-            rating: req.body.rating, // Add rating
-            sku: req.body.sku, // Add SKU
+            brand: req.body.brand,
+            rating: req.body.rating,
+            sku: req.body.sku,
             description: req.body.description,
-            image: req.file.originalname// Ensure image is uploaded
+            image: req.file.originalname
         });
 
         await product.save();
@@ -103,10 +159,11 @@ router.get('/checkCategory', async (req, res) => {
 // Get Categories
 router.get('/categories', async (req, res) => {
     try {
-        const categories = await Category.find();
-        res.status(200).json(categories);
+        const categories = await Category.find(); // Fetch categories from the database
+        res.status(200).json(categories); // Return categories as JSON (this is already an array)
     } catch (error) {
-        res.status(500).json('Error While Fetching Categories');
+        console.error('Error While Fetching Categories:', error);
+        res.status(500).json({ message: 'Error While Fetching Categories' });
     }
 });
 
@@ -124,7 +181,7 @@ router.delete('/deleteCategory/:id', async (req, res) => {
     }
 });
 
-//Update Category
+// Update Category
 router.put('/updateCategory/:id', categoryUpload.single('image'), async (req, res) => {
     try {
         const { id } = req.params;

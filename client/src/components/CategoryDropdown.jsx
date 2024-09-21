@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { getCategories } from '../service/api';
 
 const CategoryDropdown = () => {
-  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const [categories, setCategories] = useState([]); // Initialize categories as an empty array
 
   useEffect(() => {
-    const fetchCategories = async () => {
-        const categoryList = await getCategories();
-        setCategories(categoryList);
-    };
-    fetchCategories();
-}, []);
+      const fetchCategories = async () => {
+          const fetchedCategories = await getCategories();
+          setCategories(fetchedCategories); // Set the fetched categories to state
+      };
+
+      fetchCategories();
+  }, []);
 
   const uniqueCategories = Array.from(new Set(categories.map(item => item.name)));
 
