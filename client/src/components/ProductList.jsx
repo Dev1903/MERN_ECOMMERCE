@@ -1,112 +1,96 @@
 import React, { useRef, useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
-import { getProducts } from '../service/api'; // Import the API call to get products
-import '../css/productlist.css'; // Import the CSS file
+import { getProducts } from '../service/api';
+import { useCart } from '../context/CartContext'; // Import the CartContext
 
-const ProductList = ({ category, heading, filterByPopular = false }) => {
-  const scrollRef = useRef(null);
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
-  const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
-  const [addedProductId, setAddedProductId] = useState(null); // New state to track the added product
+const ProductList = ({ category, heading, filterByPopular }) => {
+    const scrollRef = useRef(null);
+    const { updateCart } = useCart(); // Access updateCart from CartContext
+    const [products, setProducts] = useState([]);
+    const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
+    const [addedProductId, setAddedProductId] = useState(null); // Track added product ID
 
-  // Fetch products from MongoDB using API
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const productList = await getProducts();
-      setProducts(productList);
+    useEffect(() => {
+        const fetchProducts = async () => {
+            const productList = await getProducts();
+            setProducts(productList);
+        };
+        fetchProducts();
+    }, []);
+
+    // Filter products based on the category and the popular prop
+    const filteredProducts = products.filter(product => {
+        const matchesCategory = category ? product.category.name === category : true;
+        const matchesPopularity = filterByPopular ? product.popular === true : true;
+        return matchesCategory && matchesPopularity;
+    });
+
+    const handleAddToCart = (product) => {
+        updateCart(product); // Use the context to update the cart
+        setAddedProductId(product._id); // Set the added product ID
+        setTimeout(() => setAddedProductId(null), 800); // Reset after 800ms
     };
-    fetchProducts();
-  }, []);
 
-  const handleAddToCart = (product) => {
-    setCart(prevCart => {
-      const existingProduct = prevCart.find(item => item._id === product._id);
-      if (existingProduct) {
-        return prevCart.map(item =>
-          item._id === product._id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prevCart, { ...product, quantity: 1 }];
-      }
-    });
+    const handleWishlist = (product) => {
+        setWishlist(prevWishlist => {
+            const isInWishlist = prevWishlist.some(item => item._id === product._id);
+            const updatedWishlist = isInWishlist 
+                ? prevWishlist.filter(item => item._id !== product._id) 
+                : [...prevWishlist, product];
+            
+            // Update local storage
+            localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+            
+            return updatedWishlist;
+        });
+    };
 
-    // Set the addedProductId to show "Added" and reset after 1 second
-    setAddedProductId(product._id);
-    setTimeout(() => setAddedProductId(null), 800); // Reset after 1 second
-  
-  setTimeout(() => window.location.reload(), 1000); // Reset after 1 second
-  };
+    const scrollLeft = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: -300, // Adjust this value based on your design
+                behavior: 'smooth',
+            });
+        }
+    };
 
-  const handleWishlist = (product) => {
-    setWishlist(prevWishlist => {
-      const isInWishlist = prevWishlist.some(item => item._id === product._id);
-      if (isInWishlist) {
-        return prevWishlist.filter(item => item._id !== product._id);
-      } else {
-        return [...prevWishlist, product];
-      }
-    });
-  };
+    const scrollRight = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({
+                left: 300, // Adjust this value based on your design
+                behavior: 'smooth',
+            });
+        }
+    };
 
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
-
-  useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
-
-  const scrollLeft = () => {
-    const cardWidth = scrollRef.current.querySelector('.product-card').offsetWidth + 16;
-    scrollRef.current.scrollBy({ left: -cardWidth, behavior: 'smooth' });
-  };
-
-  const scrollRight = () => {
-    const cardWidth = scrollRef.current.querySelector('.product-card').offsetWidth + 16;
-    scrollRef.current.scrollBy({ left: cardWidth, behavior: 'smooth' });
-  };
-
-  // Filter products based on category or search
-  const filteredProducts = filterByPopular
-    ? products.filter(product => product.popular)
-    : products.filter(product =>
-        product.category.name === category ||
-        product.name.toLowerCase().includes(category.toLowerCase())
-      );
-
-  return (
-    <div className="col product-list-container">
-      <div className="container">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h4>{heading}</h4>
-          <div>
-            <button className="btn btn-light mx-2" onClick={scrollLeft}>
-              <i className="fa-solid fa-chevron-left"></i>
-            </button>
-            <button className="btn btn-light" onClick={scrollRight}>
-              <i className="fa-solid fa-chevron-right"></i>
-            </button>
-          </div>
-        </div>
-        <div className="product-list-scroller" ref={scrollRef}>
-          {filteredProducts.map(product => (
-            <div className="me-3" key={product._id}> {/* Use _id for MongoDB IDs */}
-              <ProductCard
-                product={product}
-                handleAddToCart={() => handleAddToCart(product)}
-                handleWishlist={() => handleWishlist(product)}
-                isInWishlist={wishlist.some(item => item._id === product._id)}
-                isAddedToCart={addedProductId === product._id}
-              />
+    return (
+        <div className="col product-list-container">
+            <div className="container">
+                <h4>{heading}</h4><hr className="mb-4 mt-0" style={{width: '40vw', border: '1px solid black'}}/>
+                <div className="d-flex align-items-center">
+                    <button className="btn btn-secondary me-2" onClick={scrollLeft}>
+                        <i className="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div className="product-list-scroller" ref={scrollRef} style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+                        {filteredProducts.map(product => (
+                            <div key={product._id} className="me-3" style={{ display: 'inline-block' }}>
+                                <ProductCard
+                                    product={product}
+                                    handleAddToCart={() => handleAddToCart(product)}
+                                    handleWishlist={() => handleWishlist(product)}
+                                    isInWishlist={wishlist.some(item => item._id === product._id)}
+                                    isAddedToCart={addedProductId === product._id} // Pass the added state
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <button className="btn btn-secondary ms-2" onClick={scrollRight}>
+                        <i className="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
             </div>
-          ))}
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default ProductList;

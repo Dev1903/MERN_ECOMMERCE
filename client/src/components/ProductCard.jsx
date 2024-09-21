@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../css/productcard.css'; // Import the CSS file
 
 const ProductCard = ({ product, handleAddToCart, handleWishlist, isInWishlist, isAddedToCart }) => (
   <div className="card d-flex flex-column product-card">
@@ -12,15 +11,15 @@ const ProductCard = ({ product, handleAddToCart, handleWishlist, isInWishlist, i
         style={{ objectFit: 'contain' }} 
       />
       <div className="card-body d-flex flex-column">
-        <h5 className="card-title text-truncate" style={{minHeight: '25px'}}>{product.name}</h5>
+        <h5 className="card-title text-truncate" style={{minHeight: '32px'}}>{product.name}</h5>
         <p className="card-text text-truncate" style={{minHeight: '25px'}}>{product.brand === 'null' ? '' : product.brand}</p>
         <div className="d-flex justify-content-between mt-auto" style={{ fontSize: '16px' }}>
           <div>
             <span className="text-warning pe-5 me-4">★ {product.rating}</span>
           </div>
           <div className="d-flex justify-content-end">
-            <span className="text-danger"><s>₹{product.price}</s></span>
-            <span className="fw-bold ps-2 text-success"> ₹{product.discountPrice}</span>
+            <span className="text-danger"><s>{product.discountPrice === 'null'? '': `₹ ${product.price}`}</s></span>
+            <span className="fw-bold ps-2 text-success"> {`₹ ${product.discountPrice === 'null' ? product.price : product.discountPrice}`}</span>
           </div>
         </div>
       </div>

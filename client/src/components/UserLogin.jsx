@@ -165,8 +165,8 @@ const SignUp = () => {
                     <Searchbar />
                 </div>
 
-                <div className="container main pt-3">
-                <div className="row">
+                <div className="container main pt-3 ">
+                <div className="row ">
                     <div className="col-12 col-md-3"></div>
                     <div className="col-12 col-md-6">
                         <div className="card p-3">
@@ -184,6 +184,7 @@ const SignUp = () => {
                                         ref={nameValid}
                                         pb={1}
                                         onChange={handleInputChange}
+                                        autoComplete="name"
                                     />
                                     {!isError ? (
                                         <FormHelperText>Looks good!</FormHelperText>
@@ -203,6 +204,7 @@ const SignUp = () => {
                                         ref={validMobile}
                                         pb={1}
                                         onChange={handleMobile}
+                                        autoComplete="tel"
                                     />
                                     {!isErrorMobile ? (
                                         <FormHelperText>Looks good!</FormHelperText>
@@ -222,6 +224,7 @@ const SignUp = () => {
                                         ref={emailValid}
                                         pb={1}
                                         onChange={handleEmail}
+                                        autoComplete="email"
                                     />
                                     {!isErrorEmail ? (
                                         <FormHelperText>Looks good!</FormHelperText>
@@ -260,6 +263,7 @@ const SignUp = () => {
                                         ref={passwordValid}
                                         pb={1}
                                         onChange={handlePassword}
+                                        
                                     />
                                     {isErrorPassword ? (
                                         <FormErrorMessage>Password is required.</FormErrorMessage>
@@ -309,7 +313,7 @@ const SignUp = () => {
                 </div>
             </div>
                 
-                <div className="row footer mt-5">
+                <div className="row footer mt-5 ">
                     <Newsletter />
                     <Footer />
                 </div>
@@ -407,16 +411,17 @@ const Login = () => {
                                 <form>
                                     <FormControl isInvalid={isErrorEmail}>
                                         <FormLabel fontSize={'14px'} mt={4}>
-                                            Email ID <sup><span style={{ color: 'red' }}>*</span></sup>
+                                            User Name <sup><span style={{ color: 'red' }}>*</span></sup>
                                         </FormLabel>
                                         <Input
                                             type="email"
                                             name="email"
                                             value={inputemail}
-                                            placeholder="Enter Your Email ID"
+                                            placeholder="Enter Your Email ID or Phone Number"
                                             ref={emailValid}
                                             pb={1}
                                             onChange={handleEmail}
+                                            autoComplete="username"
                                         />
                                         {!isErrorEmail ? (
                                             <FormHelperText>Looks good!</FormHelperText>
@@ -437,6 +442,7 @@ const Login = () => {
                                             ref={passwordValid}
                                             pb={1}
                                             onChange={handlePassword}
+                                            autoComplete="current-password"
                                         />
                                         {!isErrorPassword ? (
                                             <FormHelperText>Looks good!</FormHelperText>

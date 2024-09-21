@@ -1,7 +1,13 @@
 /* ProductList.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 .product-list-container {
     margin: auto;
     padding: 0 15px; /* Ensure some padding for better appearance */
+  }
+  .product-list-container h4{
+    font-family: 'Bebas Neue', cursive;
+    letter-spacing: 3px;
+    font-size: xx-large;
   }
   
   .product-list-scroller {

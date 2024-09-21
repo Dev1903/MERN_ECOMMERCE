@@ -30,7 +30,10 @@ const Categories = () => {
                 <div className="row d-flex justify-content-between align-items-center mb-3">
                     <div className="col-4 d-flex align-items-center">
                         <h4 className="m-0 p-0">Our Top Categories</h4>
+                        
+                        
                     </div>
+                    
                     {!showAll && (
                         <div className="col-3 text-center d-flex align-items-center showall">
                             <button className="btn btn-outline-dark" onClick={() => setShowAll(true)}>
@@ -46,6 +49,7 @@ const Categories = () => {
                         </div>
                     )}
                 </div>
+                <hr className="mb-4 mt-0" style={{width: '40vw', border: '1px solid black'}}/>
                 <div className={`categories-container ${showAll ? 'expanded' : ''}`}>
                     {categories.map((item) => (
                         <div key={item._id} className="category-item" onClick={() => handleClick(item.name)} style={{ cursor: 'pointer' }}>

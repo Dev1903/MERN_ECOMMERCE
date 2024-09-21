@@ -17,7 +17,7 @@ const Newsletter = () => {
                         </div>
                         <div className="col-md-6 d-flex align-items-center subscribe">
                             <div className="input-group mb-3">
-                                <input type="text" className="form-control" placeholder="Enter your Email" aria-label="Recipient's username" aria-describedby="button-addon2" />
+                                <input type="text" name="email" autoComplete="email" className="form-control" placeholder="Enter your Email" aria-label="Recipient's username" aria-describedby="button-addon2" />
                                 <button className="btn btn-dark" type="button" id="button-addon2">Subscribe</button>
                             </div>
                         </div>

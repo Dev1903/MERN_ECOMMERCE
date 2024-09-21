@@ -44,6 +44,7 @@ const Searchbar = () => {
                     <div className="input-group">
                         <input
                             type="text"
+                            name="search"
                             className="form-control"
                             placeholder="Search for Products"
                             value={searchTerm}

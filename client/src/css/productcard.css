@@ -1,68 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund&display=swap');
+
 .product-card {
+  width: 100%;
+  max-width: 320px;
+  /* Adjusted max-width to match other components */
+  height: auto;
+  /* Allow height to adjust automatically based on content */
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card img {
+  height: 230px;
+  /* Adjusted height */
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+.card-title{
+  font-family: 'Playwrite DE Grund', cursive;
+  font-weight: bold;
+}
+
+.card-text{
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: large;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.add-to-cart-btn {
+  width: 120px;
+  /* Set a minimum width to prevent button shrinking */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Smooth transition for background and text color */
+  padding: 10px 0px !important;
+  /* Maintain padding for a consistent size */
+  font-size: 18px;
+  text-wrap: nowrap;
+}
+
+.add-to-cart-btn:focus {
+  outline: none;
+}
+
+.add-to-cart-btn.btn-dark {
+  background-color: #343a40;
+  color: white;
+}
+
+.add-to-cart-btn.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+@media (max-width: 767px) {
+  .product-card {
     width: 100%;
-    max-width: 320px; /* Adjusted max-width to match other components */
-    height: auto; /* Allow height to adjust automatically based on content */
-    margin: auto;
-    display: flex;
-    flex-direction: column;
+    max-width: 100%;
+    margin-bottom: 20px;
   }
-  
+
   .product-card img {
-    height: 230px; /* Adjusted height */
+    height: 200px;
+    /* Adjusted for smaller screens */
+  }
+}
+
+@media (min-width: 768px) {
+  .product-card {
     width: 100%;
-    object-fit: cover;
-    display: block;
-    margin: 0 auto;
+    max-width: 320px;
+    height: auto;
   }
-  
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+
+  .product-card img {
+    height: 230px;
+    /* Consistent with the height used in Products component */
   }
-  .add-to-cart-btn {
-    width: 120px; /* Set a minimum width to prevent button shrinking */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for background and text color */
-    padding: 10px 0px; /* Maintain padding for a consistent size */
-    font-size: 18px;
-    text-wrap: nowrap;
-  }
-  
-  .add-to-cart-btn:focus {
-    outline: none;
-  }
-  
-  .add-to-cart-btn.btn-dark {
-    background-color: #343a40;
-    color: white;
-  }
-  
-  .add-to-cart-btn.btn-success {
-    background-color: #28a745;
-    color: white;
-  }
-  
-  @media (max-width: 767px) {
-    .product-card {
-      width: 100%;
-      max-width: 100%;
-      margin-bottom: 20px;
-    }
-  
-    .product-card img {
-      height: 200px; /* Adjusted for smaller screens */
-    }
-  }
-  
-  @media (min-width: 768px) {
-    .product-card {
-      width: 100%;
-      max-width: 320px;
-      height: auto;
-    }
-  
-    .product-card img {
-      height: 230px; /* Consistent with the height used in Products component */
-    }
-  }
-  
+}
