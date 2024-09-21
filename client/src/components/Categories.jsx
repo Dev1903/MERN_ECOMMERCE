@@ -49,7 +49,7 @@ const Categories = () => {
                         </div>
                     )}
                 </div>
-                <hr className="mb-4 mt-0" style={{width: '40vw', border: '1px solid black'}}/>
+                <hr className="mb-5 mt-0" style={{width: '40vw', border: '1px solid black'}}/>
                 <div className={`categories-container ${showAll ? 'expanded' : ''}`}>
                     {categories.map((item) => (
                         <div key={item._id} className="category-item" onClick={() => handleClick(item.name)} style={{ cursor: 'pointer' }}>
