@@ -8,10 +8,7 @@ import Routes from './routes/route.js';
 const app = express()
 const PORT = 8000;
 
-app.use(cors({
-    origin:'http://localhost:3000' || 'https://your-vercel-app-url.vercel.app', // Adjust to your Vercel URL
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Add methods as needed
-}));
+app.use(cors());
 app.use(bodyParser.json({ extended : true }))
 app.use(bodyParser.urlencoded({ extended : true }))
 Connection()

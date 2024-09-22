@@ -1,0 +1,13 @@
+.gradient-button {
+    background: linear-gradient(to right, #66c2ca, #ADA6F3);
+    color: white;
+    border: none;
+    outline: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.totalprice{
+    color: #d9534f;
+}
+.gradient-button:hover {
+    opacity: 0.8; /* Optional: Add a hover effect */
+}

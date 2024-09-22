@@ -46,3 +46,6 @@
 .searchbar .right .account span{
     font-size: small;
 }
+.searchbar .right .account span:hover{
+    cursor: pointer;
+}

@@ -188,130 +188,137 @@ const SignUp = () => {
                             <div className="card p-3">
                                 <h6>Sign Up</h6>
                                 <hr />
-                                <form>
+                                <form >
                                     {/* Name Field */}
-                                    <FormControl isInvalid={isError}>
-                                        <FormLabel fontSize={'14px'}>Name <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                        <Input
-                                            type='text'
-                                            name="name"
-                                            value={input}
-                                            placeholder="Enter Your Name"
-                                            ref={nameValid}
-                                            pb={1}
-                                            onChange={handleInputChange}
-                                            autoComplete="name"
-                                        />
-                                        {!isError ? (
-                                            <FormHelperText>Looks good!</FormHelperText>
-                                        ) : (
-                                            <FormErrorMessage>Field is required.</FormErrorMessage>
-                                        )}
-                                    </FormControl>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <FormControl isInvalid={isError}>
+                                                <FormLabel fontSize={'14px'} mt={4}>Name <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                                <Input
+                                                    type='text'
+                                                    name="name"
+                                                    value={input}
+                                                    placeholder="Enter Your Name"
+                                                    ref={nameValid}
+                                                    pb={1}
+                                                    onChange={handleInputChange}
+                                                    autoComplete="name"
+                                                />
+                                                {!isError ? (
+                                                    <FormHelperText>Looks good!</FormHelperText>
+                                                ) : (
+                                                    <FormErrorMessage>Field is required.</FormErrorMessage>
+                                                )}
+                                            </FormControl>
 
-                                    {/* Mobile Field */}
-                                    <FormControl isInvalid={isErrorMobile}>
-                                        <FormLabel fontSize={'14px'} mt={4}>Mobile No. <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                        <Input
-                                            type='text'
-                                            name="mobile"
-                                            value={inputMobile}
-                                            placeholder="Enter Your Phone no."
-                                            ref={validMobile}
-                                            pb={1}
-                                            onChange={handleMobile}
-                                            autoComplete="tel"
-                                        />
-                                        {!isErrorMobile ? (
-                                            <FormHelperText>Looks good!</FormHelperText>
-                                        ) : (
-                                            <FormErrorMessage>Field is required.</FormErrorMessage>
-                                        )}
-                                    </FormControl>
+                                            {/* Mobile Field */}
+                                            <FormControl isInvalid={isErrorMobile}>
+                                                <FormLabel fontSize={'14px'} mt={4}>Mobile No. <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                                <Input
+                                                    type='text'
+                                                    name="mobile"
+                                                    value={inputMobile}
+                                                    placeholder="Enter Your Phone no."
+                                                    ref={validMobile}
+                                                    pb={1}
+                                                    onChange={handleMobile}
+                                                    autoComplete="tel"
+                                                />
+                                                {!isErrorMobile ? (
+                                                    <FormHelperText>Looks good!</FormHelperText>
+                                                ) : (
+                                                    <FormErrorMessage>Field is required.</FormErrorMessage>
+                                                )}
+                                            </FormControl>
+                                            {/* Password Field */}
+                                            <FormControl isInvalid={isErrorPassword || (inputPassword.length > 0 && inputPassword.length < 6)}>
+                                                <FormLabel fontSize={'14px'} mt={4}>Password <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                                <Input
+                                                    type='password'
+                                                    name="password"
+                                                    value={inputPassword}
+                                                    placeholder="Enter Your Password"
+                                                    ref={passwordValid}
+                                                    pb={1}
+                                                    onChange={handlePassword}
 
-                                    {/* Email Field */}
-                                    <FormControl isInvalid={isErrorEmail}>
-                                        <FormLabel fontSize={'14px'} mt={4}>Email ID <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                        <Input
-                                            type='email'
-                                            name="email"
-                                            value={inputEmail}
-                                            placeholder="Enter Your Email ID"
-                                            ref={emailValid}
-                                            pb={1}
-                                            onChange={handleEmail}
-                                            autoComplete="email"
-                                        />
-                                        {!isErrorEmail ? (
-                                            <FormHelperText>Looks good!</FormHelperText>
-                                        ) : (
-                                            <FormErrorMessage>Field is required.</FormErrorMessage>
-                                        )}
-                                    </FormControl>
-
-                                    {/* Address Field */}
-                                    <FormControl isInvalid={isErrorAddress}>
-                                        <FormLabel fontSize={'14px'} mt={4}>Address <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                        <Input
-                                            type='text'
-                                            name="address"
-                                            value={inputAddress} // Changed from 'input' to 'inputAddress'
-                                            placeholder="Enter Your Address"
-                                            ref={addressValid}
-                                            pb={1}
-                                            onChange={handleAddress}
-                                        />
-                                        {!isErrorAddress ? (
-                                            <FormHelperText>Looks good!</FormHelperText>
-                                        ) : (
-                                            <FormErrorMessage>Field is required.</FormErrorMessage>
-                                        )}
-                                    </FormControl>
-
-                                    {/* Password Field */}
-                                    <FormControl isInvalid={isErrorPassword || (inputPassword.length > 0 && inputPassword.length < 6)}>
-                                        <FormLabel fontSize={'14px'} mt={4}>Password <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                        <Input
-                                            type='password'
-                                            name="password"
-                                            value={inputPassword}
-                                            placeholder="Enter Your Password"
-                                            ref={passwordValid}
-                                            pb={1}
-                                            onChange={handlePassword}
-
-                                        />
-                                        {isErrorPassword ? (
-                                            <FormErrorMessage>Password is required.</FormErrorMessage>
-                                        ) : inputPassword.length < 6 && inputPassword.length > 0 ? (
-                                            <FormErrorMessage>Password must be at least 6 characters long.</FormErrorMessage>
-                                        ) : (
-                                            <FormHelperText>Looks Good!</FormHelperText>
-                                        )}
-                                    </FormControl>
+                                                />
+                                                {isErrorPassword ? (
+                                                    <FormErrorMessage>Password is required.</FormErrorMessage>
+                                                ) : inputPassword.length < 6 && inputPassword.length > 0 ? (
+                                                    <FormErrorMessage>Password must be at least 6 characters long.</FormErrorMessage>
+                                                ) : (
+                                                    <FormHelperText>Looks Good!</FormHelperText>
+                                                )}
+                                            </FormControl>
 
 
-                                    {/* Confirm Password Field */}
-                                    <FormControl isInvalid={isErrorConfirmPassword}>
-                                        <FormLabel fontSize={'14px'} mt={4}>Confirm Password <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
-                                        <Input
-                                            type='password'
-                                            name="confirmPassword"
-                                            value={inputConfirmPassword}
-                                            placeholder="Confirm Your Password"
-                                            ref={confirmPasswordValid}
-                                            pb={1}
-                                            onChange={handleConfirmPassword}
-                                        />
-                                        {!isErrorConfirmPassword ? (
-                                            <FormHelperText>Passwords match!</FormHelperText>
-                                        ) : (
-                                            <FormErrorMessage>
-                                                {inputConfirmPassword === '' ? "Field is required." : "Passwords do not match."}
-                                            </FormErrorMessage>
-                                        )}
-                                    </FormControl>
+                                        </div>
+                                        <div className="col-md-6">
+                                            {/* Address Field */}
+                                            <FormControl isInvalid={isErrorAddress}>
+                                                <FormLabel fontSize={'14px'} mt={4}>Address <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                                <Input
+                                                    type='text'
+                                                    name="address"
+                                                    value={inputAddress} // Changed from 'input' to 'inputAddress'
+                                                    placeholder="Enter Your Address"
+                                                    ref={addressValid}
+                                                    pb={1}
+                                                    onChange={handleAddress}
+                                                />
+                                                {!isErrorAddress ? (
+                                                    <FormHelperText>Looks good!</FormHelperText>
+                                                ) : (
+                                                    <FormErrorMessage>Field is required.</FormErrorMessage>
+                                                )}
+                                            </FormControl>
 
+                                            {/* Email Field */}
+                                            <FormControl isInvalid={isErrorEmail}>
+                                                <FormLabel fontSize={'14px'} mt={4}>Email ID <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                                <Input
+                                                    type='email'
+                                                    name="email"
+                                                    value={inputEmail}
+                                                    placeholder="Enter Your Email ID"
+                                                    ref={emailValid}
+                                                    pb={1}
+                                                    onChange={handleEmail}
+                                                    autoComplete="email"
+                                                />
+                                                {!isErrorEmail ? (
+                                                    <FormHelperText>Looks good!</FormHelperText>
+                                                ) : (
+                                                    <FormErrorMessage>Field is required.</FormErrorMessage>
+                                                )}
+                                            </FormControl>
+
+
+
+
+                                            {/* Confirm Password Field */}
+                                            <FormControl isInvalid={isErrorConfirmPassword}>
+                                                <FormLabel fontSize={'14px'} mt={4}>Confirm Password <sup><span style={{ color: 'red' }}>*</span></sup></FormLabel>
+                                                <Input
+                                                    type='password'
+                                                    name="confirmPassword"
+                                                    value={inputConfirmPassword}
+                                                    placeholder="Confirm Your Password"
+                                                    ref={confirmPasswordValid}
+                                                    pb={1}
+                                                    onChange={handleConfirmPassword}
+                                                />
+                                                {!isErrorConfirmPassword ? (
+                                                    <FormHelperText>Passwords match!</FormHelperText>
+                                                ) : (
+                                                    <FormErrorMessage>
+                                                        {inputConfirmPassword === '' ? "Field is required." : "Passwords do not match."}
+                                                    </FormErrorMessage>
+                                                )}
+                                            </FormControl>
+                                        </div>
+                                    </div>
                                     {/* Submit Button and Login Link */}
                                     <div className="row mt-4">
                                         <div className="col-6">
@@ -386,19 +393,31 @@ const Login = () => {
                 const res = await loginUser({ username: user.username, password: user.password });
                 if (res.status === 200) {
                     localStorage.setItem('token', res.data.token);
-                
-                // Redirect user to dashboard
-                navigate('/');
+
+                    // Redirect user to dashboard
                     Swal.fire({
                         title: 'Success',
-                        text: res.data,
+                        text: 'Successfully Logged In',
                         icon: 'success'
+                    }).then(() => {
+                        // Redirect to the login page
+                        navigate('/'); // Assuming you are using React Router
+                    });
+                }else if (res.status === 401) {
+                    // Redirect user to dashboard
+                    Swal.fire({
+                        title: 'Wrong Password',
+                        text: "Enter the Correct Password",
+                        icon: 'warning'
+                    }).then(() => {
+                        // Redirect to the login page
+                        navigate('/login'); // Assuming you are using React Router
                     });
                 } else {
                     Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went wrong!'
+                        icon: 'warning',
+                        title: 'User Does Not Exist!',
+                        text: 'Check username'
                     });
                 }
             } catch (error) {

@@ -39,6 +39,7 @@ const User = mongoose.model('User', userSchema);
 
 // Define the Order schema
 const orderSchema = mongoose.Schema({
+    paymentID: { type: String, unique: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
     totalAmount: Number,

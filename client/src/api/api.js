@@ -120,3 +120,21 @@ export const getProducts = async (category = '', searchTerm = '') => {
         return [];
     }
 };
+
+export const createOrder = async (response, cart) => {
+    const userId = 'ACTUAL_USER_ID'; // Replace with actual user ID from context or props
+    const orderData = {
+        paymentId: response.razorpay_payment_id,
+        products: cart,
+        totalAmount: cart.reduce((sum, item) => sum + item.price * item.quantity, 0), // Calculate total amount
+        userId: userId, // Use actual user ID here
+    };
+
+    try {
+        const result = await axios.post(`${URL}/createOrder`, orderData);
+        console.log(result.data);
+    } catch (error) {
+        console.error('Error while creating order:', error);
+    }
+};
+

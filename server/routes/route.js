@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { User, Category, Product } from '../schema/schemas.js';
+import { User, Category, Product, Order } from '../schema/schemas.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -87,7 +87,7 @@ router.post('/loginUser', async (req, res) => {
         if (!isMatch) {
             return res.status(401).send("Invalid credentials");
         }
-
+        console.log(process.env.JWT_SECRET)
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         console.log(token)
         return res.status(200).json({ token, user: { id: user._id, email: user.email, mobile: user.mobile } });
@@ -218,6 +218,26 @@ router.get('/products', async (req, res) => {
         res.status(200).json(products);
     } catch (error) {
         res.status(500).json('Error While Fetching Products');
+    }
+});
+
+// Create Order
+router.post('/createOrder', async (req, res) => {
+    const { paymentId, products, totalAmount, userId } = req.body;
+
+    try {
+        const order = new Order({
+            user: mongoose.Types.ObjectId(userId), // Ensure user ID is in the correct format
+            products: products.map(productId => mongoose.Types.ObjectId(productId)), // Convert to ObjectId
+            totalAmount,
+            status: 'Completed', // Set the order status
+        });
+
+        await order.save();
+        res.status(201).json({ message: 'Order created successfully', order });
+    } catch (error) {
+        console.error('Error while creating order:', error);
+        res.status(500).json({ message: 'Error while creating order' });
     }
 });
 
