@@ -146,7 +146,7 @@ export const createOrder = async (orderData) => {
 
 //fetch order
 export const getUserOrders = async (userId) => {
-    console.log(userId);
+    // console.log(userId);
     try {
         const response = await axios.get(`${URL}/orders/${userId}`);
         

@@ -13,6 +13,7 @@ const Cart = () => {
     const { cart, changeQuantity, totalQuantity } = useCart();
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const [user, setUser] = useState(null);
+    console.log(cart)
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -34,7 +35,7 @@ const Cart = () => {
         try {
             const orderData = {
                 paymentId: response.razorpay_payment_id,
-                user: user, // Use user ID
+                user: user._id, // Use user ID
                 products: cart.map(item => ({
                     product: item._id, // Convert string ID to ObjectId
                     quantity: item.quantity,

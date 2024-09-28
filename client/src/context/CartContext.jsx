@@ -28,12 +28,7 @@ const CartProvider = ({ children }) => {
 
   // Update localStorage whenever cart changes
   useEffect(() => {
-    const cartData = cart.map(item => ({
-      _id: item._id,
-      quantity: item.quantity,
-      price: item.price,
-    }));
-    localStorage.setItem('cart', JSON.stringify(cartData)); // Storing the data in localStorage
+    localStorage.setItem('cart', JSON.stringify(cart)); // Storing the data in localStorage
   }, [cart]); 
 
   // Function to update cart
