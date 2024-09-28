@@ -51,6 +51,18 @@ export const loginUser = async ({ username, password }) => {
     }
 };
 
+// Fetch User
+// Fetch user details by userId
+export const getUser = async (userId) => {
+    try {
+        const response = await axios.get(`${URL}/getUser/${userId}`); // Pass the userId in the URL
+        return response.data; // Return the user details
+    } catch (error) {
+        console.error('Error while fetching user:', error);
+        return null; // Return null on error
+    }
+};
+
 
 
 // Check if category exists
@@ -121,20 +133,28 @@ export const getProducts = async (category = '', searchTerm = '') => {
     }
 };
 
-export const createOrder = async (response, cart) => {
-    const userId = 'ACTUAL_USER_ID'; // Replace with actual user ID from context or props
-    const orderData = {
-        paymentId: response.razorpay_payment_id,
-        products: cart,
-        totalAmount: cart.reduce((sum, item) => sum + item.price * item.quantity, 0), // Calculate total amount
-        userId: userId, // Use actual user ID here
-    };
-
+//Create Order
+export const createOrder = async (orderData) => {
     try {
         const result = await axios.post(`${URL}/createOrder`, orderData);
-        console.log(result.data);
+        return result.data;
     } catch (error) {
         console.error('Error while creating order:', error);
+        throw error;
     }
 };
+
+//fetch order
+export const getUserOrders = async (userId) => {
+    console.log(userId);
+    try {
+        const response = await axios.get(`${URL}/orders/${userId}`);
+        
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching user orders:', error);
+        throw error;
+    }
+};
+
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, Box, Button, Image } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from './Header';
@@ -6,60 +6,81 @@ import Searchbar from './Searchbar';
 import { Newsletter, Footer } from './Footer';
 import { useCart } from '../context/CartContext';
 import Swal from 'sweetalert2';
+import { getUser, createOrder } from '../api/api'; // Fetch user data and create order
 
 const Cart = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const { cart, changeQuantity, totalQuantity } = useCart();
-
     const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const [user, setUser] = useState(null);
 
-    const createOrder = async (response, cart, userId) => {
-        // Implement your backend call to create an order
-        const orderData = {
-            paymentId: response.razorpay_payment_id,
-            user:userId,
-            cart: cart,
-            totalAmount: totalPrice,
-            // Add any other relevant details
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const storedUser = JSON.parse(localStorage.getItem('user'));
+                if (storedUser) {
+                    const userData = await getUser(storedUser);
+                    setUser(userData);
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
         };
 
-        await fetch(`${process.env.REACT_APP_API_URL}/createOrder`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData),
-        });
-        Swal.fire({
-            title: 'Order Placed',
-            text: "Order will be delivered to u with utmost care",
-            icon: 'success',
-            confirmButtonText: 'Continue Shopping' // Change the button text here
-        }).then(() => {
-            // Redirect to the login page
-            navigate('/'); // Assuming you are using React Router
-        });
+        fetchUserDetails();
+    }, []);
+
+    const handleOrderCreation = async (response) => {
+        try {
+            const orderData = {
+                paymentId: response.razorpay_payment_id,
+                user: user, // Use user ID
+                products: cart.map(item => ({
+                    product: item._id, // Convert string ID to ObjectId
+                    quantity: item.quantity,
+                })),
+                amount: totalPrice
+            };
+    
+            await createOrder(orderData);
+            
+            Swal.fire({
+                title: 'Order Placed',
+                text: "Order will be delivered to you with utmost care",
+                icon: 'success',
+                confirmButtonText: 'Continue Shopping',
+            }).then(() => {
+                navigate('/');
+            });
+        } catch (error) {
+            console.error('Error while creating order:', error);
+            Swal.fire('Error', 'Failed to place the order. Please try again.', 'error');
+        }
     };
 
     const handlePayment = async () => {
+        if (!user) {
+            Swal.fire('Error', 'User details not found. Please log in.', 'error');
+            return;
+        }
+
         const options = {
-            key: process.env.REACT_APP_RAZORPAY_KEY_ID, // Your Razorpay key
-            amount: totalPrice * 100, // Amount in paise
+            key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+            amount: totalPrice * 100,
             currency: 'INR',
             name: 'MERN-KART',
             description: 'Order Description',
             handler: async (response) => {
-                // Call backend to create an order
-                await createOrder(response, cart);
+                await handleOrderCreation(response); // Call the new order creation function
             },
             prefill: {
-                name: 'Bristidev Burman',
-                email: 'bristidev2004@gmail.com',
-                contact: '9330243841'
+                name: user.name,
+                email: user.email,
+                contact: user.mobile,
             },
             theme: {
-                color: '#A3E0E6'
-            }
+                color: '#A3E0E6',
+            },
         };
 
         const razorpay = new window.Razorpay(options);
@@ -83,7 +104,7 @@ const Cart = () => {
                     <Box className="oops" textAlign="center" mt={10}>
                         <Image src="/images/cart-empty.png" boxSize="200px" mb={4} />
                         <Text className="head mb-4">Oops!</Text>
-                        <Text className="desc">It looks like you haven't added any items to your wishlist yet.</Text>
+                        <Text className="desc">It looks like you haven't added any items to your cart yet.</Text>
                         <Button className="btn btn-dark" onClick={() => window.location.href = '/products'}>
                             Browse Products
                         </Button>
@@ -120,10 +141,9 @@ const Cart = () => {
                             <h4>Total Price:</h4>
                             <h4 className="totalprice">₹{totalPrice.toFixed(2)}</h4>
                             <Button className="btn btn-lg d-flex btn-dark gradient-button" onClick={handlePayment} colorScheme="teal" mt={15}>
-                            Proceed to Payment
-                        </Button>
+                                Proceed to Payment
+                            </Button>
                         </div>
-                        
                     </div>
                 )}
             </div>

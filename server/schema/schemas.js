@@ -41,9 +41,13 @@ const User = mongoose.model('User', userSchema);
 const orderSchema = mongoose.Schema({
     paymentID: { type: String, unique: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
+    products: [
+    {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' }, // Product ID
+      quantity: { type: Number, required: true } // Quantity
+    }
+  ],
     totalAmount: Number,
-    status: { type: String, default: 'Pending' },
     orderDate: { type: Date, default: Date.now },
 });
 

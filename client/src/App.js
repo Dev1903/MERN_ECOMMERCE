@@ -8,6 +8,7 @@ import Blog from "./components/Blog";
 import Cart from "./components/Cart";
 import Wishlist from "./components/WishList";
 import About from "./components/About";
+import Profile from "./components/Profile";
 import AdminPage from "./components/AdminPage";
 import { SignUp, Login } from "./components/UserLogin";
 import Fulldetails from "./components/Fulldetails";
@@ -28,6 +29,7 @@ const App = () => {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path="/admin/*" element={<AdminPage />} />
           </Routes>

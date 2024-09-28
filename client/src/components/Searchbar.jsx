@@ -11,7 +11,14 @@ const Searchbar = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     const { totalQuantity } = useCart(); // Get totalQuantity from context
+    const [token, setToken] = useState(null); // Token state
 
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setToken(storedToken); // Check token once
+    }, []);
+    
     // Fetch categories from the database
     useEffect(() => {
         const fetchCategories = async () => {
@@ -77,7 +84,7 @@ const Searchbar = () => {
                 </div>
                 <div className="col-md-4 d-flex justify-content-end align-items-center right mt-4 mb-3">
                     <div className="col-4 account text-end">
-                        <Link to="/signUp" className="text-black text-decoration-none">
+                        <Link to={token ? "/profile" : "/signUp"} className="text-black text-decoration-none">
                             <i className="fa-regular fa-user"></i>&nbsp;
                             <span>Account</span>
                         </Link>

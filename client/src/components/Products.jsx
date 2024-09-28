@@ -18,6 +18,7 @@ const Products = () => {
     const { updateCart } = useCart(); // Access updateCart from CartContext
     const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
     const [addedProductId, setAddedProductId] = useState(null);
+    const [token, setToken] = useState(null); // Token state
 
     const searchWords = searchTerm.split(' ').map(word => word.toLowerCase());
 
@@ -34,6 +35,11 @@ const Products = () => {
             productPrice.includes(word)
         );
     };
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setToken(storedToken); // Check token once
+    }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -57,26 +63,34 @@ const Products = () => {
     });
 
     const handleAddToCart = (product) => {
+        if (!token) {
+            alert('Please login first');
+            return;
+        }
+        
         updateCart(product);
         setAddedProductId(product._id);
         setTimeout(() => setAddedProductId(null), 800);
     };
-
+    
     const handleWishlist = (product) => {
+        if (!token) {
+            alert('Please login first');
+            return;
+        }
+    
         setWishlist(prevWishlist => {
             const isInWishlist = prevWishlist.some(item => item._id === product._id);
             const updatedWishlist = isInWishlist
                 ? prevWishlist.filter(item => item._id !== product._id)
                 : [...prevWishlist, product];
-
+    
             // Update local storage
             localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
-
+    
             return updatedWishlist;
         });
     };
-
-
 
     return (
         <div className="container-fluid">
@@ -89,13 +103,11 @@ const Products = () => {
             <div className="row mb-2">
                 <div className="col-12">
                     <div className="container mt-4">
-
                         <div className="row justify-content-center">
                             {filteredProducts.length > 0 && isCategoryValid ? (
                                 <div>
                                     <h2 className="mb-4">Products</h2>
                                     <div className="d-flex flex-wrap justify-content-center">
-
                                         {filteredProducts.map((product) => (
                                             <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4" key={product._id}>
                                                 <ProductCard
@@ -103,7 +115,7 @@ const Products = () => {
                                                     handleAddToCart={() => handleAddToCart(product)}
                                                     handleWishlist={() => handleWishlist(product)}
                                                     isInWishlist={wishlist.some(item => item._id === product._id)}
-                                                    isAddedToCart={addedProductId === product._id}
+                                                    isAddedToCart={token && addedProductId === product._id} // Check token here
                                                 />
                                             </div>
                                         ))}

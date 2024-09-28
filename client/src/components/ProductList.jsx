@@ -9,6 +9,13 @@ const ProductList = ({ category, heading, filterByPopular }) => {
     const [products, setProducts] = useState([]);
     const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
     const [addedProductId, setAddedProductId] = useState(null); // Track added product ID
+    const [token, setToken] = useState(null); // Token state
+
+
+    useEffect(() => {
+        const storedToken = localStorage.getItem('token');
+        setToken(storedToken); // Check token once
+    }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -26,12 +33,20 @@ const ProductList = ({ category, heading, filterByPopular }) => {
     });
 
     const handleAddToCart = (product) => {
+        if (!token) {
+            alert('Please login first');
+            return;
+        }
         updateCart(product); // Use the context to update the cart
         setAddedProductId(product._id); // Set the added product ID
         setTimeout(() => setAddedProductId(null), 800); // Reset after 800ms
     };
 
     const handleWishlist = (product) => {
+        if (!token) {
+            alert('Please login first');
+            return;
+        }
         setWishlist(prevWishlist => {
             const isInWishlist = prevWishlist.some(item => item._id === product._id);
             const updatedWishlist = isInWishlist 
@@ -79,7 +94,7 @@ const ProductList = ({ category, heading, filterByPopular }) => {
                                     handleAddToCart={() => handleAddToCart(product)}
                                     handleWishlist={() => handleWishlist(product)}
                                     isInWishlist={wishlist.some(item => item._id === product._id)}
-                                    isAddedToCart={addedProductId === product._id} // Pass the added state
+                                    isAddedToCart={token && addedProductId === product._id} // Pass the added state
                                 />
                             </div>
                         ))}

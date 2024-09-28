@@ -1,27 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { getUserProfile, getUserOrders } from '../api/api'; // Create these API calls
+import { getUser, getUserOrders } from '../api/api'; // Fetch user and orders
 
 const Profile = () => {
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        const fetchProfile = async () => {
-            const profileData = await getUserProfile(); // API call to get user profile
-            setUser(profileData);
+        const fetchUserDetails = async () => {
+            try {
+                const storedUser = JSON.parse(localStorage.getItem('user'));
+                if (storedUser) {
+                    const userData = await getUser(storedUser);
+                    setUser(userData);
+
+                    // Fetch user orders using the user ID after user data is set
+                    fetchUserOrders(userData._id);
+                }
+            } catch (error) {
+                console.error('Error fetching user details:', error);
+            }
         };
 
-        const fetchOrders = async () => {
-            const orderData = await getUserOrders(); // API call to get user orders
-            setOrders(orderData);
+        const fetchUserOrders = async (userId) => {
+            try {
+                const userOrders = await getUserOrders(userId);
+                console.log(userOrders)
+                setOrders(userOrders);
+            } catch (error) {
+                console.error('Error fetching user orders:', error);
+            }
         };
 
-        fetchProfile();
-        fetchOrders();
+        fetchUserDetails(); // Call to fetch user details
     }, []);
 
     if (!user) {
-        return <div>Loading...</div>; // Loading state
+        return <div>Loading...</div>;
     }
 
     return (

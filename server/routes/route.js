@@ -3,6 +3,7 @@ import multer from 'multer';
 import { User, Category, Product, Order } from '../schema/schemas.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 const storage = multer.memoryStorage();
@@ -66,7 +67,7 @@ router.post('/addUser', userUpload.none(), async (req, res) => {
 
 // Login User
 router.post('/loginUser', async (req, res) => {
-    console.log(req.body); // Check what is received
+    // console.log(req.body);
 
     const { username, password } = req.body;
 
@@ -77,25 +78,42 @@ router.post('/loginUser', async (req, res) => {
                 { mobile: username }
             ]
         });
-        console.log(user)
+        // console.log(user._id)
 
         if (!user) {
             return res.status(404).send("User not found");
         }
-        console.log(bcrypt.hash(user.password, 10))
+        // console.log(bcrypt.hash(user.password, 10))
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).send("Invalid credentials");
         }
-        console.log(process.env.JWT_SECRET)
+        // console.log(process.env.JWT_SECRET)
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log(token)
+        // console.log(token)
         return res.status(200).json({ token, user: { id: user._id, email: user.email, mobile: user.mobile } });
     } catch (error) {
         console.error(error); // Log any errors for debugging
         return res.status(500).send("Server error");
     }
 });
+
+// Fetch a specific user by their userId
+router.get('/getUser/:id', async (req, res) => {
+    try {
+        const userId = req.params.id;
+        console.log(userId) // Get the userId from the request parameters
+        const user = await User.findById(userId); // Fetch user from the database using the userId
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user); // Return user details as JSON
+    } catch (error) {
+        console.error('Error while fetching user:', error);
+        res.status(500).json({ message: 'Error while fetching user' });
+    }
+});
+
 
 
 
@@ -223,22 +241,60 @@ router.get('/products', async (req, res) => {
 
 // Create Order
 router.post('/createOrder', async (req, res) => {
-    const { paymentId, products, totalAmount, userId } = req.body;
+    const { paymentId, products, totalAmount, userId, date, time } = req.body;
+    console.log(req.body);
 
     try {
+        // Map the product objects without converting _id, as they are already valid ObjectId strings
+        const formattedProducts = products.map((item) => ({
+            product: new mongoose.Types.ObjectId(item._id), // Use the _id directly as it's already an ObjectId string
+            quantity: item.quantity
+        }));
+        
+
+
+        // Convert userId to ObjectId if necessary
         const order = new Order({
-            user: mongoose.Types.ObjectId(userId), // Ensure user ID is in the correct format
-            products: products.map(productId => mongoose.Types.ObjectId(productId)), // Convert to ObjectId
-            totalAmount,
-            status: 'Completed', // Set the order status
+            paymentID: paymentId,
+            user: new mongoose.Types.ObjectId(userId), // Convert userId to ObjectId
+            products: formattedProducts, // Correctly formatted products array
+            amount: totalAmount,
+            
         });
+        console.log(order)
 
         await order.save();
-        res.status(201).json({ message: 'Order created successfully', order });
+        res.status(201).json('Order created successfully');
     } catch (error) {
-        console.error('Error while creating order:', error);
-        res.status(500).json({ message: 'Error while creating order' });
+        console.error('Error while creating order:', error.message);
+        res.status(500).json('Error while creating order');
     }
 });
+
+// Get Order by userId
+router.get('/orders/:userId', async (req, res) => {
+    const userId = req.params.userId; // Extract userId from URL parameters
+    console.log('User ID:', userId); // Log the user ID for debugging
+
+    try {
+        // Convert userId to ObjectId
+        const userObjectId = new mongoose.Types.ObjectId(userId);
+        
+        // Fetch all orders for the given user ID
+        const orders = await Order.find({ user: userObjectId })
+            .populate('user') // Populate user data if necessary
+            .populate('products.productId'); // Populate product data if necessary
+
+        console.log('Orders found:', orders); // Log the orders found for debugging
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error('Error fetching orders:', error.message);
+        res.status(500).json('Error fetching orders');
+    }
+});
+
+
+
+
 
 export default router;

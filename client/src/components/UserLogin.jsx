@@ -393,6 +393,7 @@ const Login = () => {
                 const res = await loginUser({ username: user.username, password: user.password });
                 if (res.status === 200) {
                     localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('user', JSON.stringify(res.data.user.id));
 
                     // Redirect user to dashboard
                     Swal.fire({

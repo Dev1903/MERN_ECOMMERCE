@@ -12,6 +12,13 @@ export const useCart = () => {
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => JSON.parse(localStorage.getItem('cart')) || []);
   const [totalQuantity, setTotalQuantity] = useState(0);
+  const [token, setToken] = useState(null); // Token state
+
+  // Check for token once when component mounts
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+  }, []);
 
   // Update total quantity whenever cart changes
   useEffect(() => {
@@ -21,11 +28,21 @@ const CartProvider = ({ children }) => {
 
   // Update localStorage whenever cart changes
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }, [cart]);
+    const cartData = cart.map(item => ({
+      _id: item._id,
+      quantity: item.quantity,
+      price: item.price,
+    }));
+    localStorage.setItem('cart', JSON.stringify(cartData)); // Storing the data in localStorage
+  }, [cart]); 
 
   // Function to update cart
   const updateCart = (product) => {
+    if (!token) {
+      alert('Please login first');
+      return;
+    }
+
     setCart(prevCart => {
       const existingProduct = prevCart.find(item => item._id === product._id);
       if (existingProduct) {
