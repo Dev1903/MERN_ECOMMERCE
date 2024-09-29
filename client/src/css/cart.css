@@ -6,7 +6,7 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .totalprice{
-    color: #d9534f;
+    color: #d9534f!important;
 }
 .gradient-button:hover {
     opacity: 0.8; /* Optional: Add a hover effect */

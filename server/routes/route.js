@@ -118,10 +118,7 @@ router.get("/getUser/:id", async (req, res) => {
 });
 
 // Add Category
-router.post(
-  "/addCategory",
-  categoryUpload.single("image"),
-  async (req, res) => {
+router.post("/addCategory", categoryUpload.single("image"), async (req, res) => {
     try {
       const category = new Category({
         name: req.body.name,
@@ -280,8 +277,8 @@ router.post("/createOrder", async (req, res) => {
 
 // Get Order by userId
 router.get("/orders/:userId", async (req, res) => {
-  const userId = req.params.userId; // Extract userId from URL parameters
-  console.log("User ID:", userId); // Log the user ID for debugging
+  const userId = req.params.userId;
+  console.log("User ID:", userId);
 
   try {
     // Convert userId to ObjectId
@@ -289,15 +286,23 @@ router.get("/orders/:userId", async (req, res) => {
 
     // Fetch all orders for the given user ID
     const orders = await Order.find({ user: userObjectId })
-      .populate("user") // Populate user data if necessary
-      .populate("products.productId"); // Populate product data if necessary
+       // Populate user data if necessary
+      .populate({
+        path: "products", // Assuming 'products' is an array of ObjectId references to 'Product'
+        populate: {
+          path: "product", // Populate the individual products within the array
+          select: "name price image" // Only include these fields from the product
+        }
+      });
 
-    console.log("Orders found:", orders); // Log the orders found for debugging
+    console.log("Orders found:", orders);
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching orders:", error.message);
     res.status(500).json("Error fetching orders");
   }
 });
+
+
 
 export default router;
