@@ -26,7 +26,7 @@ const CategoryForm = () => {
     const handleInputChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value })
         setInput(e.target.value)
-        console.log(user)
+        // //console.log(user)
     }
 
     const handleImage = (e) => {

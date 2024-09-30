@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, Button, Image } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
-import { getProducts } from '../api/api'; // Ensure this function fetches data from MongoDB
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getProducts, fetchWishlist, updateWishlist } from '../api/api'; // Ensure getWishlist is added to your API functions
 import Header from './Header';
 import Searchbar from './Searchbar';
 import { Footer, Newsletter } from './Footer';
 import ProductCard from './ProductCard';
 import { useCart } from '../context/CartContext'; // Import the CartContext
+import { isAuthenticated, getUserId } from '../context/authUtils.js'; // Import functions from authUtils
+import Swal from 'sweetalert2';
 
 const Products = () => {
     const location = useLocation();
@@ -14,11 +16,12 @@ const Products = () => {
     const searchTerm = queryParams.get('search') || '';
     const category = queryParams.get('category') || '';
 
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const { updateCart } = useCart(); // Access updateCart from CartContext
-    const [wishlist, setWishlist] = useState(() => JSON.parse(localStorage.getItem('wishlist')) || []);
+    const [wishlist, setWishlist] = useState([]);
     const [addedProductId, setAddedProductId] = useState(null);
-    const [token, setToken] = useState(null); // Token state
+    const [user, setUser] = useState(null); // State for user ID
 
     const searchWords = searchTerm.split(' ').map(word => word.toLowerCase());
 
@@ -37,21 +40,24 @@ const Products = () => {
     };
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        setToken(storedToken); // Check token once
+        const isLoggedIn = isAuthenticated(); // Check if the user is authenticated
+        if (isLoggedIn) {
+            const id = getUserId(); // Get the user ID from the token
+            setUser(id); // Set the user ID state
+        }
     }, []);
 
     useEffect(() => {
         const fetchProducts = async () => {
-            try {
-                const productList = await getProducts();
-                setProducts(productList);
-            } catch (error) {
-                console.error('Error fetching products:', error);
+            const productList = await getProducts();
+            setProducts(productList);
+            if (user) {
+                const userWishlist = await fetchWishlist(user); // Fetch user's wishlist from the database
+                setWishlist(Array.isArray(userWishlist.items) ? userWishlist.items : []); // Ensure wishlist is an array of items
             }
         };
         fetchProducts();
-    }, []);
+    }, [user]);
 
     const validCategories = Array.from(new Set(products.map(product => product.category?.name))); // Safe access
     const isCategoryValid = !category || validCategories.includes(category);
@@ -63,32 +69,56 @@ const Products = () => {
     });
 
     const handleAddToCart = (product) => {
-        if (!token) {
-            alert('Please login first');
+        if (!user) {
+            Swal.fire({
+                title: 'User Not Signed In',
+                text: "Please Sign In",
+                icon: 'warning'
+            }).then(() => {
+                navigate('/signUp'); // Redirect to the login page
+            });
             return;
         }
-        
-        updateCart(product);
-        setAddedProductId(product._id);
-        setTimeout(() => setAddedProductId(null), 800);
+
+        updateCart(product); // Add product to cart
+        setAddedProductId(product._id); // Set the added product ID
+        setTimeout(() => setAddedProductId(null), 800); // Clear the added product ID after a short delay
     };
-    
-    const handleWishlist = (product) => {
-        if (!token) {
-            alert('Please login first');
+
+    const handleWishlist = async (product) => {
+        if (!user) {
+            Swal.fire({
+                title: 'User Not Signed In',
+                text: "Please Sign In",
+                icon: 'warning'
+            }).then(() => {
+                navigate('/signUp'); // Redirect to the login page
+            });
             return;
         }
-    
+
         setWishlist(prevWishlist => {
-            const isInWishlist = prevWishlist.some(item => item._id === product._id);
+            const isInWishlist = prevWishlist.some(item => item.productId === product._id);
             const updatedWishlist = isInWishlist
-                ? prevWishlist.filter(item => item._id !== product._id)
-                : [...prevWishlist, product];
-    
-            // Update local storage
-            localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
-    
-            return updatedWishlist;
+                ? prevWishlist.filter(item => item.productId !== product._id) // Remove from wishlist if already present
+                : [...prevWishlist, { productId: product._id, name: product.name, brand: product.brand }]; // Add to wishlist if not present
+
+            // Update the wishlist in the database
+            const updateWishlistInDatabase = async () => {
+                try {
+                    await updateWishlist(user, updatedWishlist); // Update wishlist in the database
+                } catch (error) {
+                    console.error("Error updating wishlist:", error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Unable to update wishlist. Please try again later.',
+                        icon: 'error'
+                    });
+                }
+            };
+
+            updateWishlistInDatabase(); // Call the function to update wishlist
+            return updatedWishlist; // Return the updated wishlist state
         });
     };
 
@@ -110,13 +140,13 @@ const Products = () => {
                                     <div className="d-flex flex-wrap justify-content-center">
                                         {filteredProducts.map((product) => (
                                             <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4" key={product._id}>
-                                                <ProductCard
-                                                    product={product}
-                                                    handleAddToCart={() => handleAddToCart(product)}
-                                                    handleWishlist={() => handleWishlist(product)}
-                                                    isInWishlist={wishlist.some(item => item._id === product._id)}
-                                                    isAddedToCart={token && addedProductId === product._id} // Check token here
-                                                />
+                                            <ProductCard
+                                    product={product}
+                                    handleAddToCart={() => handleAddToCart(product)}
+                                    handleWishlist={() => handleWishlist(product)}
+                                    isInWishlist={wishlist.some(item => item.productId === product._id)} // Ensure wishlist check is correct
+                                    isAddedToCart={user && addedProductId === product._id} 
+                                />
                                             </div>
                                         ))}
                                     </div>
@@ -160,9 +190,11 @@ const Products = () => {
                     </div>
                 </div>
             </div>
-            <div className="footer mb-2">
-                <Newsletter />
+            <div className="row footer">
                 <Footer />
+            </div>
+            <div className="row newsletter">
+                <Newsletter />
             </div>
         </div>
     );

@@ -1,9 +1,12 @@
 import express from "express";
 import multer from "multer";
-import { User, Category, Product, Order } from "../schema/schemas.js";
+import { User, Category, Product, Order, Cart, Wishlist } from "../schema/schemas.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 const storage = multer.memoryStorage();
@@ -66,35 +69,42 @@ router.post("/addUser", userUpload.none(), async (req, res) => {
 
 // Login User
 router.post("/loginUser", async (req, res) => {
-  // console.log(req.body);
-
   const { username, password } = req.body;
 
   try {
+    // Check if admin credentials are used
+    const isAdmin = username === process.env.ADMIN_USERNAME;
+    
+    const isAdminMatch = isAdmin ? await bcrypt.compare(password, process.env.ADMIN_PASSWORD) : false;
+
+    // If admin credentials are correct, respond with 201
+    if (isAdmin && isAdminMatch) {
+      return res.status(201).json({ message: "Admin logged in successfully" });
+    }
     const user = await User.findOne({
       $or: [{ email: username }, { mobile: username }],
     });
-    // console.log(user._id)
 
+    // Check if user exists
     if (!user) {
       return res.status(404).send("User not found");
     }
-    // console.log(bcrypt.hash(user.password, 10))
+
+    
+
+    // Check normal user password
     const isMatch = await bcrypt.compare(password, user.password);
+    
     if (!isMatch) {
       return res.status(401).send("Invalid credentials");
     }
-    // console.log(process.env.JWT_SECRET)
+
+    // Generate JWT for normal user
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    // console.log(token)
-    return res
-      .status(200)
-      .json({
-        token,
-        user: { id: user._id, email: user.email, mobile: user.mobile },
-      });
+
+    return res.status(200).json(token);
   } catch (error) {
     console.error(error); // Log any errors for debugging
     return res.status(500).send("Server error");
@@ -105,7 +115,7 @@ router.post("/loginUser", async (req, res) => {
 router.get("/getUser/:id", async (req, res) => {
   try {
     const userId = req.params.id;
-    console.log(userId); // Get the userId from the request parameters
+    //console.log(userId); // Get the userId from the request parameters
     const user = await User.findById(userId); // Fetch user from the database using the userId
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -244,6 +254,23 @@ router.get("/products", async (req, res) => {
   }
 });
 
+// Get Product by ID
+router.get("/getProduct/:id", async (req, res) => {
+  try {
+    const productId = req.params.id;
+    //console.log(`PRODUCTID:${productId}`) // Use productId instead of userId
+    const product = await Product.findById(productId); // Fetch product from the database using productId
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(product); // Return product details as JSON
+  } catch (error) {
+    console.error("Error while fetching product:", error);
+    res.status(500).json({ message: "Error while fetching product" });
+  }
+});
+
+
 // Create Order
 router.post("/createOrder", async (req, res) => {
   const { paymentId, products, totalAmount, userId, date, time } = req.body;
@@ -256,8 +283,6 @@ router.post("/createOrder", async (req, res) => {
         quantity: item.quantity,
       };
     });
-
-    console;
     // Convert userId to ObjectId if necessary
     const order = new Order({
       paymentID: paymentId,
@@ -265,7 +290,7 @@ router.post("/createOrder", async (req, res) => {
       products: formattedProducts, // Correctly formatted products array
       amount: totalAmount,
     });
-    console.log(order);
+    //console.log(order);
 
     await order.save();
     res.status(201).json("Order created successfully");
@@ -278,7 +303,7 @@ router.post("/createOrder", async (req, res) => {
 // Get Order by userId
 router.get("/orders/:userId", async (req, res) => {
   const userId = req.params.userId;
-  console.log("User ID:", userId);
+  //console.log("User ID:", userId);
 
   try {
     // Convert userId to ObjectId
@@ -295,7 +320,7 @@ router.get("/orders/:userId", async (req, res) => {
         }
       });
 
-    console.log("Orders found:", orders);
+    //console.log("Orders found:", orders);
     res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching orders:", error.message);
@@ -303,6 +328,70 @@ router.get("/orders/:userId", async (req, res) => {
   }
 });
 
+// Get cart data for a user
+router.get('/cart/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    //console.log(`GET CART: ${userId}`);
+    const cart = await Cart.findById(userId); // Fetch cart by user ID
+    if (!cart) {
+      return res.json([]);
+    }
+    res.json(cart); // Return the cart data
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
+// Update cart data for a user
+router.put('/cart/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const  items  = req.body; // Get items from request body
+    //console.log(JSON.stringify(req.body))
+
+    // Upsert the cart: create if it doesn't exist, update if it does
+    const updatedCart = await Cart.findByIdAndUpdate(userId,  items , { new: true, upsert: true });
+
+    res.json(updatedCart); // Return the updated cart data
+  } catch (error) {
+    console.error('Error updating cart:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.get('/wishList/:userID', async (req, res) => {
+  try {
+    const userId = req.params.userID;
+    //console.log(`GET WISHLIST: ${userId}`);
+    const wishlist = await Wishlist.findById(userId);
+    //console.log(wishlist) // Fetch wishlist by user ID
+    if (!wishlist) {
+      return res.json([]); // Return an empty array if no wishlist found
+    }
+    res.json(wishlist); // Return the wishlist data
+  } catch (error) {
+    console.error('Error fetching wishlist:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update wishlist data for a user
+router.put('/wishList/:userID', async (req, res) => {
+  try {
+    const userId = req.params.userID;
+    const items = req.body; // Get items from request body
+    //console.log(JSON.stringify(req.body));
+
+    // Upsert the wishlist: create if it doesn't exist, update if it does
+    const updatedWishlist = await Wishlist.findByIdAndUpdate(userId, items, { new: true, upsert: true });
+
+    res.json(updatedWishlist); // Return the updated wishlist data
+  } catch (error) {
+    console.error('Error updating wishlist:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 export default router;

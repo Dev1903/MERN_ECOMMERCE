@@ -33,34 +33,34 @@ const SignUp = () => {
     const handleInputChange = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
         setInput(e.target.value);
-        console.log(user);
+        //console.log(user);
     };
 
     const handleMobile = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
         const onlyNums = e.target.value.replace(/[^0-9]/g, '');
         setInputMobile(onlyNums);
-        console.log(user);
+        //console.log(user);
     };
 
     const handleEmail = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
         const emailCheck = e.target.value.replace(/[^a-zA-Z0-9@._-]/g, '');
         setInputEmail(emailCheck);
-        console.log(user);
+        //console.log(user);
     };
 
     const handleAddress = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
         setInputAddress(e.target.value);
-        console.log(user);
+        //console.log(user);
     };
 
     const handlePassword = (e) => {
         setUser({ ...user, [e.target.name]: e.target.value });
         const passwordCheck = e.target.value.replace(/[^a-zA-Z0-9!@#$%^&*()_+{}[\]:;"'<>,.?/-]/g, '');
         setInputPassword(passwordCheck);
-        console.log(user);
+        //console.log(user);
     };
 
     // New handler for Confirm Password
@@ -68,7 +68,7 @@ const SignUp = () => {
         setUser({ ...user, [e.target.name]: e.target.value });
         const confirmPasswordCheck = e.target.value.replace(/[^a-zA-Z0-9!@#$%^&*()_+{}[\]:;"'<>,.?/-]/g, '');
         setInputConfirmPassword(confirmPasswordCheck);
-        console.log(user);
+        //console.log(user);
     };
 
     // Validation flags
@@ -391,9 +391,9 @@ const Login = () => {
         } else {
             try {
                 const res = await loginUser({ username: user.username, password: user.password });
+                //console.log(res.data);
                 if (res.status === 200) {
-                    localStorage.setItem('token', res.data.token);
-                    localStorage.setItem('user', JSON.stringify(res.data.user.id));
+                    localStorage.setItem('token', res.data);
 
                     // Redirect user to dashboard
                     Swal.fire({
@@ -402,7 +402,17 @@ const Login = () => {
                         icon: 'success'
                     }).then(() => {
                         // Redirect to the login page
-                        navigate('/'); // Assuming you are using React Router
+                        window.location.href = '/'; // Assuming you are using React Router
+                    });
+                }else if (res.status === 201) {
+                    // Redirect user to dashboard
+                    Swal.fire({
+                        title: 'Welcome Admin',
+                        text: "ADMIN CREDENTIALS ENTERED",
+                        icon: 'success'
+                    }).then(() => {
+                        // Redirect to the login page
+                        navigate(`/${process.env.REACT_APP_ADMIN_ENTRY_URL}`); // Assuming you are using React Router
                     });
                 }else if (res.status === 401) {
                     // Redirect user to dashboard

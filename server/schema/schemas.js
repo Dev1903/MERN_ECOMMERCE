@@ -53,4 +53,29 @@ const orderSchema = mongoose.Schema({
 
 const Order = mongoose.model('Order', orderSchema);
 
-export { Category, Product, User, Order };
+const CartSchema = new mongoose.Schema({
+  _id: { type: mongoose.Schema.Types.ObjectId, required: true }, // User ID
+  items: [{
+    productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+    brand: { type: String, required: true },
+    quantity: { type: Number, required: true, min: 1 }, // Ensure quantity is at least 1
+    price: { type: Number, required: true },
+    image: {type: String}
+  }]
+});
+
+const Cart = mongoose.model('Cart', CartSchema);
+
+const WishlistSchema = new mongoose.Schema({
+  _id: { type: mongoose.Schema.Types.ObjectId, required: true }, // User ID
+  items: [{
+    productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    name: { type: String, required: true },
+    brand: { type: String, required: true }
+  }]
+});
+
+const Wishlist = mongoose.model('Wishlist', WishlistSchema);
+
+export { Category, Product, User, Order, Cart, Wishlist };

@@ -3,7 +3,7 @@ import axios from "axios";
 
 const URL = process.env.REACT_APP_API_URL;
 
-console.log('API URL:', process.env.REACT_APP_API_URL);
+// //console.log('API URL:', process.env.REACT_APP_API_URL);
 // Add User
 export const addUser = async (data) => {
     try {
@@ -70,10 +70,10 @@ export const checkCategoryExists = async (categoryName) => {
     try {
         const response = await axios.get(`${URL}/checkCategory`, { params: { categoryName } });
         if (response.data.exists) {
-            console.log('Category exists, you can proceed.');
+            //console.log('Category exists, you can proceed.');
             return true;
         } else {
-            console.log('Category does not exist, please add the category first.');
+            //console.log('Category does not exist, please add the category first.');
             return false;
         }
     } catch (error) {
@@ -133,6 +133,17 @@ export const getProducts = async (category = '', searchTerm = '') => {
     }
 };
 
+//Fetch Product by ID
+export const getProduct = async (productId) => {
+    try {
+        const response = await axios.get(`${URL}/getProduct/${productId}`); // Pass the userId in the URL
+        return response.data; // Return the user details
+    } catch (error) {
+        console.error('Error while fetching product:', error);
+        return null; // Return null on error
+    }
+};
+
 //Create Order
 export const createOrder = async (orderData) => {
     try {
@@ -146,7 +157,7 @@ export const createOrder = async (orderData) => {
 
 //fetch order
 export const getUserOrders = async (userId) => {
-    // console.log(userId);
+    // //console.log(userId);
     try {
         const response = await axios.get(`${URL}/orders/${userId}`);
         
@@ -155,6 +166,54 @@ export const getUserOrders = async (userId) => {
         console.error('Error fetching user orders:', error);
         throw error;
     }
+};
+
+
+// Fetch cart for a user
+export const fetchCart = async (userId) => {
+  try {
+    const response = await axios.get(`${URL}/cart/${userId}`);
+    return response.data; // Returns the cart data
+  } catch (error) {
+    console.error('Error fetching cart:', error);
+    throw error; // Propagate the error
+  }
+};
+
+// Update Cart
+export const updateCart = async (userId, items) => {
+  try {
+    const response = await axios.put(`${URL}/cart/${userId}`, { items });
+    return response.data; // Returns the updated cart data
+  } catch (error) {
+    console.error('Error updating cart:', error);
+    throw error; // Propagate the error
+  }
+};
+
+// Fetch wishlist for a user
+export const fetchWishlist = async (userId) => {
+    try {
+        //console.log(`Fetching wishlist for userId: ${userId}`); // Log userId to verify
+        const response = await axios.get(`${URL}/wishlist/${userId}`); // Assuming you have a route for fetching wishlist
+        //console.log("Fetched wishlist response:", response); // Log the full response object
+        return response.data || []; // Ensure you're accessing the correct field
+    } catch (error) {
+        console.error('Error fetching wishlist:', error.response ? error.response.data : error.message); // More detailed error
+        return [];
+    }
+};
+
+
+// Update Wishlist
+export const updateWishlist = async (userId, items) => {
+  try {
+    const response = await axios.put(`${URL}/wishList/${userId}`, { items });
+    return response.data; // Returns the updated wishlist data
+  } catch (error) {
+    console.error('Error updating wishlist:', error);
+    throw error; // Propagate the error
+  }
 };
 
 

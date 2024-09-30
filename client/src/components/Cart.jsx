@@ -7,21 +7,26 @@ import { Newsletter, Footer } from './Footer';
 import { useCart } from '../context/CartContext';
 import Swal from 'sweetalert2';
 import { getUser, createOrder } from '../api/api'; // Fetch user data and create order
+import { isAuthenticated, getUserId } from '../context/authUtils.js'; // Import functions from authUtils
 
 const Cart = () => {
     const navigate = useNavigate();
     const { cart, changeQuantity, totalQuantity } = useCart();
-    const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = Array.isArray(cart)
+        ? cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        : 0;
     const [user, setUser] = useState(null);
-    console.log(cart)
 
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const storedUser = JSON.parse(localStorage.getItem('user'));
-                if (storedUser) {
-                    const userData = await getUser(storedUser);
-                    setUser(userData);
+                if (isAuthenticated()) { // Check if the user is authenticated
+                    const storedUser = getUserId(); // Get user ID from the token
+                    //console.log(`Stored user ID: ${storedUser}`);
+                    if (storedUser) {
+                        const userData = await getUser(storedUser);
+                        setUser(userData);
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching user details:', error);
@@ -42,9 +47,9 @@ const Cart = () => {
                 })),
                 amount: totalPrice
             };
-    
+
             await createOrder(orderData);
-            
+
             Swal.fire({
                 title: 'Order Placed',
                 text: "Order will be delivered to you with utmost care",
@@ -101,7 +106,7 @@ const Cart = () => {
                     My Cart
                 </h2>
                 <hr style={{ width: '40vw', border: '1px solid black' }} />
-                {cart.length === 0 ? (
+                {Array.isArray(cart) && cart.length === 0 ? (
                     <Box className="oops" textAlign="center" mt={10}>
                         <Image src="/images/cart-empty.png" boxSize="200px" mb={4} />
                         <Text className="head mb-4">Oops!</Text>

@@ -16,8 +16,9 @@ import { CartProvider } from "./context/CartContext"; // Import CartProvider
 
 const App = () => {
   return (
-    <CartProvider> {/* Wrap Router with CartProvider */}
-      <Router>
+    <Router>
+      <CartProvider>
+        {/* Wrap Router with CartProvider */}
         <div className="App">
           <Routes>
             <Route path="/" element={<LandingPage />} />
@@ -31,11 +32,11 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/error" element={<ErrorPage />} />
-            <Route path="/admin/*" element={<AdminPage />} />
+            <Route path={`/${process.env.REACT_APP_ADMIN_ENTRY_URL}/*`} element={<AdminPage />} />
           </Routes>
         </div>
-      </Router>
-    </CartProvider>
+      </CartProvider>
+    </Router>
   );
 };
 

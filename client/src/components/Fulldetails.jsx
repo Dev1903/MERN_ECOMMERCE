@@ -6,7 +6,6 @@ import Searchbar from './Searchbar';
 import Header from './Header';
 import { Footer, Newsletter } from './Footer';
 import { useCart } from '../context/CartContext'; // Import the CartContext
-import '../css/fulldetails.css'; // Import the CSS file
 
 const Fulldetails = () => {
     const { id } = useParams();

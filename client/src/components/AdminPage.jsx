@@ -6,7 +6,6 @@ import Sidebar from '../admin-panel/components/Sidebar';
 import CategoryForm from '../admin-panel/components/CategoryUpload';
 import ProductForm from '../admin-panel/components/ProductUpload';
 import ProductList from '../admin-panel/components/ProductList';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is included
 
 
 const AdminPage = () => {

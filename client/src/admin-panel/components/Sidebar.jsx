@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../css/sidebar.css'; // Ensure you have a CSS file to include styling
+
 
 const Sidebar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);

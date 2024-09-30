@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CategoryDropdown from './CategoryDropdown';
 import { getCategories } from '../api/api'; // Import the function to fetch categories
+import { isAuthenticated, getUserId } from '../context/authUtils.js'; // Import functions from authUtils
 
 const Searchbar = () => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -11,12 +12,13 @@ const Searchbar = () => {
     const [errorMessage, setErrorMessage] = useState("");
     const navigate = useNavigate();
     const { totalQuantity } = useCart(); // Get totalQuantity from context
-    const [token, setToken] = useState(null); // Token state
-
+    const [user, setUser] = useState(null); // Token state
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        setToken(storedToken); // Check token once
+        if (isAuthenticated()) { // Check if user is authenticated
+            const storedUser = getUserId(); // Get user ID from the token
+            setUser(storedUser); // Set user ID
+        }
     }, []);
     
     // Fetch categories from the database
@@ -84,7 +86,7 @@ const Searchbar = () => {
                 </div>
                 <div className="col-md-4 d-flex justify-content-end align-items-center right mt-4 mb-3">
                     <div className="col-4 account text-end">
-                        <Link to={token ? "/profile" : "/signUp"} className="text-black text-decoration-none">
+                        <Link to={user ? "/profile" : "/signUp"} className="text-black text-decoration-none">
                             <i className="fa-regular fa-user"></i>&nbsp;
                             <span>Account</span>
                         </Link>

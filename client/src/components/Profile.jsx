@@ -3,21 +3,30 @@ import Searchbar from './Searchbar';
 import Header from './Header';
 import { Newsletter, Footer } from './Footer';
 import { getUser, getUserOrders } from '../api/api'; // Fetch user and orders
+import { isAuthenticated, getUserId, clearToken } from '../context/authUtils.js'; // Import functions from authUtils
+import { Button, Box, Spinner, Text } from '@chakra-ui/react'; // Import Chakra UI Button
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const storedUser = JSON.parse(localStorage.getItem('user'));
+                if (!isAuthenticated()) {
+                    console.error('User is not authenticated');
+                    return; // Exit if not authenticated
+                }
+
+                const storedUser = getUserId();
                 if (storedUser) {
                     const userData = await getUser(storedUser);
                     setUser(userData);
 
                     // Fetch user orders using the user ID after user data is set
-                    fetchUserOrders(userData._id);
+                    fetchUserOrders(storedUser);
                 }
             } catch (error) {
                 console.error('Error fetching user details:', error);
@@ -36,8 +45,20 @@ const Profile = () => {
         fetchUserDetails(); // Call to fetch user details
     }, []);
 
+    const handleLogout = () => {
+        clearToken(); // Clear token from localStorage
+        navigate('/'); // Redirect to homepage
+    };
+
     if (!user) {
-        return <div>Loading...</div>;
+        return (
+            <Box className="d-flex flex-column justify-content-center align-items-center vh-100">
+                <Spinner width="100px" // Set custom width
+                    height="100px"
+                    thickness="1px" />
+                <Text mt={4}>Loading Profile...</Text>
+            </Box>
+        );
     }
 
     return (
@@ -55,8 +76,13 @@ const Profile = () => {
                             My Profile
                         </h2>
                         <hr style={{ width: '40vw', border: '1px solid black' }} />
-                        <p>Name: {user.name}</p>
-                        <p>Address: {user.address}</p>
+                        <div style={{ marginBottom: '20px' }}>
+                            <p><strong>Name:</strong> {user.name}</p>
+                            <p><strong>Address:</strong> {user.address}</p>
+                            <p><strong>Mobile:</strong> {user.mobile}</p>
+                            <p><strong>Email:</strong> {user.email}</p>
+                            <Button className="btn btn-danger" colorScheme="red" onClick={handleLogout}>Logout</Button> {/* Logout button */}
+                        </div>
                         <h3>Your Orders</h3>
                         <ul>
                             {orders.map(order => {
