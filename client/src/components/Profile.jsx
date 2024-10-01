@@ -24,7 +24,6 @@ const Profile = () => {
                 if (storedUser) {
                     const userData = await getUser(storedUser);
                     setUser(userData);
-
                     // Fetch user orders using the user ID after user data is set
                     fetchUserOrders(storedUser);
                 }
@@ -53,9 +52,7 @@ const Profile = () => {
     if (!user) {
         return (
             <Box className="d-flex flex-column justify-content-center align-items-center vh-100">
-                <Spinner width="100px" // Set custom width
-                    height="100px"
-                    thickness="1px" />
+                <Spinner width="100px" height="100px" thickness="1px" />
                 <Text mt={4}>Loading Profile...</Text>
             </Box>
         );
@@ -83,45 +80,57 @@ const Profile = () => {
                             <p><strong>Email:</strong> {user.email}</p>
                             <Button className="btn btn-danger" colorScheme="red" onClick={handleLogout}>Logout</Button> {/* Logout button */}
                         </div>
-                        <h3>Your Orders</h3>
-                        <ul>
-                            {orders.map(order => {
-                                // Calculate total price for the order
-                                const totalPrice = order.products.reduce((total, item) => {
-                                    return total + item.product.price * item.quantity;
-                                }, 0);
+                        <br />
+                        <h3>My Orders</h3>
+                        <br />
+                        {orders.length > 0 ? (
+                            <div>
+                                {orders.map(order => {
+                                    // Calculate total price for the order
+                                    const totalPrice = order.products.reduce((total, item) => {
+                                        return total + item.product.price * item.quantity;
+                                    }, 0);
 
-                                return (
-                                    <div className="row mt-3" key={order._id}>
-                                        {order.products.map(item => (
-                                            <div className="row" key={item._id}>
-                                                <div className="col-md-6 d-flex flex-row align-items-center mb-1">
-                                                    <div>
-                                                        <img
-                                                            src={`${process.env.REACT_APP_API_URL}/images/product-images/${item.product.image}`}
-                                                            alt={item.product.name}
-                                                            width="100"
-                                                        />
+                                    return (
+                                        <div className="row mt-3" key={order._id}>
+                                            <hr />
+                                            <p className="d-flex align-items-center">
+                                                <span
+                                                    className={order.status === 'Pending' ? 'bg-warning' : 'bg-success'} style={{ width: '12px', height: '12px', display: 'inline-block', margin: ' 9px 8px', borderRadius: '50%' }}></span> Status: {order.status}
+                                            </p>
+                                            {order.products.map(item => (
+                                                <div className="row" key={item._id}>
+
+                                                    <div className="col-md-6 d-flex flex-row align-items-center mb-1">
+                                                        <div>
+                                                            <img
+                                                                src={`${process.env.REACT_APP_API_URL}/images/product-images/${item.product.image}`}
+                                                                alt={item.product.name}
+                                                                width="100"
+                                                            />
+                                                        </div>
+                                                        <div>
+                                                            <h5 className="ms-4">{item.product.name}</h5>
+                                                        </div>
                                                     </div>
-                                                    <div>
-                                                        <h5 className="ms-4">{item.product.name}</h5>
+                                                    <div className="col-md-6 d-flex flex-column justify-content-center align-items-end">
+                                                        <h3>{item.product.price}</h3>
+                                                        <h6>Quantity: {item.quantity}</h6>
                                                     </div>
+                                                    <hr className="mb-4" style={{ width: '20vw', margin: '0 auto' }} />
                                                 </div>
-                                                <div className="col-md-6 d-flex flex-column justify-content-center align-items-end">
-                                                    <h3>{item.product.price}</h3>
-                                                    <h6>Quantity: {item.quantity}</h6>
-                                                </div>
-                                                <hr className="mb-4" style={{ width: '20vw', margin: '0 auto' }} />
+                                            ))}
+                                            <div className="row h2 totalprice d-flex justify-content-end">
+                                                Total Price: {totalPrice}
                                             </div>
-                                        ))}
-                                        <div className="row h2 totalprice d-flex justify-content-end">
-                                            Total Price: {totalPrice}
+                                            <hr />
                                         </div>
-                                        <hr />
-                                    </div>
-                                );
-                            })}
-                        </ul>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div>Currently, no orders available.</div>
+                        )}
                     </div>
                 </div>
             </div>

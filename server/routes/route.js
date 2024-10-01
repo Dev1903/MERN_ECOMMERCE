@@ -211,10 +211,7 @@ router.delete("/deleteCategory/:id", async (req, res) => {
 });
 
 // Update Category
-router.put(
-  "/updateCategory/:id",
-  categoryUpload.single("image"),
-  async (req, res) => {
+router.put("/updateCategory/:id", categoryUpload.single("image"), async (req, res) => {
     try {
       const { id } = req.params;
       const { name } = req.body;
@@ -325,6 +322,35 @@ router.get("/orders/:userId", async (req, res) => {
   } catch (error) {
     console.error("Error fetching orders:", error.message);
     res.status(500).json("Error fetching orders");
+  }
+});
+
+// Get Orders
+router.get("/orders", async (req, res) => {
+  try {
+    const orders = await Order.find().populate("user").populate("products.product"); 
+    // console.log(orders)// Fetch categories from the database
+    res.status(200).json(orders); // Return categories as JSON (this is already an array)
+  } catch (error) {
+    console.error("Error While Fetching Orders:", error);
+    res.status(500).json({ message: "Error While Fetching Orders" });
+  }
+});
+
+// Update Order Status
+router.patch("/updateOrderStatus/:id", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) {
+      return res.status(404).json("Order Not Found");
+    }
+
+    order.status = req.body.status; // Set the new status
+    await order.save(); // Save the updated order
+
+    res.status(200).json("Order Status Successfully Updated");
+  } catch (error) {
+    res.status(500).json("Error While Updating Order Status");
   }
 });
 

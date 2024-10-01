@@ -15,6 +15,7 @@ const productSchema = mongoose.Schema({
     discountPrice: String,
     description: String,
     image: String,
+    sold: {type: Number, default: 0},
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
     brand: String,
     stockQuantity: String,
@@ -49,6 +50,7 @@ const orderSchema = mongoose.Schema({
   ],
     totalAmount: Number,
     orderDate: { type: Date, default: Date.now },
+    status: {type: String, default: 'Pending'}
 });
 
 const Order = mongoose.model('Order', orderSchema);

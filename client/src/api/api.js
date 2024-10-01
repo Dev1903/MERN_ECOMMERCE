@@ -168,6 +168,28 @@ export const getUserOrders = async (userId) => {
     }
 };
 
+// Update Order Status
+export const updateOrderStatus = async (id, status) => {
+    try {
+        return await axios.patch(`${URL}/updateOrderStatus/${id}`, { status });
+    } catch (error) {
+        console.error('Error While Updating Order Status:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
+    }
+};
+
+
+// Fetch Orders
+export const getOrders = async () => {
+    try {
+        const response = await axios.get(`${URL}/orders`);
+        // Ensure the response is treated as an array
+        return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+        console.error('Error While Fetching Orders:', error);
+        return []; // Return an empty array on error
+    }
+};
 
 // Fetch cart for a user
 export const fetchCart = async (userId) => {
