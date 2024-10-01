@@ -144,6 +144,31 @@ export const getProduct = async (productId) => {
     }
 };
 
+// Update Product
+export const updateProduct = async (id, productData) => {
+    try {
+        const response = await axios.put(`${URL}/updateProduct/${id}`, productData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating product', error);
+        throw error;
+    }
+};
+
+// Delete Product
+export const deleteProduct = async (id) => {
+    try {
+        return await axios.delete(`${URL}/deleteProduct/${id}`);
+    } catch (error) {
+        console.error('Error While Deleting Product:', error);
+        return error.response ? error.response : { message: 'Unknown error occurred' };
+    }
+};
+
 //Create Order
 export const createOrder = async (orderData) => {
     try {

@@ -34,7 +34,7 @@ const OrderList = () => {
     };
 
     const handleUpdateOrderStatus = async (id) => {
-        const response = await updateOrderStatus(id, 'delivered'); // Update the order status to 'delivered'
+        const response = await updateOrderStatus(id, 'Delivered'); // Update the order status to 'delivered'
         if (response.status === 200) {
             const updatedOrders = orders.map(order => 
                 order._id === id ? { ...order, status: 'Delivered' } : order

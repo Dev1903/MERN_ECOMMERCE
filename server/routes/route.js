@@ -267,6 +267,64 @@ router.get("/getProduct/:id", async (req, res) => {
   }
 });
 
+// Update Product
+router.put("/updateProduct/:id", productUpload.single("image"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      name, price, discountPrice, description, sold, category, brand,
+      stockQuantity, rating, sku
+    } = req.body;
+    let image;
+
+    // Check if an image file is uploaded
+    if (req.file) {
+      image = req.file.originalname; // Use the new uploaded image if provided
+    }
+
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json("Product Not Found");
+    }
+
+    // Update fields if they are provided, otherwise retain current values
+    product.name = name || product.name;
+    product.price = price || product.price;
+    product.discountPrice = discountPrice || product.discountPrice;
+    product.description = description || product.description;
+    product.sold = sold || product.sold; // Handle sold field
+    product.category = category || product.category;
+    product.brand = brand || product.brand;
+    product.stockQuantity = stockQuantity || product.stockQuantity;
+    product.rating = rating || product.rating;
+    product.sku = sku || product.sku;
+
+    // If a new image is uploaded, update the image field
+    if (image) {
+      product.image = image;
+    }
+
+    await product.save(); // Save updated product
+    res.status(200).json("Product Successfully Updated");
+  } catch (error) {
+    console.error("Error While Updating Product:", error);
+    res.status(500).json("Error While Updating Product");
+  }
+});
+
+// Delete Product
+router.delete("/deleteProduct/:id", async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    if (product) {
+      res.status(200).json("Product Successfully Deleted");
+    } else {
+      res.status(404).json("Product Not Found");
+    }
+  } catch (error) {
+    res.status(500).json("Error While Deleting Product");
+  }
+});
 
 // Create Order
 router.post("/createOrder", async (req, res) => {
@@ -290,6 +348,14 @@ router.post("/createOrder", async (req, res) => {
     //console.log(order);
 
     await order.save();
+
+    // Increment sold quantity for each product
+    for (const item of formattedProducts) {
+      await Product.findByIdAndUpdate(item.product, {
+        $inc: { sold: item.quantity }, // Increment the sold field by quantity
+      });
+    }
+
     res.status(201).json("Order created successfully");
   } catch (error) {
     console.error("Error while creating order:", error.message);

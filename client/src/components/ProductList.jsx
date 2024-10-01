@@ -6,7 +6,7 @@ import { useCart } from '../context/CartContext';
 import Swal from 'sweetalert2';
 import { getUserId } from '../context/authUtils.js'; 
 
-const ProductList = ({ category, heading, filterByPopular }) => {
+const ProductList = ({ category, heading }) => {
     const navigate = useNavigate();
     const scrollRef = useRef(null);
     const { updateCart } = useCart(); 
@@ -36,8 +36,8 @@ const ProductList = ({ category, heading, filterByPopular }) => {
 
     const filteredProducts = products.filter(product => {
         const matchesCategory = category ? product.category.name === category : true;
-        const matchesPopularity = filterByPopular ? product.popular === true : true;
-        return matchesCategory && matchesPopularity;
+        
+        return matchesCategory ;
     });
 
     const handleAddToCart = (product) => {
