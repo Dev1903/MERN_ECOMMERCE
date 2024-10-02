@@ -15,7 +15,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light+Two&family=Playwrite+DE+Grund&family=Bebas+Neue&display=swap');
 
-
+@import url('css/profile.css');
 @import url("css/header.css");
 @import url("css/slider.css");
 @import url("css/categories.css");
@@ -30,3 +30,4 @@
 @import url("admin-panel/css/orderList.css");
 @import url("admin-panel/css/productList.css");
 @import url("admin-panel/css/sidebar.css");
+

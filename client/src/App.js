@@ -30,7 +30,7 @@ const App = () => {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/signUp" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/*" element={<Profile />} />
             <Route path="/error" element={<ErrorPage />} />
             <Route path={`/${process.env.REACT_APP_ADMIN_ENTRY_URL}/*`} element={<AdminPage />} />
           </Routes>

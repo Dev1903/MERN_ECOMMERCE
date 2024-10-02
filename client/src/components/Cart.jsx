@@ -105,7 +105,7 @@ const Cart = () => {
                 <h2 style={{ fontFamily: 'Bebas Neue, cursive', letterSpacing: '3px', fontSize: 'xx-large' }}>
                     My Cart
                 </h2>
-                <hr style={{ width: '40vw', border: '1px solid black' }} />
+                <hr style={{border: '1px solid black' }} />
                 {Array.isArray(cart) && cart.length === 0 ? (
                     <Box className="oops" textAlign="center" mt={10}>
                         <Image src="/images/cart-empty.png" boxSize="200px" mb={4} />

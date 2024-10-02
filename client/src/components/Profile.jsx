@@ -1,30 +1,110 @@
 import React, { useEffect, useState } from 'react';
+import { Route, Routes, Link } from 'react-router-dom';
 import Searchbar from './Searchbar';
 import Header from './Header';
 import { Newsletter, Footer } from './Footer';
-import { getUser, getUserOrders } from '../api/api'; // Fetch user and orders
-import { isAuthenticated, getUserId, clearToken } from '../context/authUtils.js'; // Import functions from authUtils
-import { Button, Box, Spinner, Text } from '@chakra-ui/react'; // Import Chakra UI Button
+import { getUser, getUserOrders } from '../api/api';
+import { isAuthenticated, getUserId, clearToken } from '../context/authUtils.js';
+import { Button, Box, Spinner, Text, background } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import Wishlist from './WishList.jsx';
+import { color } from 'framer-motion';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
     const [orders, setOrders] = useState([]);
     const navigate = useNavigate();
 
+    const ProfileOverview = ({ user }) => {
+        return (
+            <div className="col-md-12 profile-main">
+                {/* Profile Overview */}
+                <div className="row profile-overview mb-4">                    
+                        <div className="profile-container">
+                            <div className="row heading">
+                                <h3>My Profile</h3>
+                            </div>
+
+                            <div className="details">
+                                <p><strong>Name:</strong> {user.name}</p>
+                                <p><strong>Address:</strong> {user.address}</p>
+                                <p><strong>Mobile:</strong> {user.mobile}</p>
+                                <p><strong>Email:</strong> {user.email}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+        );
+    };
+
+    const Orders = ({ orders }) => {
+        return (
+            <div className="row orders-section">
+                <div className="col-12">
+                    <div className="row heading">
+                        <h3 >My Orders</h3>
+                    </div>
+
+                    {orders.length > 0 ? (
+                        <div className="order-list">
+                            {orders.map(order => {
+                                const totalPrice = order.products.reduce((total, item) => {
+                                    return total + item.product.price * item.quantity;
+                                }, 0);
+
+                                return (
+                                    <div className="order-card mb-4" key={order._id}>
+                                        <div className="d-flex justify-content-between align-items-center mb-3">
+                                            <span className="order-status">
+                                                <span className={order.status === 'Pending' ? 'status-pending' : 'status-success'}></span>
+                                                Status: {order.status}
+                                            </span>
+                                            <span className="totalprice h5">Total: ₹{totalPrice}</span>
+                                        </div>
+                                        <div className="row">
+                                            {order.products.map(item => (
+                                                <div className="col-md-4 mb-3" key={item._id}>
+                                                    <div className="card product-card">
+                                                        <img
+                                                            src={`${process.env.REACT_APP_API_URL}/images/product-images/${item.product.image}`}
+                                                            alt={item.product.name}
+                                                            className="card-img-top product-image"
+                                                        />
+                                                        <div className="card-body">
+                                                            <h5 className="card-title">{item.product.name}</h5>
+                                                            <p className="card-text">₹{item.product.price}</p>
+                                                            <p className="card-text">Quantity: {item.quantity}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <p>No orders found.</p>
+                    )}
+                </div>
+
+            </div>
+        );
+    };
+
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
                 if (!isAuthenticated()) {
                     console.error('User is not authenticated');
-                    return; // Exit if not authenticated
+                    return;
                 }
 
                 const storedUser = getUserId();
                 if (storedUser) {
                     const userData = await getUser(storedUser);
                     setUser(userData);
-                    // Fetch user orders using the user ID after user data is set
                     fetchUserOrders(storedUser);
                 }
             } catch (error) {
@@ -41,12 +121,12 @@ const Profile = () => {
             }
         };
 
-        fetchUserDetails(); // Call to fetch user details
+        fetchUserDetails();
     }, []);
 
     const handleLogout = () => {
-        clearToken(); // Clear token from localStorage
-        navigate('/'); // Redirect to homepage
+        clearToken();
+        navigate('/');
     };
 
     if (!user) {
@@ -59,81 +139,55 @@ const Profile = () => {
     }
 
     return (
-        <div className="container-fluid">
-            <div className="row searchbar mb-2">
+        <div className="container-fluid profile">
+            {/* Searchbar */}
+            <div className="row mb-2 searchbar">
                 <Searchbar />
             </div>
-            <div className="row header mb-2">
+
+            {/* Header */}
+            <div className="row mb-2 header">
                 <Header />
             </div>
-            <div className="row mb-2">
-                <div className="col">
-                    <div className="container">
-                        <h2 style={{ fontFamily: 'Bebas Neue, cursive', letterSpacing: '3px', fontSize: 'xx-large' }}>
-                            My Profile
-                        </h2>
-                        <hr style={{ width: '40vw', border: '1px solid black' }} />
-                        <div style={{ marginBottom: '20px' }}>
-                            <p><strong>Name:</strong> {user.name}</p>
-                            <p><strong>Address:</strong> {user.address}</p>
-                            <p><strong>Mobile:</strong> {user.mobile}</p>
-                            <p><strong>Email:</strong> {user.email}</p>
-                            <Button className="btn btn-danger" colorScheme="red" onClick={handleLogout}>Logout</Button> {/* Logout button */}
-                        </div>
-                        <br />
-                        <h3>My Orders</h3>
-                        <br />
-                        {orders.length > 0 ? (
-                            <div>
-                                {orders.map(order => {
-                                    // Calculate total price for the order
-                                    const totalPrice = order.products.reduce((total, item) => {
-                                        return total + item.product.price * item.quantity;
-                                    }, 0);
 
-                                    return (
-                                        <div className="row mt-3" key={order._id}>
-                                            <hr />
-                                            <p className="d-flex align-items-center">
-                                                <span
-                                                    className={order.status === 'Pending' ? 'bg-warning' : 'bg-success'} style={{ width: '12px', height: '12px', display: 'inline-block', margin: ' 9px 8px', borderRadius: '50%' }}></span> Status: {order.status}
-                                            </p>
-                                            {order.products.map(item => (
-                                                <div className="row" key={item._id}>
-
-                                                    <div className="col-md-6 d-flex flex-row align-items-center mb-1">
-                                                        <div>
-                                                            <img
-                                                                src={`${process.env.REACT_APP_API_URL}/images/product-images/${item.product.image}`}
-                                                                alt={item.product.name}
-                                                                width="100"
-                                                            />
-                                                        </div>
-                                                        <div>
-                                                            <h5 className="ms-4">{item.product.name}</h5>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-md-6 d-flex flex-column justify-content-center align-items-end">
-                                                        <h3>{item.product.price}</h3>
-                                                        <h6>Quantity: {item.quantity}</h6>
-                                                    </div>
-                                                    <hr className="mb-4" style={{ width: '20vw', margin: '0 auto' }} />
-                                                </div>
-                                            ))}
-                                            <div className="row h2 totalprice d-flex justify-content-end">
-                                                Total Price: {totalPrice}
-                                            </div>
-                                            <hr />
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div>Currently, no orders available.</div>
-                        )}
+            <div className="row d-flex justify-content-between">
+                {/* Sidebar */}
+                <div className="col-md-3 sidebar_container">
+                    <div className="profile-sidebar">
+                        <h4>Hello, {user.name}</h4>
+                        <ul className="list-group ">
+                            <li className="list-group-item ">
+                                <Link to="overview ">
+                                    <i className="fa-solid fa-id-badge pe-2"></i>My Profile</Link>
+                            </li>
+                            <li className="list-group-item">
+                                <Link to="orders">
+                                    <i className="fa-solid fa-people-carry-box pe-2"></i>My Orders</Link>
+                            </li>
+                            <li className="list-group-item">
+                                <Link to="/wishlist">
+                                    <i className="fa-solid fa-hand-holding-heart pe-2"></i>
+                                    My Wishlist</Link>
+                            </li>
+                            <li className="list-group-item logout" onClick={handleLogout}>
+                                <i className="fa-solid fa-power-off pe-2"></i>Logout
+                            </li>
+                        </ul>
                     </div>
                 </div>
+
+                {/* Main Profile Section */}
+                <div className="col-md-9 profile-main">
+                    <Routes>
+                        <Route path="/" element={<ProfileOverview user={user} />} />
+                        <Route path="overview" element={<ProfileOverview user={user} />} />
+                        <Route path="orders" element={<Orders orders={orders} />} />
+                        <Route path="/wishlist" element={<Wishlist />} />
+                    </Routes>
+                </div>
             </div>
+
+            {/* Footer */}
             <div className="row footer mb-2">
                 <Newsletter />
                 <Footer />

@@ -111,9 +111,8 @@ const Wishlist = () => {
                 <h2 className="" style={{
                     fontFamily: 'Bebas Neue, cursive',
                     letterSpacing: '3px',
-                    fontSize: 'xx-large'
-                }}>My Wishlist</h2>
-                <hr className="mb-4 mt-0" style={{ width: '40vw', border: '1px solid black' }} />
+                    fontSize: 'xx-large'}}>My Wishlist</h2>
+                <hr className="mb-4 mt-0" style={{border: '1px solid black' }} />
                 <div className="row mt-5">
                     {wishlist.length > 0 ? (
                         wishlist.map(item => (
