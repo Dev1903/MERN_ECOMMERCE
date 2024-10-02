@@ -60,6 +60,7 @@ const OrderList = () => {
                         <th>Products Ordered</th>
                         <th>Order Amount</th>
                         <th>Order Date & Time</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -124,10 +125,12 @@ const OrderList = () => {
                                     return `${formattedDate} & ${formattedTime}`;
                                 })()}
                             </td>
+                            <td><div className={`badge text-bg-${order.status === 'Delivered' ? 'success' : 'warning'}`}>{order.status}</div></td>
                             <td>
                                 <button
                                     className="btn btn-success" // Changed class to success for delivered status
                                     onClick={() => handleUpdateOrderStatus(order._id)}
+                                    disabled={order.status === "Delivered"}
                                 >
                                     Set Order as Delivered
                                 </button>

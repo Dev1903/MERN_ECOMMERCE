@@ -30,7 +30,7 @@ const Newsletter = () => {
 
 const Footer = () => {
     return (
-        <div className="col rest mt-1">
+        <div className="col rest mt-1" id='contact'>
             <div className="container">
                 <div className="row justify-content-between">
                     <div className="col-lg-3 pt-5">
@@ -63,15 +63,15 @@ const Footer = () => {
                             <Link to="/about">About</Link>
                         </div>
                         <div className="row">
-                            <Link to="/popular-products">Popular Products</Link>
+                            <Link to="/trending-products">Popular Products</Link>
                         </div>
                         <div className="row">
-                            <Link to="/contact">Contact</Link>
+                            <Link to="#contact">Contact</Link>
                         </div>
                     </div>
                     <div className="col-lg-2 pt-5">
                         <div className="row">
-                            <Link to="/my-account">My Account</Link>
+                            <Link to="/profile">My Account</Link>
                         </div>
                         <div className="row">
                             <Link to="/order-tracking">Order Tracking</Link>

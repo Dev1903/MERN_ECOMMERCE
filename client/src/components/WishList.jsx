@@ -133,6 +133,7 @@ const Wishlist = () => {
                                 alt="No items in wishlist"
                                 boxSize="200px"
                                 mb={4}
+                                style={{width: '250px', height: 'auto'}}
                             />
                             <Text className="head mb-4">Oops!</Text>
                             <Text className="desc">It looks like you haven't added any items to your wishlist yet.</Text>

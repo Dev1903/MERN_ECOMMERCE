@@ -14,6 +14,20 @@ export const addUser = async (data) => {
     }
 };
 
+export const updateUser = async (id, userData) => {
+    try {
+        const response = await axios.put(`${process.env.REACT_APP_API_URL}/updateUser/${id}`, userData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating user', error);
+        throw error;
+    }
+};
+
 // Add Category
 export const addCategory = async (data) => {
     try {
@@ -33,6 +47,7 @@ export const addProduct = async (data) => {
         return error.response ? error.response : { message: 'Unknown error occurred' };
     }
 };
+
 
 // Login user function
 export const loginUser = async ({ username, password }) => {

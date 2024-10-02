@@ -401,10 +401,13 @@ const Login = () => {
                         text: 'Successfully Logged In',
                         icon: 'success'
                     }).then(() => {
-                        // Redirect to the login page
-                        window.location.href = '/'; // Assuming you are using React Router
+                        // Replace the current history entry (login page) with the target page
+                        window.history.replaceState(null, null, '/');
+
+                        // Redirect to the home page
+                        window.location.href = '/';
                     });
-                }else if (res.status === 201) {
+                } else if (res.status === 201) {
                     // Redirect user to dashboard
                     Swal.fire({
                         title: 'Welcome Admin',
@@ -414,7 +417,7 @@ const Login = () => {
                         // Redirect to the login page
                         navigate(`/${process.env.REACT_APP_ADMIN_ENTRY_URL}`); // Assuming you are using React Router
                     });
-                }else if (res.status === 401) {
+                } else if (res.status === 401) {
                     // Redirect user to dashboard
                     Swal.fire({
                         title: 'Wrong Password',

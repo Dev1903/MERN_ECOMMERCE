@@ -67,6 +67,32 @@ router.post("/addUser", userUpload.none(), async (req, res) => {
   }
 });
 
+// Update User
+router.put("/updateUser/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, address, mobile, email } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json("User Not Found");
+    }
+
+    // Update fields if they are provided, otherwise retain current values
+    user.name = firstName && lastName ? `${firstName} ${lastName}` : user.name;
+    user.address = address || user.address;
+    user.mobile = mobile || user.mobile;
+    user.email = email || user.email;
+
+    await user.save(); // Save updated user
+    res.status(200).json("User Successfully Updated");
+  } catch (error) {
+    console.error("Error While Updating User:", error);
+    res.status(500).json("Error While Updating User");
+  }
+});
+
+
 // Login User
 router.post("/loginUser", async (req, res) => {
   const { username, password } = req.body;

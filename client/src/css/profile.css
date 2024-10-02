@@ -1,8 +1,6 @@
-/* Flipkart-like Profile Page */
-
 /* Sidebar Styling */
 .sidebar_container {
-    background-color: #2d2063;
+    background-color: #343A40;
     padding: 20px;
     border-radius: 10px;
     min-height: 100vh;
@@ -24,26 +22,35 @@
     background-color: #fff;
     font-size: 18px;
     color: #333;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: background-color ease-in-out 0.1s;
     
 }
 
 .profile-sidebar .list-group-item:hover {
-    background-color: #7a4b96;
+    background-color: #64b8cf;
+    transition: background-color ease-in-out 0.1s;
     color: #f7f7f7;
    
     
+}
+.small-swal{
+    width: 400px!important;
+    height: auto;
 }
 .profile-sidebar .list-group-item h2{
     background-color:#353535;
     color: #f7f7f7;
 }
-.profile-sidebar .list-group-item a{
+.profile-sidebar .list-group a{
     text-decoration: none;
     color:black;
 }
 
 .profile-sidebar .logout:hover{
-    background-color: rgb(241, 61, 61)!important;
+    transition: background-color ease-in-out 0.1s;
+    background-color: #e65e5e;
     color: white;
 }
 
@@ -63,7 +70,7 @@
     padding: 5px 0;
     margin: 0;
     color:#f7f7f7;
-    background-color: #2d2063;
+    background-color: #343A40;
     border-radius: 10px;
     text-align: center;
     
@@ -75,7 +82,10 @@
     padding: 20px;
     border-radius: 10px;
 }
-
+.profile .product-image{
+    height: 250px;
+    width: auto;
+}
 .order-list .order-card {
     background-color: #fff;
     padding: 15px;

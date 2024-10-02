@@ -11,7 +11,7 @@ import { isAuthenticated, getUserId } from '../context/authUtils.js'; // Import 
 
 const Cart = () => {
     const navigate = useNavigate();
-    const { cart, changeQuantity, totalQuantity } = useCart();
+    const { cart, setCart, changeQuantity, totalQuantity } = useCart();
     const totalPrice = Array.isArray(cart)
         ? cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
         : 0;
@@ -56,6 +56,7 @@ const Cart = () => {
                 icon: 'success',
                 confirmButtonText: 'Continue Shopping',
             }).then(() => {
+                setCart([]);
                 navigate('/');
             });
         } catch (error) {
@@ -124,7 +125,7 @@ const Cart = () => {
                                         <img src={`${process.env.REACT_APP_API_URL}/images/product-images/${item.image}`} alt={item.name} className="cart-item-img" style={{ width: '100px' }} />
                                         <div className="flex-grow-1 ms-3">
                                             <h5 className="mb-1">{item.name}</h5>
-                                            <p className="mb-1">{item.brand}</p>
+                                            <p className="mb-1">{item.brand === "null" ? "": item.brand}</p>
                                         </div>
                                     </Link>
                                     <div className="buttons">
@@ -146,7 +147,7 @@ const Cart = () => {
                         <div className="d-flex flex-column justify-content-between align-items-end">
                             <h4>Total Price:</h4>
                             <h4 className="totalprice">₹{totalPrice.toFixed(2)}</h4>
-                            <Button className="btn btn-lg d-flex btn-dark gradient-button" onClick={handlePayment} colorScheme="teal" mt={15}>
+                            <Button className="btn btn-lg d-flex btn-dark" onClick={handlePayment} colorScheme="teal" mt={15}>
                                 Proceed to Payment
                             </Button>
                         </div>
