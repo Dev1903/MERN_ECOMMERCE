@@ -5,7 +5,6 @@ import { getCategories, deleteCategory, updateCategory } from '../../api/api';
 const Category = () => {
     const [categories, setCategories] = useState([]);
     const [viewAll, setViewAll] = useState(false);
-    const [editMode, setEditMode] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
     const [categoryName, setCategoryName] = useState('');
     const [categoryImage, setCategoryImage] = useState(null);
@@ -45,7 +44,6 @@ const Category = () => {
     };
 
     const handleEditClick = (category) => {
-        setEditMode(true);
         setCurrentCategory(category);
         setCategoryName(category.name);
         setCategoryImage(null);
@@ -71,7 +69,6 @@ const Category = () => {
                 'Category updated successfully.',
                 'success'
             );
-            setEditMode(false);
             setCurrentCategory(null);
             setCategoryName('');
             setCategoryImage(null);
