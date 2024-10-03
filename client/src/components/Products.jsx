@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Text, Button, Image } from '@chakra-ui/react';
+import { Box, Text, Button, Image, Spinner } from '@chakra-ui/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getProducts, fetchWishlist, updateWishlist } from '../api/api'; // Ensure getWishlist is added to your API functions
 import Header from './Header';
@@ -22,6 +22,7 @@ const Products = () => {
     const [wishlist, setWishlist] = useState([]);
     const [addedProductId, setAddedProductId] = useState(null);
     const [user, setUser] = useState(null); // State for user ID
+    const [loading, setLoading] = useState(true); // New loading state
 
     const searchWords = searchTerm.split(' ').map(word => word.toLowerCase());
 
@@ -49,11 +50,18 @@ const Products = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
-            const productList = await getProducts();
-            setProducts(productList);
-            if (user) {
-                const userWishlist = await fetchWishlist(user); // Fetch user's wishlist from the database
-                setWishlist(Array.isArray(userWishlist.items) ? userWishlist.items : []); // Ensure wishlist is an array of items
+            setLoading(true); // Start loading
+            try {
+                const productList = await getProducts();
+                setProducts(productList);
+                if (user) {
+                    const userWishlist = await fetchWishlist(user); // Fetch user's wishlist from the database
+                    setWishlist(Array.isArray(userWishlist.items) ? userWishlist.items : []); // Ensure wishlist is an array of items
+                }
+            } catch (error) {
+                console.error("Error fetching products:", error);
+            } finally {
+                setLoading(false); // Stop loading once the data is fetched
             }
         };
         fetchProducts();
@@ -134,19 +142,26 @@ const Products = () => {
                 <div className="col-12">
                     <div className="container mt-4">
                         <div className="row justify-content-center">
-                            {filteredProducts.length > 0 && isCategoryValid ? (
+                            {loading ? ( // Show loading spinner while fetching
+                                <Box className="d-flex flex-column justify-content-center align-items-center vh-100">
+                                    <Spinner width="100px" // Set custom width
+                                        height="100px"
+                                        thickness="1px" />
+                                    <Text mt={4}>Searching Filtered Products...</Text>
+                                </Box>
+                            ) : filteredProducts.length > 0 && isCategoryValid ? (
                                 <div>
                                     <h2 className="mb-4">Products</h2>
                                     <div className="d-flex flex-wrap justify-content-center">
                                         {filteredProducts.map((product) => (
                                             <div className="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3 mb-4" key={product._id}>
-                                            <ProductCard
-                                    product={product}
-                                    handleAddToCart={() => handleAddToCart(product)}
-                                    handleWishlist={() => handleWishlist(product)}
-                                    isInWishlist={wishlist.some(item => item.productId === product._id)} // Ensure wishlist check is correct
-                                    isAddedToCart={user && addedProductId === product._id} 
-                                />
+                                                <ProductCard
+                                                    product={product}
+                                                    handleAddToCart={() => handleAddToCart(product)}
+                                                    handleWishlist={() => handleWishlist(product)}
+                                                    isInWishlist={wishlist.some(item => item.productId === product._id)} // Ensure wishlist check is correct
+                                                    isAddedToCart={user && addedProductId === product._id}
+                                                />
                                             </div>
                                         ))}
                                     </div>
@@ -158,7 +173,7 @@ const Products = () => {
                                     flexDirection="column"
                                     alignItems="center"
                                     justifyContent="center"
-                                    minHeight="100vh"
+                                    minHeight="50vh"
                                     textAlign="center"
                                     bgColor="white"
                                     p={5}
@@ -167,7 +182,7 @@ const Products = () => {
                                 >
                                     <Image
                                         src="/images/no-products.jpeg"
-                                        style={{height: '200px', width: 'auto'}}
+                                        style={{ height: '200px', width: 'auto' }}
                                         alt="Cute Illustration"
                                         boxSize="150px"
                                         mb={4}
