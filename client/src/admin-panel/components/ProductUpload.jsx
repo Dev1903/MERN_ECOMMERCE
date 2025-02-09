@@ -19,14 +19,12 @@ const ProductForm = () => {
         rating: ''
     });
 
-    const [inputImage, setInputImage] = useState('');
 
     const handleInputChange = (e) => {
         setProduct({ ...product, [e.target.name]: e.target.value });
     };
 
     const handleImage = (e) => {
-        setInputImage(e.target.files[0]);
         setProduct({ ...product, image: e.target.files[0] });
     };
 

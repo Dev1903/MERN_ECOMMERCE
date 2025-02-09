@@ -5,7 +5,6 @@ import { getProducts, deleteProduct, updateProduct } from '../../api/api';
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [viewAll, setViewAll] = useState(false);
-    const [editMode, setEditMode] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
     const [productName, setProductName] = useState('');
     const [productPrice, setProductPrice] = useState('');
@@ -54,7 +53,6 @@ const ProductList = () => {
     };
 
     const handleEditClick = (product) => {
-        setEditMode(true);
         setCurrentProduct(product);
         setProductName(product.name);
         setBrand(product.brand);
@@ -91,7 +89,6 @@ const ProductList = () => {
             const updatedProducts = await getProducts();
             setProducts(updatedProducts);
             Swal.fire('Updated!', 'Product updated successfully.', 'success');
-            setEditMode(false);
             setCurrentProduct(null);
             setProductImage(null);
             // Close modal
